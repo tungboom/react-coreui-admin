@@ -1,0 +1,47 @@
+{
+    "common": {
+        "title": {
+            "login": "Login",
+            "signUp": "Sign up"
+        },
+        "intro": {
+            "login": "Sign In to your account",
+            "signUp": "If you do not have an account yet, register now."
+        },
+        "table": {
+            "previousText": "Previous",
+            "nextText": "Next",
+            "loadingText": "Loading...",
+            "noDataText": "No rows found",
+            "pageText": "Page",
+            "ofText": "of",
+            "rowsText": "rows"
+        },
+        "button": {
+            "login": "Login",
+            "forgotPassword": "Forgot password",
+            "register": "Register now",
+            "langEn": "English",
+            "langVi": "Vietnammes"
+        },
+        "label": {
+            "language": "Language"
+        },
+        "placeholder": {
+            "username": "Enter username",
+            "password": "Enter password"
+        },
+        "message": {
+            "username": {
+                "required": "Please enter a username",
+                "minMaxLength": "Your username must be between 6 and 16 characters",
+                "pattern": "Your username must be composed only with letter and numbers"
+            },
+            "password": {
+                "required": "Please enter a password",
+                "minMaxLength": "Your password must be between 6 and 16 characters",
+                "pattern": "Your password must be composed only with letter and numbers"
+            }
+        }
+    }
+}

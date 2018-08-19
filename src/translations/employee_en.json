@@ -1,0 +1,76 @@
+{
+    "employee": {
+        "title": {
+            "search": "Search",
+            "info": "Information"
+        },
+        "intro": {
+            "loadData": "Load data",
+            "saveData": "Save data"
+        },
+        "button": {
+            "add": "Add",
+            "edit": "Edit",
+            "delete": "Delete",
+            "import": "Import",
+            "export": "Export",
+            "search": "Search"
+        },
+        "table": {
+            "previousText": "Previous",
+            "nextText": "Next",
+            "loadingText": "Loading...",
+            "noDataText": "No rows found",
+            "pageText": "Page",
+            "ofText": "of",
+            "rowsText": "rows"
+        },
+        "dropdown": {
+            "all": "All",
+            "status": {
+                "isActive": "Is active",
+                "looked": "Looked"
+            }
+        },
+        "label": {
+            "number": "Index",
+            "action": "Actions",
+            "image": "Image",
+            "username": "Username",
+            "fullName": "Full name",
+            "status": "Status",
+            "roleName": "Role",
+            "createdTime": "Created time",
+            "createdUser": "Created user",
+            "updatedTime": "Updated time",
+            "updatedUser": "Updated user",
+            "signInCount": "Number login",
+            "email": "Email",
+            "dateOfBirth": "Date of birth"
+        },
+        "placeholder": {
+            "username": "Enter username",
+            "fullName": "Enter full name",
+            "email": "Enter email",
+            "dateOfBirth": "Enter date of birth",
+            "createdUser": "Enter created user"
+        },
+        "message": {
+            "error": "Error !",
+            "success": "Success !",
+            "username": {
+                "required": "Please enter a username",
+                "minMaxLength": "Your username must be between 6 and 16 characters",
+                "pattern": "Your username must be composed only with letter and numbers"
+            },
+            "password": {
+                "required": "Please enter a password",
+                "minMaxLength": "Your password must be between 6 and 16 characters",
+                "pattern": "Your password must be composed only with letter and numbers"
+            },
+            "invalidateDate": "Invalidate date",
+            "dateOfBirthMax": "Date of birth does not too current date",
+            "statusAll": "The default is all states"
+        }
+    }
+}

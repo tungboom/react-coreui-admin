@@ -1,0 +1,76 @@
+{
+    "employee": {
+        "title": {
+            "search": "Tìm kiếm",
+            "info": "Thông tin"
+        },
+        "intro": {
+            "loadData": "Tải dữ liệu",
+            "saveData": "Lưu dữ liệu"
+        },
+        "button": {
+            "add": "Thêm mới",
+            "edit": "Sửa",
+            "delete": "Xóa",
+            "import": "Import",
+            "export": "Export",
+            "search": "Tìm kiếm"
+        },
+        "table": {
+            "previousText": "Trở về",
+            "nextText": "Trang tiếp",
+            "loadingText": "Đang tải ...",
+            "noDataText": "Không tìm thấy bản ghi nào",
+            "pageText": "Trang",
+            "ofText": "của",
+            "rowsText": "bản ghi"
+        },
+        "dropdown": {
+            "all": "Tất cả",
+            "status": {
+                "isActive": "Đang hoạt động",
+                "looked": "Đang khóa"
+            }
+        },
+        "label": {
+            "number": "STT",
+            "action": "Hoạt động",
+            "image": "Ảnh",
+            "username": "Tên truy cập",
+            "fullName": "Tên người dùng",
+            "status": "Trạng thái",
+            "roleName": "Tên quyền",
+            "createdTime": "Ngày tạo",
+            "createdUser": "Người tạo",
+            "updatedTime": "Ngày cập nhật",
+            "updatedUser": "Người cập nhật",
+            "signInCount": "Số lần đăng nhập",
+            "email": "Email",
+            "dateOfBirth": "Ngày sinh"
+        },
+        "placeholder": {
+            "username": "Nhập tên tài khoản",
+            "fullName": "Nhập tên người dùng",
+            "email": "Nhập email",
+            "dateOfBirth": "Nhập ngày sinh",
+            "createdUser": "Nhập người tạo"
+        },
+        "message": {
+            "error": "Có lỗi xảy ra !",
+            "success": "Thành công !",
+            "username": {
+                "required": "Bạn chưa nhập tài khoản",
+                "minMaxLength": "Tài khoản phải từ 6 đến 16 ký tự",
+                "pattern": "Tài khoản chỉ chứa ký tự chữ hoặc số"
+            },
+            "password": {
+                "required": "Bạn chưa nhập mật khẩu",
+                "minMaxLength": "Mật khẩu phải từ 6 đến 16 ký tự",
+                "pattern": "Mật khẩu chỉ chứa ký tự chữ hoặc số"
+            },
+            "invalidateDate": "Sai định dạng thời gian",
+            "dateOfBirthMax": "Ngày sinh không quá ngày hiện tại",
+            "statusAll": "Mặc định là tất cả các trạng thái"
+        }
+    }
+}
