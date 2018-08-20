@@ -4,17 +4,17 @@ import initialState from '../stores/initialState';
 export default function authReducer(state = initialState.auth, action) {
     switch (action.type) {
         case `${types.ON_GET_TOKEN}_SUCCESS`:
-            return { ...state, token: action.payload };
+            return { ...state, token: action };
         case `${types.ON_GET_TOKEN}_FAIL`:
-            return { ...state, token: action.payload };
+            return { ...state, token: action };
         case `${types.ON_LOGIN}_SUCCESS`:
-            return { ...state, login: action.payload, isAuthenticated: true };
+            return { ...state, login: action, isAuthenticated: true };
         case `${types.ON_LOGIN}_FAIL`:
-            return { ...state, login: action.payload, isAuthenticated: false };
+            return { ...state, login: action, isAuthenticated: false };
         case `${types.ON_LOGOUT}_SUCCESS`:
-            return { ...state, logout: action.payload, isAuthenticated: false };
+            return { ...state, logout: action, isAuthenticated: false };
         case `${types.ON_LOGOUT}_FAIL`:
-            return { ...state, logout: action.payload, isAuthenticated: false };
+            return { ...state, logout: action, isAuthenticated: false };
         default:
             return state;
     }

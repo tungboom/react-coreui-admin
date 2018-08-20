@@ -9,7 +9,6 @@ import LoginForm from './LoginForm';
 import * as types from '../../../actions/authTypes';
 import { translate, Trans } from 'react-i18next';
 import {toastr} from 'react-redux-toastr';
-import history from './../../../history';
 
 class Login extends Component {
     constructor(props) {
@@ -29,16 +28,16 @@ class Login extends Component {
                 localStorage.setItem('user', response.payload.data);
             }).catch((response) => {
                 localStorage.clear();
-                toastr.error(this.props.t("auth.message.error.connectServer"));
+                toastr.error(this.props.t("auth:auth.message.error.connectServer"));
             });
         }).catch((response) => {
             localStorage.clear();
             if (response.error !== undefined) {
                 if(response.error.response.data.error === "invalid_grant") {
-                    toastr.error(this.props.t("auth.message.error.wrongUsernamePassword"));
+                    toastr.error(this.props.t("auth:auth.message.error.wrongUsernamePassword"));
                 }
             } else {
-                toastr.error(this.props.t("auth.message.error.connectServer"));
+                toastr.error(this.props.t("auth:auth.message.error.connectServer"));
             }
         });
     }
@@ -64,7 +63,7 @@ class Login extends Component {
     render() {
         let errorMessage = <div></div>;
         if(this.displayRedirectMessages()) {
-            errorMessage = <div className="alert alert-danger"><Trans i18nKey="auth.message.error.needLogin"/></div>;
+            errorMessage = <div className="alert alert-danger"><Trans i18nKey="auth:auth.message.error.needLogin"/></div>;
         }
         const isAuthenticated = localStorage.getItem('is_authenticated') === "true" ? true : false;
         return (
@@ -82,7 +81,7 @@ class Login extends Component {
 function mapStateToProps(state, ownProps) {
     return {
         isAuthenticated: state.auth.isAuthenticated,
-        response: state.auth.login
+        response: state.auth
     };
 }
 
@@ -92,4 +91,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate('auth')(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(Login));

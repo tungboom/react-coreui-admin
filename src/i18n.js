@@ -1,41 +1,21 @@
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import i18nextXHRBackend from 'i18next-xhr-backend';
 import Config from './config';
 
-import common_en from "./translations/common_en.json";
-import common_vi from "./translations/common_vi.json";
-
-import auth_en from "./translations/auth_en.json";
-import auth_vi from "./translations/auth_vi.json";
-
-//Apps_start
-import employee_en from "./translations/employee_en.json";
-import employee_vi from "./translations/employee_vi.json";
-//Apps_end
-
 i18next
+    .use(i18nextXHRBackend)
     .use(LanguageDetector)
     .init({
-    resources: {
-        en: {
-            common: common_en,
-            auth: auth_en,
-            //Apps_start
-            employee: employee_en
-            //Apps_end
-        },
-        vi: {
-            common: common_vi,
-            auth: auth_vi,
-            //Apps_start
-            employee: employee_vi
-            //Apps_end
-        },
+    backend: {
+        // load from i18next-gitbook repo
+        loadPath: '/locales/{{lng}}/{{ns}}.json'
     },
     lng: localStorage.getItem('default_locale') ? localStorage.getItem('default_locale') : Config.defaultLocale,
     fallbackLng: 'vi',
+    debug: true,
     // have a common namespace used around the full app
-    ns: ['common'],
+    ns: ['common', 'auth', 'employee'],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false, // not needed for react!!
@@ -44,6 +24,8 @@ i18next
     react: {
         wait: true
     }
+}, function(err, t) {
+    console.log(err);
 });
 
 export default i18next;

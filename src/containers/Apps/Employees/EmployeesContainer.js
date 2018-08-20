@@ -25,6 +25,10 @@ import {
   Row,
   Tooltip,
   UncontrolledTooltip,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader
 } from 'reactstrap';
 import { AvForm, AvField, AvGroup, AvInput, AvFeedback, AvRadioGroup, AvRadio } from 'availity-reactstrap-validation';
 import { connect } from 'react-redux';
@@ -48,6 +52,64 @@ class EmployeesContainer extends Component {
     this.toggleFormInfo = this.toggleFormInfo.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
+    this.toggleAddOrEditModal = this.toggleAddOrEditModal.bind(this);
+
+    const columnsTable = [
+      {
+        Header: this.props.t("employee:employee.label.number"),
+        id: "row",
+        maxWidth: 50,
+        className: "text-center",
+        filterable: false,
+        sortable: false,
+        Cell: (row) => {
+            return <div>{row.index + 1}</div>;
+        }
+      },
+      {
+        Header: this.props.t("employee:employee.label.username"),
+        accessor: "username"
+      },
+      {
+        Header: this.props.t("employee:employee.label.fullName"),
+        id: "fullName",
+        accessor: d => d.firstName + " " + d.lastName
+      },
+      {
+        Header: this.props.t("employee:employee.label.status"),
+        id: "enabled",
+        accessor: d => d.enabled ? this.props.t("employee:employee.dropdown.status.isActive") : this.props.t("employee:employee.dropdown.status.looked")
+      },
+      {
+        Header: this.props.t("employee:employee.label.roleName"),
+        accessor: "roleName"
+      },
+      {
+        Header: this.props.t("employee:employee.label.createdTime"),
+        id: "createdTime",
+        className: "text-right",
+        accessor: d => dateformat(d.createdTime, "HH:MM:ss dd-mm-yyyy")
+      },
+      {
+        Header: this.props.t("employee:employee.label.createdUser"),
+        accessor: "createdUser"
+      },
+      {
+        Header: this.props.t("employee:employee.label.updatedTime"),
+        id: "updatedTime",
+        className: "text-right",
+        accessor: d => d.updatedTime === null ? "" : dateformat(d.updatedTime, "HH:MM:ss dd-mm-yyyy")
+      },
+      {
+        Header: this.props.t("employee:employee.label.updatedUser"),
+        accessor: "updatedUser"
+      },
+      {
+        Header: this.props.t("employee:employee.label.signInCount"),
+        className: "text-center",
+        accessor: "signInCount"
+      }
+    ];
 
     this.state = {
       collapseFormSearch: true,
@@ -58,62 +120,9 @@ class EmployeesContainer extends Component {
       data: [],
       pages: null,
       loading: true,
-      columns: [
-        {
-          Header: this.props.t("employee.label.number"),
-          id: "row",
-          maxWidth: 50,
-          className: "text-center",
-          filterable: false,
-          sortable: false,
-          Cell: (row) => {
-              return <div>{row.index + 1}</div>;
-          }
-        },
-        {
-          Header: this.props.t("employee.label.username"),
-          accessor: "username"
-        },
-        {
-          Header: this.props.t("employee.label.fullName"),
-          id: "fullName",
-          accessor: d => d.firstName + " " + d.lastName
-        },
-        {
-          Header: this.props.t("employee.label.status"),
-          id: "enabled",
-          accessor: d => d.enabled ? this.props.t("employee.dropdown.status.isActive") : this.props.t("employee.dropdown.status.looked")
-        },
-        {
-          Header: this.props.t("employee.label.roleName"),
-          accessor: "roleName"
-        },
-        {
-          Header: this.props.t("employee.label.createdTime"),
-          id: "createdTime",
-          className: "text-right",
-          accessor: d => dateformat(d.createdTime, "HH:MM:ss dd-mm-yyyy")
-        },
-        {
-          Header: this.props.t("employee.label.createdUser"),
-          accessor: "createdUser"
-        },
-        {
-          Header: this.props.t("employee.label.updatedTime"),
-          id: "updatedTime",
-          className: "text-right",
-          accessor: d => d.updatedTime === null ? "" : dateformat(d.updatedTime, "HH:MM:ss dd-mm-yyyy")
-        },
-        {
-          Header: this.props.t("employee.label.updatedUser"),
-          accessor: "updatedUser"
-        },
-        {
-          Header: this.props.t("employee.label.signInCount"),
-          className: "text-center",
-          accessor: "signInCount"
-        }
-      ]
+      columns: columnsTable,
+      //AddOrEditModal
+      addOrEditModal: false,
     };
   }
 
@@ -181,6 +190,12 @@ class EmployeesContainer extends Component {
     });
   }
 
+  toggleAddOrEditModal() {
+    this.setState({
+      addOrEditModal: !this.state.addOrEditModal,
+    });
+  }
+
   render() {
     const nowDate = new Date().toJSON().split('T')[0];
     const { t } = this.props;
@@ -193,7 +208,7 @@ class EmployeesContainer extends Component {
               <Col xs="12">
                 <Card>
                   <CardHeader>
-                    <i className="fa fa-search"></i><Trans i18nKey="employee.title.search"/>
+                    <i className="fa fa-search"></i><Trans i18nKey="employee:employee.title.search"/>
                     <div className="card-header-actions">
                       <Button type="button" color="link" className="card-header-action btn-setting"><i className="icon-settings"></i></Button>
                       <Button type="button" color="link" className="card-header-action btn-minimize" data-target="#collapseFormSearch" onClick={this.toggleFormSearch}><i className="icon-arrow-up"></i></Button>
@@ -203,41 +218,41 @@ class EmployeesContainer extends Component {
                     <CardBody>
                       <Row>
                         <Col xs="12" sm="4">
-                          <AvField name="username" label={t("employee.label.username")} placeholder={t("employee.placeholder.username")} />
+                          <AvField name="username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} />
                         </Col>
                         <Col xs="12" sm="4">
-                          <AvField name="fullName" label={t("employee.label.fullName")} placeholder={t("employee.placeholder.fullName")} />
+                          <AvField name="fullName" label={t("employee:employee.label.fullName")} placeholder={t("employee:employee.placeholder.fullName")} />
                         </Col>
                         <Col xs="12" sm="4">
-                          <AvField name="email" label={t("employee.label.email")} placeholder={t("employee.placeholder.email")} />
+                          <AvField name="email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} />
                         </Col>
                       </Row>
                       <Row>
                         <Col xs="12" sm="4">
                           <AvGroup>
-                            <Label for="dateOfBirth"><Trans i18nKey="employee.label.dateOfBirth"/></Label>
+                            <Label for="dateOfBirth"><Trans i18nKey="employee:employee.label.dateOfBirth"/></Label>
                             <AvInput type="date" max={nowDate} id="dateOfBirth" name="dateOfBirth"/>
-                            <AvFeedback><Trans i18nKey="employee.message.invalidateDate"/></AvFeedback>
+                            <AvFeedback><Trans i18nKey="employee:employee.message.invalidateDate"/></AvFeedback>
                           </AvGroup>
                         </Col>
                         <Col xs="12" sm="4">
-                          <AvField type="select" name="enabled" label={t("employee.label.status")} helpMessage={t("employee.message.statusAll")} >
-                            <option value=""><Trans i18nKey="employee.dropdown.all"/></option>
-                            <option value="1"><Trans i18nKey="employee.dropdown.status.isActive"/></option>
-                            <option value="0"><Trans i18nKey="employee.dropdown.status.looked"/></option>
+                          <AvField type="select" name="enabled" label={t("employee:employee.label.status")} helpMessage={t("employee:employee.message.statusAll")} >
+                            <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
+                            <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
+                            <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option>
                           </AvField>
                         </Col>
                         <Col xs="12" sm="4">
-                          <AvField name="createdUser" label={t("employee.label.createdUser")} placeholder={t("employee.placeholder.createdUser")} />
+                          <AvField name="createdUser" label={t("employee:employee.label.createdUser")} placeholder={t("employee:employee.placeholder.createdUser")} />
                         </Col>
                       </Row>
                     </CardBody>
                     <CardFooter className="text-center">
-                      <Button type="submit" size="md" color="warning" className="mr-1"><i className="fa fa-search"></i> <Trans i18nKey="employee.button.search"/></Button>
-                      <Button type="button" size="md" color="success" className="mr-1"><i className="fa fa-plus-circle"></i> <Trans i18nKey="employee.button.add"/></Button>
-                      <Button type="button" size="md" color="danger" className="mr-1"><i className="fa fa-times-circle"></i> <Trans i18nKey="employee.button.delete"/></Button>
-                      <Button type="button" size="md" color="primary" className="mr-1"><i className="fa fa-download"></i> <Trans i18nKey="employee.button.import"/></Button>
-                      <Button type="button" size="md" color="info" className="mr-1"><i className="fa fa-upload"></i> <Trans i18nKey="employee.button.export"/></Button>
+                      <Button type="submit" size="md" color="warning" className="mr-1"><i className="fa fa-search"></i> <Trans i18nKey="employee:employee.button.search"/></Button>
+                      <Button type="button" size="md" color="success" className="mr-1" onClick={this.toggleAddOrEditModal}><i className="fa fa-plus-circle"></i> <Trans i18nKey="employee:employee.button.add"/></Button>
+                      <Button type="button" size="md" color="danger" className="mr-1"><i className="fa fa-times-circle"></i> <Trans i18nKey="employee:employee.button.delete"/></Button>
+                      <Button type="button" size="md" color="primary" className="mr-1"><i className="fa fa-download"></i> <Trans i18nKey="employee:employee.button.import"/></Button>
+                      <Button type="button" size="md" color="info" className="mr-1"><i className="fa fa-upload"></i> <Trans i18nKey="employee:employee.button.export"/></Button>
                     </CardFooter>
                   </Collapse>
                 </Card>
@@ -250,7 +265,7 @@ class EmployeesContainer extends Component {
             <Col>
                 <Card>
                 <CardHeader>
-                    <i className="fa fa-align-justify"></i><Trans i18nKey="employee.title.info"/>
+                    <i className="fa fa-align-justify"></i><Trans i18nKey="employee:employee.title.info"/>
                     <div className="card-header-actions">
                         <Button type="button" color="link" className="card-header-action btn-setting"><i className="icon-settings"></i></Button>
                         <Button type="button" color="link" className="card-header-action btn-minimize" data-target="#collapseFormInfo" onClick={this.toggleFormInfo}><i className="icon-arrow-up"></i></Button>
@@ -283,6 +298,23 @@ class EmployeesContainer extends Component {
             </Col>
             </Row>
         </div>
+        <div>
+          <Modal isOpen={this.state.addOrEditModal} toggle={this.toggleAddOrEditModal}
+                  className={'modal-success ' + this.props.className}>
+            <ModalHeader toggle={this.toggleAddOrEditModal}>Modal title</ModalHeader>
+            <ModalBody>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+              et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+              aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+              culpa qui officia deserunt mollit anim id est laborum.
+            </ModalBody>
+            <ModalFooter>
+              <Button color="success" onClick={this.toggleAddOrEditModal}>Do Something</Button>{' '}
+              <Button color="secondary" onClick={this.toggleAddOrEditModal}>Cancel</Button>
+            </ModalFooter>
+          </Modal>
+        </div>
       </div>
     );
   }
@@ -300,4 +332,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate('employee')(EmployeesContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(EmployeesContainer));

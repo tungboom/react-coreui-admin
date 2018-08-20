@@ -46,6 +46,7 @@ const axiosMiddlewareOptions = {
                         dispatch(onLogout({ isExpiredToken : true }));
                     }
                 }
+                return Promise.reject(error);
             }
         }]
     }

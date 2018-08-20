@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 // Auth actions
 import * as authActions from '../../actions/authActions';
-import history from './../../history';
 
 const propTypes = {
   children: PropTypes.node,
@@ -30,7 +29,7 @@ class DefaultHeader extends Component {
       let language = sessionStorage.getItem('default_locale') ? sessionStorage.getItem('default_locale') : Config.defaultLocale;
       this.state = {
           dropdownOpen: new Array(1).fill(false),
-          dropDownValue: language === "vi" ? <Trans i18nKey="common.button.langVi"/> : <Trans i18nKey="common.button.langEn"/>,
+          dropDownValue: language === "vi" ? <Trans i18nKey="common:common.button.langVi"/> : <Trans i18nKey="common:common.button.langEn"/>,
           errorUsername: "",
           errorPassword: ""
       };
@@ -42,7 +41,7 @@ class DefaultHeader extends Component {
     let language = sessionStorage.getItem('default_locale') ? sessionStorage.getItem('default_locale') : Config.defaultLocale;
     this.setState({
       dropdownOpen: newArray,
-      dropDownValue: language === "vi" ? <Trans i18nKey="common.button.langVi"/> : <Trans i18nKey="common.button.langEn"/>
+      dropDownValue: language === "vi" ? <Trans i18nKey="common:common.button.langVi"/> : <Trans i18nKey="common:common.button.langEn"/>
     });
   }
   handleLogout() {
@@ -87,9 +86,9 @@ class DefaultHeader extends Component {
                 {this.state.dropDownValue}
             </DropdownToggle>
             <DropdownMenu>
-                <DropdownItem header><Trans i18nKey="common.label.language"/></DropdownItem>
-                <DropdownItem onClick={() => changeLanguage('vi')}><Trans i18nKey="common.button.langVi"/></DropdownItem>
-                <DropdownItem onClick={() => changeLanguage('en')}><Trans i18nKey="common.button.langEn"/></DropdownItem>
+                <DropdownItem header><Trans i18nKey="common:common.label.language"/></DropdownItem>
+                <DropdownItem onClick={() => changeLanguage('vi')}><Trans i18nKey="common:common.button.langVi"/></DropdownItem>
+                <DropdownItem onClick={() => changeLanguage('en')}><Trans i18nKey="common:common.button.langEn"/></DropdownItem>
             </DropdownMenu>
             </Dropdown>
           <NavItem className="d-md-down-none">
@@ -134,7 +133,8 @@ DefaultHeader.defaultProps = defaultProps;
 
 function mapStateToProps(state, ownProps) {
     return {
-        isAuthenticated: state.auth.isAuthenticated
+        isAuthenticated: state.auth.isAuthenticated,
+        response: state.auth
     };
 }
 
@@ -144,4 +144,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate('common')(DefaultHeader));
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(DefaultHeader));

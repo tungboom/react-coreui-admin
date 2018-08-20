@@ -18,7 +18,7 @@ class LoginForm extends Component {
         let language = sessionStorage.getItem('default_locale') ? sessionStorage.getItem('default_locale') : Config.defaultLocale;
         this.state = {
             dropdownOpen: new Array(1).fill(false),
-            dropDownValue: language === "vi" ? <Trans i18nKey="auth.button.langVi"/> : <Trans i18nKey="auth.button.langEn"/>,
+            dropDownValue: language === "vi" ? <Trans i18nKey="auth:auth.button.langVi"/> : <Trans i18nKey="auth:auth.button.langEn"/>,
             errorUsername: "",
             errorPassword: ""
         };
@@ -31,7 +31,7 @@ class LoginForm extends Component {
         let language = sessionStorage.getItem('default_locale') ? sessionStorage.getItem('default_locale') : Config.defaultLocale;
         this.setState({
             dropdownOpen: newArray,
-            dropDownValue: language === "vi" ? <Trans i18nKey="auth.button.langVi"/> : <Trans i18nKey="auth.button.langEn"/>
+            dropDownValue: language === "vi" ? <Trans i18nKey="auth:auth.button.langVi"/> : <Trans i18nKey="auth:auth.button.langEn"/>
         });
     }
 
@@ -42,22 +42,22 @@ class LoginForm extends Component {
     validateUsername = _debounce((value, ctx, input, cb) => {
         cb(true);
         if (!value || value === '') {
-            this.setState({errorUsername: <Trans i18nKey="auth.message.username.required"/>});
+            this.setState({errorUsername: <Trans i18nKey="auth:auth.message.username.required"/>});
         } else if (value.length < 1 || value.length > 16) {
-            this.setState({errorUsername: <Trans i18nKey="auth.message.username.minMaxLength"/>});
+            this.setState({errorUsername: <Trans i18nKey="auth:auth.message.username.minMaxLength"/>});
         } else if (value.match(/^[A-Za-z0-9]+$/)) {
-            this.setState({errorUsername: <Trans i18nKey="auth.message.username.pattern"/>});
+            this.setState({errorUsername: <Trans i18nKey="auth:auth.message.username.pattern"/>});
         }
     }, 0);
 
     validatePassword = _debounce((value, ctx, input, cb) => {
         cb(true);
         if (!value || value === '') {
-            this.setState({errorPassword: <Trans i18nKey="auth.message.password.required"/>});
+            this.setState({errorPassword: <Trans i18nKey="auth:auth.message.password.required"/>});
         } else if (value.length < 1 || value.length > 16) {
-            this.setState({errorPassword: <Trans i18nKey="auth.message.password.minMaxLength"/>});
+            this.setState({errorPassword: <Trans i18nKey="auth:auth.message.password.minMaxLength"/>});
         } else if (value.match(/^[A-Za-z0-9]+$/)) {
-            this.setState({errorPassword: <Trans i18nKey="auth.message.password.pattern"/>});
+            this.setState({errorPassword: <Trans i18nKey="auth:auth.message.password.pattern"/>});
         }
     }, 0);
 
@@ -77,8 +77,8 @@ class LoginForm extends Component {
                         <CardBody>
                             <FormGroup row>
                                 <Col md="9">
-                                    <h1><Trans i18nKey="auth.title.login"/></h1>
-                                    <p className="text-muted"><Trans i18nKey="auth.intro.login"/></p>
+                                    <h1><Trans i18nKey="auth:auth.title.login"/></h1>
+                                    <p className="text-muted"><Trans i18nKey="auth:auth.intro.login"/></p>
                                 </Col>
                                 <Col xs="12" md="3">
                                     <Dropdown isOpen={this.state.dropdownOpen[0]} toggle={() => {
@@ -88,9 +88,9 @@ class LoginForm extends Component {
                                         {this.state.dropDownValue}
                                     </DropdownToggle>
                                     <DropdownMenu>
-                                        <DropdownItem header><Trans i18nKey="auth.label.language"/></DropdownItem>
-                                        <DropdownItem onClick={() => changeLanguage('vi')}><Trans i18nKey="auth.button.langVi"/></DropdownItem>
-                                        <DropdownItem onClick={() => changeLanguage('en')}><Trans i18nKey="auth.button.langEn"/></DropdownItem>
+                                        <DropdownItem header><Trans i18nKey="auth:auth.label.language"/></DropdownItem>
+                                        <DropdownItem onClick={() => changeLanguage('vi')}><Trans i18nKey="auth:auth.button.langVi"/></DropdownItem>
+                                        <DropdownItem onClick={() => changeLanguage('en')}><Trans i18nKey="auth:auth.button.langEn"/></DropdownItem>
                                     </DropdownMenu>
                                     </Dropdown>
                                 </Col>
@@ -102,7 +102,7 @@ class LoginForm extends Component {
                                         <InputGroupAddon addonType="prepend">
                                             <InputGroupText><i className="fa fa-user"></i></InputGroupText>
                                         </InputGroupAddon>
-                                        <AvInput id="username" name="username" placeholder={t('auth.placeholder.username')}
+                                        <AvInput id="username" name="username" placeholder={t('auth:auth.placeholder.username')}
                                             minLength="1" maxLength="16" pattern="^[A-Za-z0-9]+$" required 
                                             validate={{async: this.validateUsername}} 
                                         />
@@ -114,7 +114,7 @@ class LoginForm extends Component {
                                         <InputGroupAddon addonType="prepend">
                                             <InputGroupText><i className="fa fa-asterisk"></i></InputGroupText>
                                         </InputGroupAddon>
-                                        <AvInput name="password" type="password" placeholder={t('auth.placeholder.password')}
+                                        <AvInput name="password" type="password" placeholder={t('auth:auth.placeholder.password')}
                                                 minLength="1" maxLength="16" pattern="^[A-Za-z0-9]+$" required 
                                             validate={{async: this.validatePassword}} 
                                         />
@@ -124,10 +124,10 @@ class LoginForm extends Component {
                                 <FormGroup className="form-actions">
                                 <Row>
                                     <Col xs="6">
-                                        <Button type="submit" color="primary" className="px-4"><Trans i18nKey="auth.button.login"/></Button>
+                                        <Button type="submit" color="primary" className="px-4"><Trans i18nKey="auth:auth.button.login"/></Button>
                                     </Col>
                                     <Col xs="6" className="text-right">
-                                        <Button type="button" color="link" className="px-0"><Trans i18nKey="auth.button.forgotPassword"/></Button>
+                                        <Button type="button" color="link" className="px-0"><Trans i18nKey="auth:auth.button.forgotPassword"/></Button>
                                     </Col>
                                 </Row>
                                 </FormGroup>
@@ -137,9 +137,9 @@ class LoginForm extends Component {
                         <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
                         <CardBody className="text-center">
                             <div>
-                            <h2><Trans i18nKey="auth.title.signUp"/></h2>
-                            <p><Trans i18nKey="auth.intro.signUp"/></p>
-                            <Button color="primary" className="mt-3" active><Trans i18nKey="auth.button.register"/></Button>
+                            <h2><Trans i18nKey="auth:auth.title.signUp"/></h2>
+                            <p><Trans i18nKey="auth:auth.intro.signUp"/></p>
+                            <Button color="primary" className="mt-3" active><Trans i18nKey="auth:auth.button.register"/></Button>
                             </div>
                         </CardBody>
                         </Card>
@@ -158,4 +158,4 @@ LoginForm.propTypes = {
     errorMessage: PropTypes.object.isRequired
 };
 
-export default translate('auth')(LoginForm);
+export default translate()(LoginForm);
