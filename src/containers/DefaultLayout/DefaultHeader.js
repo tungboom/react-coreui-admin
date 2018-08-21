@@ -3,8 +3,11 @@ import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLin
 import PropTypes from 'prop-types';
 
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
-import logo from '../../assets/img/brand/logo.svg'
-import sygnet from '../../assets/img/brand/sygnet.svg'
+// import logo from '../../assets/img/brand/logo.svg';
+// import sygnet from '../../assets/img/brand/sygnet.svg';
+
+import logo from '../../assets/img/brand/logo_itsol.png';
+import sygnet from '../../assets/img/brand/sygnet_itsol.jpg';
 
 import { translate, Trans } from 'react-i18next';
 import Config from '../../config';
