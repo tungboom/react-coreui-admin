@@ -1,8 +1,7 @@
 {
     "employee": {
         "title": {
-            "search": "Search",
-            "info": "Information"
+            
         },
         "intro": {
             "loadData": "Load data",

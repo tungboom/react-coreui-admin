@@ -1,8 +1,7 @@
 {
     "employee": {
         "title": {
-            "search": "Tìm kiếm",
-            "info": "Thông tin"
+            
         },
         "intro": {
             "loadData": "Tải dữ liệu",

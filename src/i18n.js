@@ -25,7 +25,7 @@ i18next
         wait: true
     }
 }, function(err, t) {
-    console.log(err);
+    //console.log(err);
 });
 
 export default i18next;

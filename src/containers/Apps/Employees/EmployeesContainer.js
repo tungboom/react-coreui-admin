@@ -33,12 +33,10 @@ import {
 import { AvForm, AvField, AvGroup, AvInput, AvFeedback, AvRadioGroup, AvRadio } from 'availity-reactstrap-validation';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-// Import React Table
-import ReactTable from "react-table";
-import "react-table/react-table.css";
 // Employees actions
 import * as employeesActions from '../../../actions/employeesActions';
 // Child components
+import CustomReactTable from "../../Utils/CustomReactTable";
 import * as types from '../../../actions/employeesTypes';
 import { translate, Trans } from 'react-i18next';
 import { toastr } from 'react-redux-toastr';
@@ -50,9 +48,11 @@ class EmployeesContainer extends Component {
 
     this.toggleFormSearch = this.toggleFormSearch.bind(this);
     this.toggleFormInfo = this.toggleFormInfo.bind(this);
-    this.fetchData = this.fetchData.bind(this);
+    this.onFetchData = this.onFetchData.bind(this);
     this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
     this.toggleAddOrEditModal = this.toggleAddOrEditModal.bind(this);
+    this.handleValidSubmitAddOrEdit = this.handleValidSubmitAddOrEdit.bind(this);
+    this.handleInvalidSubmitAddOrEdit = this.handleInvalidSubmitAddOrEdit.bind(this);
 
     const columnsTable = [
       {
@@ -123,6 +123,7 @@ class EmployeesContainer extends Component {
       columns: columnsTable,
       //AddOrEditModal
       addOrEditModal: false,
+      isAdd: null
     };
   }
 
@@ -134,7 +135,7 @@ class EmployeesContainer extends Component {
     this.setState({ collapseFormInfo: !this.state.collapseFormInfo });
   }
 
-  fetchData(state, instance) {
+  onFetchData(state, instance) {
     let sortName = null;
     let sortType = null;
     if (state.sorted.length > 0) {
@@ -190,10 +191,20 @@ class EmployeesContainer extends Component {
     });
   }
 
-  toggleAddOrEditModal() {
+  toggleAddOrEditModal(value) {
     this.setState({
       addOrEditModal: !this.state.addOrEditModal,
+      isAdd: value
     });
+  }
+
+  handleValidSubmitAddOrEdit(event, values) {
+    console.log(values);
+  }
+
+  handleInvalidSubmitAddOrEdit(event, errors, values) {
+    console.log(errors);
+    console.log(values);
   }
 
   render() {
@@ -208,7 +219,7 @@ class EmployeesContainer extends Component {
               <Col xs="12">
                 <Card>
                   <CardHeader>
-                    <i className="fa fa-search"></i><Trans i18nKey="employee:employee.title.search"/>
+                    <i className="fa fa-search"></i><Trans i18nKey="common:common.title.search"/>
                     <div className="card-header-actions">
                       <Button type="button" color="link" className="card-header-action btn-setting"><i className="icon-settings"></i></Button>
                       <Button type="button" color="link" className="card-header-action btn-minimize" data-target="#collapseFormSearch" onClick={this.toggleFormSearch}><i className="icon-arrow-up"></i></Button>
@@ -249,9 +260,9 @@ class EmployeesContainer extends Component {
                     </CardBody>
                     <CardFooter className="text-center">
                       <Button type="submit" size="md" color="warning" className="mr-1"><i className="fa fa-search"></i> <Trans i18nKey="employee:employee.button.search"/></Button>
-                      <Button type="button" size="md" color="success" className="mr-1" onClick={this.toggleAddOrEditModal}><i className="fa fa-plus-circle"></i> <Trans i18nKey="employee:employee.button.add"/></Button>
-                      <Button type="button" size="md" color="danger" className="mr-1"><i className="fa fa-times-circle"></i> <Trans i18nKey="employee:employee.button.delete"/></Button>
-                      <Button type="button" size="md" color="primary" className="mr-1"><i className="fa fa-download"></i> <Trans i18nKey="employee:employee.button.import"/></Button>
+                      <Button type="button" size="md" color="success" className="mr-1" onClick={() => this.toggleAddOrEditModal("ADD")}><i className="fa fa-plus-circle"></i> <Trans i18nKey="employee:employee.button.add"/></Button>
+                      <Button type="button" size="md" color="danger" className="mr-1" onClick={() => this.toggleAddOrEditModal("EDIT")}><i className="fa fa-times-circle"></i> <Trans i18nKey="employee:employee.button.delete"/></Button>
+                      <Button type="button" size="md" color="info" className="mr-1"><i className="fa fa-download"></i> <Trans i18nKey="employee:employee.button.import"/></Button>
                       <Button type="button" size="md" color="info" className="mr-1"><i className="fa fa-upload"></i> <Trans i18nKey="employee:employee.button.export"/></Button>
                     </CardFooter>
                   </Collapse>
@@ -265,7 +276,7 @@ class EmployeesContainer extends Component {
             <Col>
                 <Card>
                 <CardHeader>
-                    <i className="fa fa-align-justify"></i><Trans i18nKey="employee:employee.title.info"/>
+                    <i className="fa fa-align-justify"></i><Trans i18nKey="common:common.title.info"/>
                     <div className="card-header-actions">
                         <Button type="button" color="link" className="card-header-action btn-setting"><i className="icon-settings"></i></Button>
                         <Button type="button" color="link" className="card-header-action btn-minimize" data-target="#collapseFormInfo" onClick={this.toggleFormInfo}><i className="icon-arrow-up"></i></Button>
@@ -273,24 +284,13 @@ class EmployeesContainer extends Component {
                 </CardHeader>
                 <Collapse isOpen={this.state.collapseFormInfo} id="collapseFormInfo">
                     <CardBody>
-                        <ReactTable
+                        <CustomReactTable
                           columns={columns}
-                          manual // Forces table not to paginate or sort automatically, so we can handle it server-side
                           data={data}
-                          pages={pages} // Display the total number of pages
-                          loading={loading} // Display the loading overlay when we need it
-                          onFetchData={this.fetchData} // Request new data when things change
-                          //filterable
+                          pages={pages}
+                          loading={loading}
+                          onFetchData={this.onFetchData}
                           defaultPageSize={10}
-                          className="-striped -highlight"
-                          // Text
-                          previousText={t('common:common.table.previousText')}
-                          nextText={t('common:common.table.nextText')}
-                          loadingText={t('common:common.table.loadingText')}
-                          noDataText={t('common:common.table.noDataText')}
-                          pageText={t('common:common.table.pageText')}
-                          ofText={t('common:common.table.ofText')}
-                          rowsText={t('common:common.table.rowsText')}
                         />
                     </CardBody>
                 </Collapse>
@@ -300,19 +300,48 @@ class EmployeesContainer extends Component {
         </div>
         <div>
           <Modal isOpen={this.state.addOrEditModal} toggle={this.toggleAddOrEditModal}
-                  className={'modal-success ' + this.props.className}>
-            <ModalHeader toggle={this.toggleAddOrEditModal}>Modal title</ModalHeader>
+                  className={(this.state.isAdd === "ADD" ? 'modal-success ' : this.state.isAdd === "EDIT" ? 'modal-primary ' : '') + 'modal-lg ' + this.props.className}>
+            <ModalHeader toggle={this.toggleAddOrEditModal}>{this.state.isAdd === "ADD" ? t("common:common.title.add") : this.state.isAdd === "EDIT" ? t("common:common.title.edit") : ''}</ModalHeader>
             <ModalBody>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-              et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum.
+              <AvForm onValidSubmit={this.handleValidSubmitAddOrEdit} onInvalidSubmit={this.handleInvalidSubmitAddOrEdit}>
+                  <Row>
+                    <Col xs="12" sm="6">
+                      <AvField name="username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} required/>
+                    </Col>
+                    <Col xs="12" sm="6">
+                      <AvField name="fullName" label={t("employee:employee.label.fullName")} placeholder={t("employee:employee.placeholder.fullName")} required/>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs="12" sm="6">
+                      <AvField name="email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} required/>
+                    </Col>
+                    <Col xs="12" sm="6">
+                      <AvGroup>
+                        <Label for="dateOfBirth"><Trans i18nKey="employee:employee.label.dateOfBirth"/></Label>
+                        <AvInput type="date" max={nowDate} id="dateOfBirth" name="dateOfBirth" required/>
+                        <AvFeedback><Trans i18nKey="employee:employee.message.invalidateDate"/></AvFeedback>
+                      </AvGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs="12" sm="6">
+                      <AvField type="select" name="enabled" label={t("employee:employee.label.status")} helpMessage={t("employee:employee.message.statusAll")} required>
+                        <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
+                        <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
+                        <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option>
+                      </AvField>
+                    </Col>
+                    <Col xs="12" sm="6">
+                      
+                    </Col>
+                  </Row>
+                  <FormGroup className="text-center">
+                    <Button type="submit" color="success"><i className="fa fa-save"></i> {this.state.isAdd === "ADD" ? t("common:common.button.save") : this.state.isAdd === "EDIT" ? t("common:common.button.update") : ''}</Button>{' '}
+                    <Button type="button" color="danger" onClick={this.toggleAddOrEditModal}><i className="fa fa-reply"></i> {t("common:common.button.cancel")}</Button>
+                  </FormGroup>
+              </AvForm>
             </ModalBody>
-            <ModalFooter>
-              <Button color="success" onClick={this.toggleAddOrEditModal}>Do Something</Button>{' '}
-              <Button color="secondary" onClick={this.toggleAddOrEditModal}>Cancel</Button>
-            </ModalFooter>
           </Modal>
         </div>
       </div>
