@@ -284,13 +284,13 @@ class EmployeesContainer extends Component {
                           defaultPageSize={10}
                           className="-striped -highlight"
                           // Text
-                          previousText={t('employee.table.previousText')}
-                          nextText={t('employee.table.nextText')}
-                          loadingText={t('employee.table.loadingText')}
-                          noDataText={t('employee.table.noDataText')}
-                          pageText={t('employee.table.pageText')}
-                          ofText={t('employee.table.ofText')}
-                          rowsText={t('employee.table.rowsText')}
+                          previousText={t('common:common.table.previousText')}
+                          nextText={t('common:common.table.nextText')}
+                          loadingText={t('common:common.table.loadingText')}
+                          noDataText={t('common:common.table.noDataText')}
+                          pageText={t('common:common.table.pageText')}
+                          ofText={t('common:common.table.ofText')}
+                          rowsText={t('common:common.table.rowsText')}
                         />
                     </CardBody>
                 </Collapse>
