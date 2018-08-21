@@ -33,8 +33,16 @@ class Login extends Component {
         }).catch((response) => {
             localStorage.clear();
             if (response.error !== undefined) {
-                if(response.error.response.data.error === "invalid_grant") {
-                    toastr.error(this.props.t("auth:auth.message.error.wrongUsernamePassword"));
+                if (response.error.response !== undefined) {
+                    if (response.error.response.data !== undefined) {
+                        if(response.error.response.data.error === "invalid_grant") {
+                            toastr.error(this.props.t("auth:auth.message.error.wrongUsernamePassword"));
+                        }
+                    } else {
+                        toastr.error(this.props.t("auth:auth.message.error.connectServer"));
+                    }
+                } else {
+                    toastr.error(this.props.t("auth:auth.message.error.connectServer"));
                 }
             } else {
                 toastr.error(this.props.t("auth:auth.message.error.connectServer"));
