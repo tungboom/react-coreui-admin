@@ -43,8 +43,8 @@ class LoginForm extends Component {
         cb(true);
         if (!value || value === '') {
             this.setState({errorUsername: <Trans i18nKey="auth:auth.message.username.required"/>});
-        } else if (value.length < 1 || value.length > 16) {
-            this.setState({errorUsername: <Trans i18nKey="auth:auth.message.username.minMaxLength"/>});
+        } else if (value.length > 16) {
+            this.setState({errorUsername: <Trans i18nKey="auth:auth.message.username.maxLength"/>});
         } else if (value.match(/^[A-Za-z0-9]+$/)) {
             this.setState({errorUsername: <Trans i18nKey="auth:auth.message.username.pattern"/>});
         }
@@ -54,7 +54,7 @@ class LoginForm extends Component {
         cb(true);
         if (!value || value === '') {
             this.setState({errorPassword: <Trans i18nKey="auth:auth.message.password.required"/>});
-        } else if (value.length < 1 || value.length > 16) {
+        } else if (value.length < 6 || value.length > 16) {
             this.setState({errorPassword: <Trans i18nKey="auth:auth.message.password.minMaxLength"/>});
         } else if (value.match(/^[A-Za-z0-9]+$/)) {
             this.setState({errorPassword: <Trans i18nKey="auth:auth.message.password.pattern"/>});
@@ -103,7 +103,7 @@ class LoginForm extends Component {
                                             <InputGroupText><i className="fa fa-user"></i></InputGroupText>
                                         </InputGroupAddon>
                                         <AvInput id="username" name="username" placeholder={t('auth:auth.placeholder.username')}
-                                            minLength="1" maxLength="16" pattern="^[A-Za-z0-9]+$" required 
+                                            maxLength="16" pattern="^[A-Za-z0-9]+$" required 
                                             validate={{async: this.validateUsername}} 
                                         />
                                         <AvFeedback>{this.state.errorUsername}</AvFeedback>
@@ -115,7 +115,7 @@ class LoginForm extends Component {
                                             <InputGroupText><i className="fa fa-asterisk"></i></InputGroupText>
                                         </InputGroupAddon>
                                         <AvInput name="password" type="password" placeholder={t('auth:auth.placeholder.password')}
-                                                minLength="1" maxLength="16" pattern="^[A-Za-z0-9]+$" required 
+                                                minLength="6" maxLength="16" pattern="^[A-Za-z0-9]+$" required 
                                             validate={{async: this.validatePassword}} 
                                         />
                                         <AvFeedback>{this.state.errorPassword}</AvFeedback>

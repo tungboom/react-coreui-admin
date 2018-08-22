@@ -45,31 +45,40 @@
             "updatedUser": "Updated user",
             "signInCount": "Number login",
             "email": "Email",
-            "dateOfBirth": "Date of birth"
+            "dateOfBirth": "Date of birth",
+            "password": "Password",
+            "rePassword": "Re-password"
         },
         "placeholder": {
             "username": "Enter username",
             "fullName": "Enter full name",
             "email": "Enter email",
             "dateOfBirth": "Enter date of birth",
-            "createdUser": "Enter created user"
+            "createdUser": "Enter created user",
+            "password": "Enter password",
+            "rePassword": "Enter re-password"
         },
         "message": {
             "error": "Error !",
             "success": "Success !",
             "username": {
-                "required": "Please enter a username",
-                "minMaxLength": "Your username must be between 6 and 16 characters",
+                "required": "Please enter username",
+                "minMaxLength": "Your username must be between 1 and 16 characters",
                 "pattern": "Your username must be composed only with letter and numbers"
             },
             "password": {
-                "required": "Please enter a password",
+                "required": "Please enter password",
                 "minMaxLength": "Your password must be between 6 and 16 characters",
-                "pattern": "Your password must be composed only with letter and numbers"
+                "pattern": "Your password must be composed only with letter and numbers",
+                "match": "Confirm the password incorrectly"
             },
+            "requiredRePassword": "Please enter re-password",
             "invalidateDate": "Invalidate date",
             "dateOfBirthMax": "Date of birth does not too current date",
-            "statusAll": "The default is all states"
+            "statusAll": "The default is all states",
+            "requiredStatus": "Please select status",
+            "fullName": "Please enter full name",
+            "email": "Please enter email"
         }
     }
 }

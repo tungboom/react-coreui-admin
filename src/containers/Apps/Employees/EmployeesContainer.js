@@ -122,6 +122,7 @@ class EmployeesContainer extends Component {
       loading: true,
       columns: columnsTable,
       //AddOrEditModal
+      backdrop: "static",
       addOrEditModal: false,
       isAdd: null
     };
@@ -299,49 +300,79 @@ class EmployeesContainer extends Component {
             </Row>
         </div>
         <div>
-          <Modal isOpen={this.state.addOrEditModal} toggle={this.toggleAddOrEditModal}
+          <Modal isOpen={this.state.addOrEditModal} toggle={this.toggleAddOrEditModal} backdrop={this.state.backdrop}
                   className={(this.state.isAdd === "ADD" ? 'modal-success ' : this.state.isAdd === "EDIT" ? 'modal-primary ' : '') + 'modal-lg ' + this.props.className}>
-            <ModalHeader toggle={this.toggleAddOrEditModal}>{this.state.isAdd === "ADD" ? t("common:common.title.add") : this.state.isAdd === "EDIT" ? t("common:common.title.edit") : ''}</ModalHeader>
-            <ModalBody>
-              <AvForm onValidSubmit={this.handleValidSubmitAddOrEdit} onInvalidSubmit={this.handleInvalidSubmitAddOrEdit}>
-                  <Row>
-                    <Col xs="12" sm="6">
-                      <AvField name="username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} required/>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <AvField name="fullName" label={t("employee:employee.label.fullName")} placeholder={t("employee:employee.placeholder.fullName")} required/>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12" sm="6">
-                      <AvField name="email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} required/>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <AvGroup>
-                        <Label for="dateOfBirth"><Trans i18nKey="employee:employee.label.dateOfBirth"/></Label>
-                        <AvInput type="date" max={nowDate} id="dateOfBirth" name="dateOfBirth" required/>
-                        <AvFeedback><Trans i18nKey="employee:employee.message.invalidateDate"/></AvFeedback>
-                      </AvGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12" sm="6">
-                      <AvField type="select" name="enabled" label={t("employee:employee.label.status")} helpMessage={t("employee:employee.message.statusAll")} required>
-                        <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
-                        <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
-                        <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option>
-                      </AvField>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      
-                    </Col>
-                  </Row>
-                  <FormGroup className="text-center">
-                    <Button type="submit" color="success"><i className="fa fa-save"></i> {this.state.isAdd === "ADD" ? t("common:common.button.save") : this.state.isAdd === "EDIT" ? t("common:common.button.update") : ''}</Button>{' '}
-                    <Button type="button" color="danger" onClick={this.toggleAddOrEditModal}><i className="fa fa-reply"></i> {t("common:common.button.cancel")}</Button>
-                  </FormGroup>
-              </AvForm>
-            </ModalBody>
+            <AvForm onValidSubmit={this.handleValidSubmitAddOrEdit} onInvalidSubmit={this.handleInvalidSubmitAddOrEdit}>
+              <ModalHeader toggle={this.toggleAddOrEditModal}>{this.state.isAdd === "ADD" ? t("common:common.title.add") : this.state.isAdd === "EDIT" ? t("common:common.title.edit") : ''}</ModalHeader>
+              <ModalBody>
+                <Row>
+                  <Col xs="12" sm="6">
+                    <AvField name="username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} required maxLength="16"
+                      validate={{
+                        required: {value: true, errorMessage: t("employee:employee.message.username.required")},
+                        pattern: {value: '^[A-Za-z0-9]+$', errorMessage: t("employee:employee.message.username.pattern")}
+                    }}/>
+                  </Col>
+                  <Col xs="12" sm="6">
+                    <AvField name="fullName" label={t("employee:employee.label.fullName")} placeholder={t("employee:employee.placeholder.fullName")} required
+                      validate={{
+                        required: {value: true, errorMessage: t("employee:employee.message.fullName")}
+                    }}/>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="12" sm="6">
+                    <AvField name="email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} required
+                      validate={{
+                        required: {value: true, errorMessage: t("employee:employee.message.email")}
+                    }}/>
+                  </Col>
+                  <Col xs="12" sm="6">
+                    <AvGroup>
+                      <Label for="dateOfBirth"><Trans i18nKey="employee:employee.label.dateOfBirth"/></Label>
+                      <AvInput type="date" max={nowDate} id="dateOfBirth" name="dateOfBirth" required/>
+                      <AvFeedback><Trans i18nKey="employee:employee.message.invalidateDate"/></AvFeedback>
+                    </AvGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="12" sm="6">
+                    <AvField name="password" autoComplete="off" label={t("employee:employee.label.password")} placeholder={t("employee:employee.placeholder.password")} required maxLength="16"
+                      validate={{
+                        required: {value: true, errorMessage: t("employee:employee.message.password.required")},
+                        pattern: {value: '^[A-Za-z0-9]+$', errorMessage: t("employee:employee.message.password.pattern")},
+                        minLength: {value: 6, errorMessage: t("employee:employee.message.password.minMaxLength")}
+                    }}/>
+                  </Col>
+                  <Col xs="12" sm="6">
+                    <AvField name="rePassword" autoComplete="off" label={t("employee:employee.label.rePassword")} placeholder={t("employee:employee.placeholder.rePassword")} required maxLength="16"
+                      validate={{
+                        match: { value: 'password', errorMessage: t("employee:employee.message.password.match")},
+                        required: {value: true, errorMessage: t("employee:employee.message.password.requiredRePassword")}
+                    }}/>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="12" sm="6">
+                    <AvField type="select" name="enabled" label={t("employee:employee.label.status")} helpMessage={t("employee:employee.message.statusAll")} required
+                      validate={{
+                        required: {value: true, errorMessage: t("employee:employee.message.requiredStatus")}
+                    }}>
+                      <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
+                      <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
+                      <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option>
+                    </AvField>
+                  </Col>
+                  <Col xs="12" sm="6">
+                    
+                  </Col>
+                </Row>
+              </ModalBody>
+              <ModalFooter>
+                <Button type="submit" color="success"><i className="fa fa-save"></i> {this.state.isAdd === "ADD" ? t("common:common.button.save") : this.state.isAdd === "EDIT" ? t("common:common.button.update") : ''}</Button>{' '}
+                <Button type="button" color="danger" onClick={this.toggleAddOrEditModal}><i className="fa fa-reply"></i> {t("common:common.button.cancel")}</Button>
+              </ModalFooter>
+            </AvForm>
           </Modal>
         </div>
       </div>

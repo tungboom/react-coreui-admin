@@ -45,31 +45,40 @@
             "updatedUser": "Người cập nhật",
             "signInCount": "Số lần đăng nhập",
             "email": "Email",
-            "dateOfBirth": "Ngày sinh"
+            "dateOfBirth": "Ngày sinh",
+            "password": "Mật khẩu",
+            "rePassword": "Nhập lại mật khẩu"
         },
         "placeholder": {
             "username": "Nhập tên tài khoản",
             "fullName": "Nhập tên người dùng",
             "email": "Nhập email",
             "dateOfBirth": "Nhập ngày sinh",
-            "createdUser": "Nhập người tạo"
+            "createdUser": "Nhập người tạo",
+            "password": "Nhập mật khẩu",
+            "rePassword": "Nhập lại mật khẩu"
         },
         "message": {
             "error": "Có lỗi xảy ra !",
             "success": "Thành công !",
             "username": {
                 "required": "Bạn chưa nhập tài khoản",
-                "minMaxLength": "Tài khoản phải từ 6 đến 16 ký tự",
+                "minMaxLength": "Tài khoản phải từ 1 đến 16 ký tự",
                 "pattern": "Tài khoản chỉ chứa ký tự chữ hoặc số"
             },
             "password": {
                 "required": "Bạn chưa nhập mật khẩu",
                 "minMaxLength": "Mật khẩu phải từ 6 đến 16 ký tự",
-                "pattern": "Mật khẩu chỉ chứa ký tự chữ hoặc số"
+                "pattern": "Mật khẩu chỉ chứa ký tự chữ hoặc số",
+                "match": "Xác nhận mật khẩu không đúng"
             },
+            "requiredRePassword": "Bạn chưa nhập lại mật khẩu",
             "invalidateDate": "Sai định dạng thời gian",
             "dateOfBirthMax": "Ngày sinh không quá ngày hiện tại",
-            "statusAll": "Mặc định là tất cả các trạng thái"
+            "statusAll": "Mặc định là tất cả các trạng thái",
+            "requiredStatus": "Bạn chưa chọn trạng thái",
+            "fullName": "Bạn chưa nhập tên người dùng",
+            "email": "Bạn chưa nhập email"
         }
     }
 }
