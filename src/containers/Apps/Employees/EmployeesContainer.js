@@ -313,26 +313,17 @@ class EmployeesContainer extends Component {
                         pattern: {value: '^[A-Za-z0-9]+$', errorMessage: t("employee:employee.message.username.pattern")}
                     }}/>
                   </Col>
-                  <Col xs="12" sm="6">
-                    <AvField name="fullName" label={t("employee:employee.label.fullName")} placeholder={t("employee:employee.placeholder.fullName")} required
+                  <Col xs="12" sm="6" md="3">
+                    <AvField name="firstName" label={t("employee:employee.label.firstName")} placeholder={t("employee:employee.placeholder.firstName")} required
                       validate={{
-                        required: {value: true, errorMessage: t("employee:employee.message.fullName")}
+                        required: {value: true, errorMessage: t("employee:employee.message.firstName")}
                     }}/>
                   </Col>
-                </Row>
-                <Row>
-                  <Col xs="12" sm="6">
-                    <AvField name="email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} required
+                  <Col xs="12" sm="6" md="3">
+                    <AvField name="lastName" label={t("employee:employee.label.lastName")} placeholder={t("employee:employee.placeholder.lastName")} required
                       validate={{
-                        required: {value: true, errorMessage: t("employee:employee.message.email")}
+                        required: {value: true, errorMessage: t("employee:employee.message.lastName")}
                     }}/>
-                  </Col>
-                  <Col xs="12" sm="6">
-                    <AvGroup>
-                      <Label for="dateOfBirth"><Trans i18nKey="employee:employee.label.dateOfBirth"/></Label>
-                      <AvInput type="date" max={nowDate} id="dateOfBirth" name="dateOfBirth" required/>
-                      <AvFeedback><Trans i18nKey="employee:employee.message.invalidateDate"/></AvFeedback>
-                    </AvGroup>
                   </Col>
                 </Row>
                 <Row>
@@ -348,13 +339,43 @@ class EmployeesContainer extends Component {
                     <AvField name="rePassword" autoComplete="off" label={t("employee:employee.label.rePassword")} placeholder={t("employee:employee.placeholder.rePassword")} required maxLength="16"
                       validate={{
                         match: { value: 'password', errorMessage: t("employee:employee.message.password.match")},
-                        required: {value: true, errorMessage: t("employee:employee.message.password.requiredRePassword")}
+                        required: {value: true, errorMessage: t("employee:employee.message.requiredRePassword")}
                     }}/>
                   </Col>
                 </Row>
                 <Row>
                   <Col xs="12" sm="6">
-                    <AvField type="select" name="enabled" label={t("employee:employee.label.status")} helpMessage={t("employee:employee.message.statusAll")} required
+                    <AvField name="email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} required
+                      validate={{
+                        required: {value: true, errorMessage: t("employee:employee.message.email")}
+                    }}/>
+                  </Col>
+                  <Col xs="12" sm="6">
+                    <AvField name="phone" label={t("employee:employee.label.phone")} placeholder={t("employee:employee.placeholder.phone")} required
+                      validate={{
+                        required: {value: true, errorMessage: t("employee:employee.message.phone")}
+                    }}/>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="12" sm="6">
+                    <AvField name="dateOfBirth" label={t("employee:employee.label.dateOfBirth")} type="date" max={nowDate} required
+                      validate={{
+                        required: {value: true, errorMessage: t("employee:employee.message.requiredDateOfBirth")},
+                        dateRange: {start: {value: -100, units: 'years'}, end: {value: 0, units: 'years'}, errorMessage: t("employee:employee.message.dateOfBirthRange")},
+                        date: {format: 'dd/mm/yyyy', errorMessage: t("employee:employee.message.invalidateDate")}
+                    }}/>
+                  </Col>
+                  <Col xs="12" sm="6">
+                    <AvField name="employeeCode" label={t("employee:employee.label.employeeCode")} placeholder={t("employee:employee.placeholder.employeeCode")} required
+                      validate={{
+                        required: {value: true, errorMessage: t("employee:employee.message.employeeCode")}
+                    }}/>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="12" sm="6">
+                    <AvField type="select" name="enabled" label={t("employee:employee.label.status")} required
                       validate={{
                         required: {value: true, errorMessage: t("employee:employee.message.requiredStatus")}
                     }}>
@@ -364,7 +385,11 @@ class EmployeesContainer extends Component {
                     </AvField>
                   </Col>
                   <Col xs="12" sm="6">
-                    
+                    <AvField type="select" name="unit" label={t("employee:employee.label.unit")}>
+                      <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
+                      {/* <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
+                      <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option> */}
+                    </AvField>
                   </Col>
                 </Row>
               </ModalBody>

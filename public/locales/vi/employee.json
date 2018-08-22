@@ -16,13 +16,7 @@
             "search": "Tìm kiếm"
         },
         "table": {
-            "previousText": "Trở về",
-            "nextText": "Trang tiếp",
-            "loadingText": "Đang tải ...",
-            "noDataText": "Không tìm thấy bản ghi nào",
-            "pageText": "Trang",
-            "ofText": "của",
-            "rowsText": "bản ghi"
+            
         },
         "dropdown": {
             "all": "Tất cả",
@@ -37,6 +31,8 @@
             "image": "Ảnh",
             "username": "Tên truy cập",
             "fullName": "Tên người dùng",
+            "firstName": "Họ",
+            "lastName": "Tên",
             "status": "Trạng thái",
             "roleName": "Tên quyền",
             "createdTime": "Ngày tạo",
@@ -47,16 +43,24 @@
             "email": "Email",
             "dateOfBirth": "Ngày sinh",
             "password": "Mật khẩu",
-            "rePassword": "Nhập lại mật khẩu"
+            "rePassword": "Nhập lại mật khẩu",
+            "phone": "Số điện thoại",
+            "employeeCode": "Mã nhân viên",
+            "unit": "Đơn vị"
         },
         "placeholder": {
             "username": "Nhập tên tài khoản",
             "fullName": "Nhập tên người dùng",
+            "firstName": "Nhập họ",
+            "lastName": "Nhập tên",
             "email": "Nhập email",
             "dateOfBirth": "Nhập ngày sinh",
             "createdUser": "Nhập người tạo",
             "password": "Nhập mật khẩu",
-            "rePassword": "Nhập lại mật khẩu"
+            "rePassword": "Nhập lại mật khẩu",
+            "phone": "Nhập số điện thoại",
+            "employeeCode": "Nhập mã nhân viên",
+            "unit": "Nhập đơn vị"
         },
         "message": {
             "error": "Có lỗi xảy ra !",
@@ -78,7 +82,14 @@
             "statusAll": "Mặc định là tất cả các trạng thái",
             "requiredStatus": "Bạn chưa chọn trạng thái",
             "fullName": "Bạn chưa nhập tên người dùng",
-            "email": "Bạn chưa nhập email"
+            "firstName": "Bạn chưa nhập họ",
+            "lastName": "Bạn chưa nhập tên",
+            "email": "Bạn chưa nhập email",
+            "phone": "Bạn chưa nhập số điện thoại",
+            "employeeCode": "Bạn chưa nhập mã nhân viên",
+            "unit": "Bạn chưa nhập đơn vị",
+            "requiredDateOfBirth": "Bạn chưa nhập ngày sinh",
+            "dateOfBirthRange": "Ngày sinh không hợp lệ"
         }
     }
 }

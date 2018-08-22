@@ -16,13 +16,7 @@
             "search": "Search"
         },
         "table": {
-            "previousText": "Previous",
-            "nextText": "Next",
-            "loadingText": "Loading...",
-            "noDataText": "No rows found",
-            "pageText": "Page",
-            "ofText": "of",
-            "rowsText": "rows"
+            
         },
         "dropdown": {
             "all": "All",
@@ -37,6 +31,8 @@
             "image": "Image",
             "username": "Username",
             "fullName": "Full name",
+            "firstName": "First name",
+            "lastName": "Last name",
             "status": "Status",
             "roleName": "Role",
             "createdTime": "Created time",
@@ -47,16 +43,24 @@
             "email": "Email",
             "dateOfBirth": "Date of birth",
             "password": "Password",
-            "rePassword": "Re-password"
+            "rePassword": "Re-password",
+            "phone": "Phone",
+            "employeeCode": "Employee code",
+            "unit": "Unit"
         },
         "placeholder": {
             "username": "Enter username",
             "fullName": "Enter full name",
+            "firstName": "Enter first name",
+            "lastName": "Enter last name",
             "email": "Enter email",
             "dateOfBirth": "Enter date of birth",
             "createdUser": "Enter created user",
             "password": "Enter password",
-            "rePassword": "Enter re-password"
+            "rePassword": "Enter re-password",
+            "phone": "Enter phone",
+            "employeeCode": "Enter employee code",
+            "unit": "Enter unit"
         },
         "message": {
             "error": "Error !",
@@ -78,7 +82,14 @@
             "statusAll": "The default is all states",
             "requiredStatus": "Please select status",
             "fullName": "Please enter full name",
-            "email": "Please enter email"
+            "firstName": "Please enter first name",
+            "lastName": "Please enter last name",
+            "email": "Please enter email",
+            "phone": "Please enter phone",
+            "employeeCode": "Please enter employee code",
+            "unit": "Please enter unit",
+            "requiredDateOfBirth": "Please enter date of birth",
+            "dateOfBirthRange": "Date of birth is invalid"
         }
     }
 }
