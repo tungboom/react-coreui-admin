@@ -212,7 +212,11 @@ class EmployeesContainer extends Component {
 
   handleValidSubmitAddOrEdit(event, values) {
     console.log(values);
-    this.props.actions.onAdd(values).then((response) => {
+    //this.setState({ image: this.editor.getImageScaledToCanvas().toDataURL() });
+    const formData = new FormData();
+    formData.append('formDataJson', JSON.stringify(values));
+    formData.append('files', this.editor.getImageScaledToCanvas().toDataURL());
+    this.props.actions.onAdd(formData).then((response) => {
       
     }).catch((response) => {
       
@@ -222,7 +226,6 @@ class EmployeesContainer extends Component {
   handleInvalidSubmitAddOrEdit(event, errors, values) {
     console.log(errors);
     console.log(values);
-    this.setState({ image: this.editor.getImageScaledToCanvas().toDataURL() });
   }
 
   handleNewImage = e => {
@@ -373,7 +376,7 @@ class EmployeesContainer extends Component {
               <ModalBody>
                 <Row>
                   <Col xs="12" sm="6" className="text-right">
-                    <AvGroup>
+                    <FormGroup>
                       <Dropzone
                         onDrop={this.handleDrop}
                         disableClick
@@ -397,14 +400,14 @@ class EmployeesContainer extends Component {
                         />
                       </Dropzone>
                       <br></br>
-                      <AvInput name="newImage" type="file" onChange={this.handleNewImage}/>
-                    </AvGroup>
+                      <Input name="newImage" type="file" onChange={this.handleNewImage}/>
+                    </FormGroup>
                     
                   </Col>
                   <Col xs="12" sm="6">
-                    <AvGroup>
+                    <FormGroup>
                       <Label for="scale"><Trans i18nKey="employee:employee.label.zoom"/></Label>
-                      <AvInput
+                      <Input
                         id="scale"
                         name="scale"
                         type="range"
@@ -413,14 +416,14 @@ class EmployeesContainer extends Component {
                         max="2"
                         step="0.01"
                         defaultValue="1"/>
-                    </AvGroup>
-                    <AvGroup>
+                    </FormGroup>
+                    <FormGroup>
                       <Label for="allowZoomOut"><Trans i18nKey="employee:employee.label.allowScale"/></Label>
-                      <AvInput type="checkbox" id="allowZoomOut" name="allowZoomOut" className="ml-3" onChange={this.handleAllowZoomOut} checked={this.state.allowZoomOut} />
-                    </AvGroup>
-                    <AvGroup>
+                      <Input type="checkbox" id="allowZoomOut" name="allowZoomOut" className="ml-3" onChange={this.handleAllowZoomOut} checked={this.state.allowZoomOut} />
+                    </FormGroup>
+                    <FormGroup>
                       <Label for="borderRadius"><Trans i18nKey="employee:employee.label.borderRadius"/></Label>
-                      <AvInput
+                      <Input
                         id="borderRadius"
                         name="borderRadius"
                         type="range"
@@ -429,7 +432,7 @@ class EmployeesContainer extends Component {
                         max="50"
                         step="1"
                         defaultValue="0"/>
-                    </AvGroup>
+                    </FormGroup>
                     <FormGroup>
                       <Label><Trans i18nKey="employee:employee.label.rotate"/></Label>
                       <br></br>

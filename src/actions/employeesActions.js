@@ -14,7 +14,7 @@ export function onSearchTable(data) {
   };
 }
 
-export function onAdd(data) {
+export function onAdd(formData) {
   return {
     type: types.ADD_EMPLOYEE,
     payload: {
@@ -22,13 +22,14 @@ export function onAdd(data) {
       request:{
         method: 'POST',
         url:'/employees/add',
-        data: data
+        data: formData,
+        config: { headers: {'Content-Type': 'multipart/form-data' }}
       }
     }
   };
 }
 
-export function onEdit(data) {
+export function onEdit(formData) {
   return {
     type: types.EDIT_EMPLOYEE,
     payload: {
@@ -36,7 +37,8 @@ export function onEdit(data) {
       request:{
         method: 'POST',
         url:'/employees/edit',
-        data: data
+        data: formData,
+        config: { headers: {'Content-Type': 'multipart/form-data' }}
       }
     }
   };
