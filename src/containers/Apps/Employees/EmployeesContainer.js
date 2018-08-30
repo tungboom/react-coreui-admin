@@ -403,7 +403,7 @@ class EmployeesContainer extends Component {
                   </Col>
                   <Col xs="12" sm="6">
                     <AvGroup>
-                      <Label for="scale">Zoom</Label>
+                      <Label for="scale"><Trans i18nKey="employee:employee.label.zoom"/></Label>
                       <AvInput
                         id="scale"
                         name="scale"
@@ -415,11 +415,11 @@ class EmployeesContainer extends Component {
                         defaultValue="1"/>
                     </AvGroup>
                     <AvGroup>
-                      <Label for="allowZoomOut">{'Allow Scale < 1'}</Label>
+                      <Label for="allowZoomOut"><Trans i18nKey="employee:employee.label.allowScale"/></Label>
                       <AvInput type="checkbox" id="allowZoomOut" name="allowZoomOut" className="ml-3" onChange={this.handleAllowZoomOut} checked={this.state.allowZoomOut} />
                     </AvGroup>
                     <AvGroup>
-                      <Label for="borderRadius">Border radius:</Label>
+                      <Label for="borderRadius"><Trans i18nKey="employee:employee.label.borderRadius"/></Label>
                       <AvInput
                         id="borderRadius"
                         name="borderRadius"
@@ -431,10 +431,10 @@ class EmployeesContainer extends Component {
                         defaultValue="0"/>
                     </AvGroup>
                     <FormGroup>
-                      <Label>Rotate:</Label>
+                      <Label><Trans i18nKey="employee:employee.label.rotate"/></Label>
                       <br></br>
-                      <Button type="button" onClick={this.rotateLeft}><i className="fa fa-rotate-left"></i> Left</Button>{' '}
-                      <Button type="button" onClick={this.rotateRight}><i className="fa fa-rotate-right"></i> Right</Button>
+                      <Button type="button" onClick={this.rotateLeft}><i className="fa fa-rotate-left"></i> <Trans i18nKey="employee:employee.button.rotateLeft"/></Button>{' '}
+                      <Button type="button" onClick={this.rotateRight}><i className="fa fa-rotate-right"></i> <Trans i18nKey="employee:employee.button.rotateRight"/></Button>
                     </FormGroup>
                   </Col>
                 </Row>

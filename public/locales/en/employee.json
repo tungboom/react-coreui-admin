@@ -13,7 +13,9 @@
             "delete": "Delete",
             "import": "Import",
             "export": "Export",
-            "search": "Search"
+            "search": "Search",
+            "rotateLeft": "Left",
+            "rotateRight": "Right"
         },
         "table": {
             
@@ -46,7 +48,11 @@
             "rePassword": "Re-password",
             "phone": "Phone",
             "employeeCode": "Employee code",
-            "unit": "Unit"
+            "unit": "Unit",
+            "zoom": "Zoom",
+            "allowScale": "Allow Scale < 1",
+            "borderRadius": "Border radius",
+            "rotate": "Rotate"
         },
         "placeholder": {
             "username": "Enter username",

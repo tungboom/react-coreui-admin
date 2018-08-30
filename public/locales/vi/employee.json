@@ -13,7 +13,9 @@
             "delete": "Xóa",
             "import": "Import",
             "export": "Export",
-            "search": "Tìm kiếm"
+            "search": "Tìm kiếm",
+            "rotateLeft": "Xoay trái",
+            "rotateRight": "Xoay phải"
         },
         "table": {
             
@@ -46,7 +48,11 @@
             "rePassword": "Nhập lại mật khẩu",
             "phone": "Số điện thoại",
             "employeeCode": "Mã nhân viên",
-            "unit": "Đơn vị"
+            "unit": "Đơn vị",
+            "zoom": "Thu phóng",
+            "allowScale": "Cho phép tỉ lệ thu phóng < 1",
+            "borderRadius": "Bán kính viền",
+            "rotate": "Xoay"
         },
         "placeholder": {
             "username": "Nhập tên tài khoản",
