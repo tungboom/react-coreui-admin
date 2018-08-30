@@ -53,7 +53,9 @@
     "react-i18next": "^7.9.0",
     "i18next-browser-languagedetector": "^2.2.2",
     "i18next-xhr-backend": "^1.5.1",
-    "dateformat": "^3.0.3"
+    "dateformat": "^3.0.3",
+    "react-avatar-editor": "^11.0.4",
+    "react-dropzone": "^5.0.1"
   },
   "devDependencies": {
     "babel-jest": "^23.0.1",

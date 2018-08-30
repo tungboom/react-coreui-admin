@@ -42,7 +42,7 @@ const axiosMiddlewareOptions = {
             error: ({ getState, dispatch, getSourceAction }, error) => {
                 // Response Error Interception
                 if (error.response !== undefined) {
-                    if (error.response.status === 401 && error.response.data.message === "expired_token") {
+                    if (error.response.status === 401 && (error.response.data.message === "expired_token" || error.response.data.error === "invalid_token")) {
                         dispatch(onLogout({ isExpiredToken : true }));
                     }
                 }

@@ -41,6 +41,8 @@ import * as types from '../../../actions/employeesTypes';
 import { translate, Trans } from 'react-i18next';
 import { toastr } from 'react-redux-toastr';
 import dateformat from "dateformat";
+import Dropzone from 'react-dropzone';
+import ReactAvatarEditor from 'react-avatar-editor';
 
 class EmployeesContainer extends Component {
   constructor(props) {
@@ -124,7 +126,16 @@ class EmployeesContainer extends Component {
       //AddOrEditModal
       backdrop: "static",
       addOrEditModal: false,
-      isAdd: null
+      isAdd: null,
+      //Avatar
+      image: null,
+      allowZoomOut: false,
+      position: { x: 0.5, y: 0.5 },
+      scale: 1,
+      rotate: 0,
+      borderRadius: 0,
+      width: 200,
+      height: 200
     };
   }
 
@@ -201,11 +212,66 @@ class EmployeesContainer extends Component {
 
   handleValidSubmitAddOrEdit(event, values) {
     console.log(values);
+    this.props.actions.onAdd(values).then((response) => {
+      
+    }).catch((response) => {
+      
+    });
   }
 
   handleInvalidSubmitAddOrEdit(event, errors, values) {
     console.log(errors);
     console.log(values);
+    this.setState({ image: this.editor.getImageScaledToCanvas().toDataURL() });
+  }
+
+  handleNewImage = e => {
+    this.setState({ image: e.target.files[0] });
+  }
+
+  handleScale = e => {
+    const scale = parseFloat(e.target.value);
+    this.setState({ scale });
+  }
+
+  handleAllowZoomOut = ({ target: { checked: allowZoomOut } }) => {
+    this.setState({ allowZoomOut });
+  }
+
+  rotateLeft = e => {
+    e.preventDefault()
+    this.setState({
+      rotate: this.state.rotate - 90,
+    })
+  }
+
+  rotateRight = e => {
+    e.preventDefault()
+    this.setState({
+      rotate: this.state.rotate + 90,
+    })
+  }
+
+  handleBorderRadius = e => {
+    const borderRadius = parseInt(e.target.value);
+    this.setState({ borderRadius });
+  }
+
+  logCallback(e) {
+    // eslint-disable-next-line
+    console.log('callback', e);
+  }
+
+  setEditorRef = editor => {
+    if (editor) this.editor = editor;
+  }
+
+  handlePositionChange = position => {
+    this.setState({ position });
+  }
+
+  handleDrop = acceptedFiles => {
+    this.setState({ image: acceptedFiles[0] });
   }
 
   render() {
@@ -305,6 +371,73 @@ class EmployeesContainer extends Component {
             <AvForm onValidSubmit={this.handleValidSubmitAddOrEdit} onInvalidSubmit={this.handleInvalidSubmitAddOrEdit}>
               <ModalHeader toggle={this.toggleAddOrEditModal}>{this.state.isAdd === "ADD" ? t("common:common.title.add") : this.state.isAdd === "EDIT" ? t("common:common.title.edit") : ''}</ModalHeader>
               <ModalBody>
+                <Row>
+                  <Col xs="12" sm="6" className="text-right">
+                    <AvGroup>
+                      <Dropzone
+                        onDrop={this.handleDrop}
+                        disableClick
+                        multiple={false}
+                        style={{ width: this.state.width, height: this.state.height, marginBottom:'50px' }}
+                      >
+                        <ReactAvatarEditor
+                          ref={this.setEditorRef}
+                          scale={parseFloat(this.state.scale)}
+                          width={this.state.width}
+                          height={this.state.height}
+                          position={this.state.position}
+                          onPositionChange={this.handlePositionChange}
+                          rotate={parseFloat(this.state.rotate)}
+                          borderRadius={this.state.width / (100 / this.state.borderRadius)}
+                          onLoadFailure={this.logCallback.bind(this, 'onLoadFailed')}
+                          onLoadSuccess={this.logCallback.bind(this, 'onLoadSuccess')}
+                          onImageReady={this.logCallback.bind(this, 'onImageReady')}
+                          image={this.state.image}
+                          className="editor-canvas"
+                        />
+                      </Dropzone>
+                      <br></br>
+                      <AvInput name="newImage" type="file" onChange={this.handleNewImage}/>
+                    </AvGroup>
+                    
+                  </Col>
+                  <Col xs="12" sm="6">
+                    <AvGroup>
+                      <Label for="scale">Zoom</Label>
+                      <AvInput
+                        id="scale"
+                        name="scale"
+                        type="range"
+                        onChange={this.handleScale}
+                        min={this.state.allowZoomOut ? '0.1' : '1'}
+                        max="2"
+                        step="0.01"
+                        defaultValue="1"/>
+                    </AvGroup>
+                    <AvGroup>
+                      <Label for="allowZoomOut">{'Allow Scale < 1'}</Label>
+                      <AvInput type="checkbox" id="allowZoomOut" name="allowZoomOut" className="ml-3" onChange={this.handleAllowZoomOut} checked={this.state.allowZoomOut} />
+                    </AvGroup>
+                    <AvGroup>
+                      <Label for="borderRadius">Border radius:</Label>
+                      <AvInput
+                        id="borderRadius"
+                        name="borderRadius"
+                        type="range"
+                        onChange={this.handleBorderRadius}
+                        min="0"
+                        max="50"
+                        step="1"
+                        defaultValue="0"/>
+                    </AvGroup>
+                    <FormGroup>
+                      <Label>Rotate:</Label>
+                      <br></br>
+                      <Button type="button" onClick={this.rotateLeft}><i className="fa fa-rotate-left"></i> Left</Button>{' '}
+                      <Button type="button" onClick={this.rotateRight}><i className="fa fa-rotate-right"></i> Right</Button>
+                    </FormGroup>
+                  </Col>
+                </Row>
                 <Row>
                   <Col xs="12" sm="6">
                     <AvField name="username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} required maxLength="16"
