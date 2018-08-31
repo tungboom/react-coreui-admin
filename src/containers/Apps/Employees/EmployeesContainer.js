@@ -72,12 +72,14 @@ class EmployeesContainer extends Component {
       {
         Header: this.props.t("employee:employee.label.image"),
         id: "fileId",
+        maxWidth: 100,
         accessor: d => {
           let html = <div></div>;
-          if(d.fileId === null || d.fileId === "") {
+          if(d.fileId === undefined || d.fileId === null || d.fileId === "") {
             html = <div className="text-center"><img className="app-img-avatar-table" src={avatar} alt={d.firstName + " " + d.lastName} /></div>;
           } else {
-            html = <div className="text-center"><img className="app-img-avatar-table" src={Config.apiUrl + "/common/getFileById?fileId=" + d.fileId} alt={d.firstName + " " + d.lastName} /></div>;
+            const accessToken = localStorage.getItem('access_token');
+            html = <div className="text-center"><img className="app-img-avatar-table" src={Config.apiUrl + "/demo/common/getFileById?fileId=" + d.fileId + '&access_token=' + accessToken} alt={d.firstName + " " + d.lastName} /></div>;
           }
           return html;
         }
@@ -233,20 +235,28 @@ class EmployeesContainer extends Component {
   }
 
   handleValidSubmitAddOrEdit(event, values) {
-    let objSave = values;
-    objSave.enabled = objSave.enabled === "1" ? true : objSave.enabled === "0" ? false : false;
-    const formData = new FormData();
-    formData.append('formDataJson', JSON.stringify(objSave));
-    formData.append('files', this.editor.getImageScaledToCanvas().toDataURL());
-    this.props.actions.onAdd(formData).then((response) => {
-      if(response.payload.data.key === "SUCCESS") {
-        toastr.success(this.props.t("employee:employee.message.success.add"));
-      } else {
+    fetch(this.editor.getImageScaledToCanvas().toDataURL())
+    .then(res => res.blob())
+    .then(blob => {
+      let filename = this.state.image.name;
+      let mimeType = this.state.image.type;
+      let fileAvatar = new File([blob], filename, {type:mimeType});
+      let objSave = values;
+      objSave.enabled = objSave.enabled === "1" ? true : objSave.enabled === "0" ? false : false;
+      const formData = new FormData();
+      formData.append('formDataJson', JSON.stringify(objSave));
+      formData.append('files', fileAvatar);
+      this.props.actions.onAdd(formData).then((response) => {
+        if(response.payload.data.key === "SUCCESS") {
+          toastr.success(this.props.t("employee:employee.message.success.add"));
+        } else {
+          toastr.error(this.props.t("employee:employee.message.error.add"));
+        }
+      }).catch((response) => {
         toastr.error(this.props.t("employee:employee.message.error.add"));
-      }
-    }).catch((response) => {
-      toastr.error(this.props.t("employee:employee.message.error.add"));
+      });
     });
+    
   }
 
   handleInvalidSubmitAddOrEdit(event, errors, values) {
