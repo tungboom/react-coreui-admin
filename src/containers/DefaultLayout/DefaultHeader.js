@@ -11,7 +11,6 @@ import sygnet from '../../assets/img/brand/sygnet_itsol.jpg';
 
 import { translate, Trans } from 'react-i18next';
 import Config from '../../config';
-import * as types from '../../actions/authTypes';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 // Auth actions

@@ -69,8 +69,16 @@
             "unit": "Enter unit"
         },
         "message": {
-            "error": "Error !",
-            "success": "Success !",
+            "error": {
+                "add": "Add user fails",
+                "edit": "Edit user fails",
+                "delete": "Delete user fails"
+            },
+            "success": {
+                "add": "Add user successfully",
+                "edit": "Edit user successfully",
+                "delete": "Delete user successfully"
+            },
             "username": {
                 "required": "Please enter username",
                 "minMaxLength": "Your username must be between 1 and 16 characters",

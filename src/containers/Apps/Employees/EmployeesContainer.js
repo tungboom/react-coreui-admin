@@ -37,12 +37,13 @@ import { bindActionCreators } from 'redux';
 import * as employeesActions from '../../../actions/employeesActions';
 // Child components
 import CustomReactTable from "../../Utils/CustomReactTable";
-import * as types from '../../../actions/employeesTypes';
 import { translate, Trans } from 'react-i18next';
 import { toastr } from 'react-redux-toastr';
 import dateformat from "dateformat";
 import Dropzone from 'react-dropzone';
 import ReactAvatarEditor from 'react-avatar-editor';
+import avatar from '../../../assets/img/brand/person.svg';
+import Config from '../../../config';
 
 class EmployeesContainer extends Component {
   constructor(props) {
@@ -66,6 +67,27 @@ class EmployeesContainer extends Component {
         sortable: false,
         Cell: (row) => {
             return <div>{row.index + 1}</div>;
+        }
+      },
+      {
+        Header: this.props.t("employee:employee.label.image"),
+        id: "fileId",
+        accessor: d => {
+          let html = <div></div>;
+          if(d.fileId === null || d.fileId === "") {
+            html = <div className="text-center"><img className="app-img-avatar-table" src={avatar} alt={d.firstName + " " + d.lastName} /></div>;
+          } else {
+            html = <div className="text-center"><img className="app-img-avatar-table" src={Config.apiUrl + "/common/getFileById?fileId=" + d.fileId} alt={d.firstName + " " + d.lastName} /></div>;
+          }
+          return html;
+        }
+      },
+      {
+        Header: this.props.t("employee:employee.label.action"),
+        id: "userId",
+        accessor: d => {
+          let html = <div></div>;
+          return html;
         }
       },
       {
@@ -211,21 +233,24 @@ class EmployeesContainer extends Component {
   }
 
   handleValidSubmitAddOrEdit(event, values) {
-    console.log(values);
-    //this.setState({ image: this.editor.getImageScaledToCanvas().toDataURL() });
+    let objSave = values;
+    objSave.enabled = objSave.enabled === "1" ? true : objSave.enabled === "0" ? false : false;
     const formData = new FormData();
-    formData.append('formDataJson', JSON.stringify(values));
+    formData.append('formDataJson', JSON.stringify(objSave));
     formData.append('files', this.editor.getImageScaledToCanvas().toDataURL());
     this.props.actions.onAdd(formData).then((response) => {
-      
+      if(response.payload.data.key === "SUCCESS") {
+        toastr.success(this.props.t("employee:employee.message.success.add"));
+      } else {
+        toastr.error(this.props.t("employee:employee.message.error.add"));
+      }
     }).catch((response) => {
-      
+      toastr.error(this.props.t("employee:employee.message.error.add"));
     });
   }
 
   handleInvalidSubmitAddOrEdit(event, errors, values) {
-    console.log(errors);
-    console.log(values);
+    
   }
 
   handleNewImage = e => {
@@ -521,7 +546,7 @@ class EmployeesContainer extends Component {
                     </AvField>
                   </Col>
                   <Col xs="12" sm="6">
-                    <AvField type="select" name="unit" label={t("employee:employee.label.unit")}>
+                    <AvField type="select" name="unitId" label={t("employee:employee.label.unit")}>
                       <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
                       {/* <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
                       <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option> */}

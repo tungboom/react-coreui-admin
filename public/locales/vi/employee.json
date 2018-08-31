@@ -69,8 +69,16 @@
             "unit": "Nhập đơn vị"
         },
         "message": {
-            "error": "Có lỗi xảy ra !",
-            "success": "Thành công !",
+            "error": {
+                "add": "Thêm mới người dùng thất bại",
+                "edit": "Sửa người dùng thất bại",
+                "delete": "Xóa người dùng thất bại"
+            },
+            "success": {
+                "add": "Thêm mới người dùng thành công",
+                "edit": "Sửa người dùng thành công",
+                "delete": "Xóa người dùng thành công"
+            },
             "username": {
                 "required": "Bạn chưa nhập tài khoản",
                 "minMaxLength": "Tài khoản phải từ 1 đến 16 ký tự",
