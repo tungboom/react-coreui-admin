@@ -37,6 +37,7 @@ import { bindActionCreators } from 'redux';
 import * as employeesActions from '../../../actions/employeesActions';
 // Child components
 import CustomReactTable from "../../Utils/CustomReactTable";
+import AddOrEditEmployeeContainer from "./AddOrEditEmployeeContainer";
 import { translate, Trans } from 'react-i18next';
 import { toastr } from 'react-redux-toastr';
 import dateformat from "dateformat";
@@ -63,7 +64,6 @@ class EmployeesContainer extends Component {
         id: "row",
         maxWidth: 50,
         className: "text-center",
-        filterable: false,
         sortable: false,
         Cell: (row) => {
             return <div>{row.index + 1}</div>;
@@ -71,15 +71,16 @@ class EmployeesContainer extends Component {
       },
       {
         Header: this.props.t("employee:employee.label.image"),
-        id: "fileId",
-        maxWidth: 100,
+        id: "avatarId",
+        sortable: false,
+        maxWidth: 80,
         accessor: d => {
           let html = <div></div>;
-          if(d.fileId === undefined || d.fileId === null || d.fileId === "") {
+          if(d.avatarId === undefined || d.avatarId === null || d.avatarId === "") {
             html = <div className="text-center"><img className="app-img-avatar-table" src={avatar} alt={d.firstName + " " + d.lastName} /></div>;
           } else {
             const accessToken = localStorage.getItem('access_token');
-            html = <div className="text-center"><img className="app-img-avatar-table" src={Config.apiUrl + "/demo/common/getFileById?fileId=" + d.fileId + '&access_token=' + accessToken} alt={d.firstName + " " + d.lastName} /></div>;
+            html = <div className="text-center"><img className="app-img-avatar-table" src={Config.apiUrl + "/demo/common/getFileById?fileId=" + d.avatarId + '&access_token=' + accessToken} alt={d.firstName + " " + d.lastName} /></div>;
           }
           return html;
         }
@@ -87,8 +88,12 @@ class EmployeesContainer extends Component {
       {
         Header: this.props.t("employee:employee.label.action"),
         id: "userId",
+        sortable: false,
         accessor: d => {
-          let html = <div></div>;
+          let html = <div className="text-center">
+            <span className="app-span-icon-table mr-2" onClick={() => this.toggleAddOrEditModal("EDIT")}><i className="fa fa-edit"></i></span>
+            <span className="app-span-icon-table"><i className="fa fa-times-circle"></i></span>
+          </div>;
           return html;
         }
       },
@@ -151,6 +156,7 @@ class EmployeesContainer extends Component {
       backdrop: "static",
       addOrEditModal: false,
       isAdd: null,
+      objectAddOrEdit: {},
       //Avatar
       image: null,
       allowZoomOut: false,
@@ -207,10 +213,11 @@ class EmployeesContainer extends Component {
   }
 
   handleSubmitSearch(event, errors, values) {
-    values.enabled = values.enabled === "1" ? true : values.enabled === "0" ? false : null;
-    values.dateOfBirth = values.dateOfBirth === "" ? null : values.dateOfBirth;
+    let obj = values.objectSearch;
+    obj.enabled = obj.enabled === "1" ? true : obj.enabled === "0" ? false : null;
+    obj.dateOfBirth = obj.dateOfBirth === "" ? null : obj.dateOfBirth;
 
-    const objectSearch = Object.assign({}, this.state.objectSearch, values);
+    const objectSearch = Object.assign({}, this.state.objectSearch, obj);
     this.setState({
       loading: true,
       objectSearch: objectSearch
@@ -232,6 +239,20 @@ class EmployeesContainer extends Component {
       addOrEditModal: !this.state.addOrEditModal,
       isAdd: value
     });
+    if(value === "ADD") {
+      this.setState({
+        objectAddOrEdit: {}
+      });
+    } else if(value === "EDIT") {
+      this.props.actions.onGetDetail(1).then((response) => {
+        let objectUser = response.payload.data;
+        this.setState({
+          objectAddOrEdit: objectUser
+        });
+      }).catch((response) => {
+        toastr.error(this.props.t("employee:employee.message.error.getDetail"));
+      });
+    }
   }
 
   handleValidSubmitAddOrEdit(event, values) {
@@ -241,7 +262,7 @@ class EmployeesContainer extends Component {
       let filename = this.state.image.name;
       let mimeType = this.state.image.type;
       let fileAvatar = new File([blob], filename, {type:mimeType});
-      let objSave = values;
+      let objSave = values.objectUser;
       objSave.enabled = objSave.enabled === "1" ? true : objSave.enabled === "0" ? false : false;
       const formData = new FormData();
       formData.append('formDataJson', JSON.stringify(objSave));
@@ -316,6 +337,24 @@ class EmployeesContainer extends Component {
     const nowDate = new Date().toJSON().split('T')[0];
     const { t } = this.props;
     const { columns, data, pages, loading } = this.state;
+    let objectAddOrEdit = {};
+    if(this.props.response.detail !== undefined) {
+      const obj = this.props.response.detail.payload.data;
+      objectAddOrEdit.objectUser = {
+        username: obj.username === null ? undefined : obj.username,
+        firstName: obj.firstName === null ? undefined : obj.firstName,
+        lastName: obj.lastName === null ? undefined : obj.lastName,
+        password: obj.password === null ? undefined : obj.password,
+        rePassword: obj.rePassword === null ? undefined : obj.rePassword,
+        email: obj.email === null ? undefined : obj.email,
+        phone: obj.phone === null ? undefined : obj.phone,
+        dateOfBirth: obj.dateOfBirth === null ? undefined : obj.dateOfBirth,
+        employeeCode: obj.employeeCode === null ? undefined : obj.employeeCode,
+        enabled: obj.enabled === true ? "1" : obj.enabled === false ? "0" : "",
+        unitId: obj.unitId === null ? undefined : obj.unitId
+      };
+    }
+    console.log(objectAddOrEdit);
     return (
       <div>
         <div className="animated fadeIn">
@@ -334,39 +373,39 @@ class EmployeesContainer extends Component {
                     <CardBody>
                       <Row>
                         <Col xs="12" sm="4">
-                          <AvField name="username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} />
+                          <AvField name="objectSearch.username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} />
                         </Col>
                         <Col xs="12" sm="4">
-                          <AvField name="fullName" label={t("employee:employee.label.fullName")} placeholder={t("employee:employee.placeholder.fullName")} />
+                          <AvField name="objectSearch.fullName" label={t("employee:employee.label.fullName")} placeholder={t("employee:employee.placeholder.fullName")} />
                         </Col>
                         <Col xs="12" sm="4">
-                          <AvField name="email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} />
+                          <AvField name="objectSearch.email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} />
                         </Col>
                       </Row>
                       <Row>
                         <Col xs="12" sm="4">
                           <AvGroup>
-                            <Label for="dateOfBirth"><Trans i18nKey="employee:employee.label.dateOfBirth"/></Label>
-                            <AvInput type="date" max={nowDate} id="dateOfBirth" name="dateOfBirth"/>
+                            <Label for="objectSearch.dateOfBirth"><Trans i18nKey="employee:employee.label.dateOfBirth"/></Label>
+                            <AvInput type="date" max={nowDate} id="objectSearch.dateOfBirth" name="objectSearch.dateOfBirth"/>
                             <AvFeedback><Trans i18nKey="employee:employee.message.invalidateDate"/></AvFeedback>
                           </AvGroup>
                         </Col>
                         <Col xs="12" sm="4">
-                          <AvField type="select" name="enabled" label={t("employee:employee.label.status")} helpMessage={t("employee:employee.message.statusAll")} >
+                          <AvField type="select" name="objectSearch.enabled" label={t("employee:employee.label.status")} helpMessage={t("employee:employee.message.statusAll")} >
                             <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
                             <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
                             <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option>
                           </AvField>
                         </Col>
                         <Col xs="12" sm="4">
-                          <AvField name="createdUser" label={t("employee:employee.label.createdUser")} placeholder={t("employee:employee.placeholder.createdUser")} />
+                          <AvField name="objectSearch.createdUser" label={t("employee:employee.label.createdUser")} placeholder={t("employee:employee.placeholder.createdUser")} />
                         </Col>
                       </Row>
                     </CardBody>
                     <CardFooter className="text-center">
                       <Button type="submit" size="md" color="warning" className="mr-1"><i className="fa fa-search"></i> <Trans i18nKey="employee:employee.button.search"/></Button>
                       <Button type="button" size="md" color="success" className="mr-1" onClick={() => this.toggleAddOrEditModal("ADD")}><i className="fa fa-plus-circle"></i> <Trans i18nKey="employee:employee.button.add"/></Button>
-                      <Button type="button" size="md" color="danger" className="mr-1" onClick={() => this.toggleAddOrEditModal("EDIT")}><i className="fa fa-times-circle"></i> <Trans i18nKey="employee:employee.button.delete"/></Button>
+                      {/* <Button type="button" size="md" color="danger" className="mr-1" onClick={() => this.toggleAddOrEditModal("EDIT")}><i className="fa fa-times-circle"></i> <Trans i18nKey="employee:employee.button.delete"/></Button> */}
                       <Button type="button" size="md" color="info" className="mr-1"><i className="fa fa-download"></i> <Trans i18nKey="employee:employee.button.import"/></Button>
                       <Button type="button" size="md" color="info" className="mr-1"><i className="fa fa-upload"></i> <Trans i18nKey="employee:employee.button.export"/></Button>
                     </CardFooter>
@@ -406,7 +445,7 @@ class EmployeesContainer extends Component {
         <div>
           <Modal isOpen={this.state.addOrEditModal} toggle={this.toggleAddOrEditModal} backdrop={this.state.backdrop}
                   className={(this.state.isAdd === "ADD" ? 'modal-success ' : this.state.isAdd === "EDIT" ? 'modal-primary ' : '') + 'modal-lg ' + this.props.className}>
-            <AvForm onValidSubmit={this.handleValidSubmitAddOrEdit} onInvalidSubmit={this.handleInvalidSubmitAddOrEdit}>
+            <AvForm onValidSubmit={this.handleValidSubmitAddOrEdit} onInvalidSubmit={this.handleInvalidSubmitAddOrEdit} model={objectAddOrEdit}>
               <ModalHeader toggle={this.toggleAddOrEditModal}>{this.state.isAdd === "ADD" ? t("common:common.title.add") : this.state.isAdd === "EDIT" ? t("common:common.title.edit") : ''}</ModalHeader>
               <ModalBody>
                 <Row>
@@ -478,20 +517,20 @@ class EmployeesContainer extends Component {
                 </Row>
                 <Row>
                   <Col xs="12" sm="6">
-                    <AvField name="username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} required maxLength="16"
+                    <AvField name="objectUser.username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} required maxLength="16"
                       validate={{
                         required: {value: true, errorMessage: t("employee:employee.message.username.required")},
                         pattern: {value: '^[A-Za-z0-9]+$', errorMessage: t("employee:employee.message.username.pattern")}
                     }}/>
                   </Col>
                   <Col xs="12" sm="6" md="3">
-                    <AvField name="firstName" label={t("employee:employee.label.firstName")} placeholder={t("employee:employee.placeholder.firstName")} required
+                    <AvField name="objectUser.firstName" label={t("employee:employee.label.firstName")} placeholder={t("employee:employee.placeholder.firstName")} required
                       validate={{
                         required: {value: true, errorMessage: t("employee:employee.message.firstName")}
                     }}/>
                   </Col>
                   <Col xs="12" sm="6" md="3">
-                    <AvField name="lastName" label={t("employee:employee.label.lastName")} placeholder={t("employee:employee.placeholder.lastName")} required
+                    <AvField name="objectUser.lastName" label={t("employee:employee.label.lastName")} placeholder={t("employee:employee.placeholder.lastName")} required
                       validate={{
                         required: {value: true, errorMessage: t("employee:employee.message.lastName")}
                     }}/>
@@ -499,7 +538,7 @@ class EmployeesContainer extends Component {
                 </Row>
                 <Row>
                   <Col xs="12" sm="6">
-                    <AvField name="password" autoComplete="off" label={t("employee:employee.label.password")} placeholder={t("employee:employee.placeholder.password")} required maxLength="16"
+                    <AvField name="objectUser.password" type="password" autoComplete="off" label={t("employee:employee.label.password")} placeholder={t("employee:employee.placeholder.password")} required maxLength="16"
                       validate={{
                         required: {value: true, errorMessage: t("employee:employee.message.password.required")},
                         pattern: {value: '^[A-Za-z0-9]+$', errorMessage: t("employee:employee.message.password.pattern")},
@@ -507,7 +546,7 @@ class EmployeesContainer extends Component {
                     }}/>
                   </Col>
                   <Col xs="12" sm="6">
-                    <AvField name="rePassword" autoComplete="off" label={t("employee:employee.label.rePassword")} placeholder={t("employee:employee.placeholder.rePassword")} required maxLength="16"
+                    <AvField name="objectUser.rePassword" type="password" autoComplete="off" label={t("employee:employee.label.rePassword")} placeholder={t("employee:employee.placeholder.rePassword")} required maxLength="16"
                       validate={{
                         match: { value: 'password', errorMessage: t("employee:employee.message.password.match")},
                         required: {value: true, errorMessage: t("employee:employee.message.requiredRePassword")}
@@ -516,13 +555,13 @@ class EmployeesContainer extends Component {
                 </Row>
                 <Row>
                   <Col xs="12" sm="6">
-                    <AvField name="email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} required
+                    <AvField name="objectUser.email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} required
                       validate={{
                         required: {value: true, errorMessage: t("employee:employee.message.email")}
                     }}/>
                   </Col>
                   <Col xs="12" sm="6">
-                    <AvField name="phone" label={t("employee:employee.label.phone")} placeholder={t("employee:employee.placeholder.phone")} required
+                    <AvField name="objectUser.phone" label={t("employee:employee.label.phone")} placeholder={t("employee:employee.placeholder.phone")} required
                       validate={{
                         required: {value: true, errorMessage: t("employee:employee.message.phone")}
                     }}/>
@@ -530,7 +569,7 @@ class EmployeesContainer extends Component {
                 </Row>
                 <Row>
                   <Col xs="12" sm="6">
-                    <AvField name="dateOfBirth" label={t("employee:employee.label.dateOfBirth")} type="date" max={nowDate} required
+                    <AvField name="objectUser.dateOfBirth" label={t("employee:employee.label.dateOfBirth")} type="date" max={nowDate} required
                       validate={{
                         required: {value: true, errorMessage: t("employee:employee.message.requiredDateOfBirth")},
                         dateRange: {start: {value: -100, units: 'years'}, end: {value: 0, units: 'years'}, errorMessage: t("employee:employee.message.dateOfBirthRange")},
@@ -538,7 +577,7 @@ class EmployeesContainer extends Component {
                     }}/>
                   </Col>
                   <Col xs="12" sm="6">
-                    <AvField name="employeeCode" label={t("employee:employee.label.employeeCode")} placeholder={t("employee:employee.placeholder.employeeCode")} required
+                    <AvField name="objectUser.employeeCode" label={t("employee:employee.label.employeeCode")} placeholder={t("employee:employee.placeholder.employeeCode")} required
                       validate={{
                         required: {value: true, errorMessage: t("employee:employee.message.employeeCode")}
                     }}/>
@@ -546,7 +585,7 @@ class EmployeesContainer extends Component {
                 </Row>
                 <Row>
                   <Col xs="12" sm="6">
-                    <AvField type="select" name="enabled" label={t("employee:employee.label.status")} required
+                    <AvField type="select" name="objectUser.enabled" label={t("employee:employee.label.status")} required
                       validate={{
                         required: {value: true, errorMessage: t("employee:employee.message.requiredStatus")}
                     }}>
@@ -556,7 +595,7 @@ class EmployeesContainer extends Component {
                     </AvField>
                   </Col>
                   <Col xs="12" sm="6">
-                    <AvField type="select" name="unitId" label={t("employee:employee.label.unit")}>
+                    <AvField type="select" name="objectUser.unitId" label={t("employee:employee.label.unit")}>
                       <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
                       {/* <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
                       <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option> */}

@@ -14,6 +14,19 @@ export function onSearchTable(data) {
   };
 }
 
+export function onGetDetail(userId) {
+  return {
+    type: types.GET_DETAIL_EMPLOYEE,
+    payload: {
+      client: 'default',
+      request:{
+        method: 'GET',
+        url:'/employees/getDetail?userId=' + userId
+      }
+    }
+  };
+}
+
 export function onAdd(formData) {
   return {
     type: types.ADD_EMPLOYEE,
@@ -44,15 +57,14 @@ export function onEdit(formData) {
   };
 }
 
-export function onDelete(data) {
+export function onDelete(userId) {
   return {
     type: types.DELETE_EMPLOYEE,
     payload: {
       client: 'default',
       request:{
-        method: 'POST',
-        url:'/employees/delete',
-        data: data
+        method: 'GET',
+        url:'/employees/delete?userId=' + userId
       }
     }
   };

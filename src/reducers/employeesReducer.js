@@ -7,6 +7,10 @@ export default function employeesReducer(state = initialState.employees, action)
             return { ...state, dataTable: action };
         case `${types.SEARCH_EMPLOYEE}_FAIL`:
             return { ...state, dataTable: action };
+        case `${types.GET_DETAIL_EMPLOYEE}_SUCCESS`:
+            return { ...state, detail: action };
+        case `${types.GET_DETAIL_EMPLOYEE}_FAIL`:
+            return { ...state, detail: action };
         case `${types.ADD_EMPLOYEE}_SUCCESS`:
             return { ...state, add: action };
         case `${types.ADD_EMPLOYEE}_FAIL`:
