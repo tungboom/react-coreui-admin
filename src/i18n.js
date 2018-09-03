@@ -15,7 +15,7 @@ i18next
     fallbackLng: 'vi',
     debug: true,
     // have a common namespace used around the full app
-    ns: ['common', 'auth', 'employee'],
+    ns: ['common', 'auth', 'employee', 'role', 'history', 'location'],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false, // not needed for react!!
