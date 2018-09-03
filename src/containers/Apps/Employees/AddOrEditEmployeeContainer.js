@@ -288,13 +288,16 @@ class AddOrEditEmployeeContainer extends Component {
                         <Col xs="12" sm="6">
                         <AvField name="objectUser.email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} required
                             validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.email")}
+                            required: {value: true, errorMessage: t("employee:employee.message.email")},
+                            email: {value: true, errorMessage: t("employee:employee.message.invalidateEmail")}
                         }}/>
                         </Col>
                         <Col xs="12" sm="6">
-                        <AvField name="objectUser.phone" label={t("employee:employee.label.phone")} placeholder={t("employee:employee.placeholder.phone")} required
+                        <AvField name="objectUser.phone" label={t("employee:employee.label.phone")} placeholder={t("employee:employee.placeholder.phone")} required maxLength="15"
                             validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.phone")}
+                            required: {value: true, errorMessage: t("employee:employee.message.phone")},
+                            number: {value: true, errorMessage: t("employee:employee.message.invalidatePhone")},
+                            minLength: {value: 9, errorMessage: t("employee:employee.message.invalidatePhone")}
                         }}/>
                         </Col>
                     </Row>

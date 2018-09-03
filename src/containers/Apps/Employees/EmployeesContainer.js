@@ -88,6 +88,7 @@ class EmployeesContainer extends Component {
                 Header: this.props.t("employee:employee.label.action"),
                 id: "userId",
                 sortable: false,
+                maxWidth: 80,
                 accessor: d => {
                     let html = <div className="text-center">
                     <span className="app-span-icon-table mr-2" onClick={() => this.openAddOrEditModal("EDIT", d.userId)}><i className="fa fa-edit"></i></span>
@@ -203,9 +204,8 @@ class EmployeesContainer extends Component {
 
     handleSubmitSearch(event, errors, values) {
         let obj = values.objectSearch;
+        obj.enabledString = obj.enabled === "" ? null : obj.enabled;
         obj.enabled = obj.enabled === "1" ? true : obj.enabled === "0" ? false : null;
-        obj.dateOfBirth = obj.dateOfBirth === "" ? null : obj.dateOfBirth;
-
         const objectSearch = Object.assign({}, this.state.objectSearch, obj);
         this.setState({
             loading: true,
@@ -323,32 +323,28 @@ class EmployeesContainer extends Component {
                                         <CardBody>
                                             <Row>
                                                 <Col xs="12" sm="4">
-                                                <AvField name="objectSearch.username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} />
+                                                    <AvField name="objectSearch.username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} />
                                                 </Col>
                                                 <Col xs="12" sm="4">
-                                                <AvField name="objectSearch.fullName" label={t("employee:employee.label.fullName")} placeholder={t("employee:employee.placeholder.fullName")} />
+                                                    <AvField name="objectSearch.fullName" label={t("employee:employee.label.fullName")} placeholder={t("employee:employee.placeholder.fullName")} />
                                                 </Col>
                                                 <Col xs="12" sm="4">
-                                                <AvField name="objectSearch.email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} />
+                                                    <AvField name="objectSearch.email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} />
                                                 </Col>
                                             </Row>
                                             <Row>
                                                 <Col xs="12" sm="4">
-                                                <AvGroup>
-                                                    <Label for="objectSearch.dateOfBirth"><Trans i18nKey="employee:employee.label.dateOfBirth"/></Label>
-                                                    <AvInput type="date" max={nowDate} id="objectSearch.dateOfBirth" name="objectSearch.dateOfBirth"/>
-                                                    <AvFeedback><Trans i18nKey="employee:employee.message.invalidateDate"/></AvFeedback>
-                                                </AvGroup>
+                                                    <AvField name="objectSearch.employeeCode" label={t("employee:employee.label.employeeCode")} placeholder={t("employee:employee.placeholder.employeeCode")} />
                                                 </Col>
                                                 <Col xs="12" sm="4">
-                                                <AvField type="select" name="objectSearch.enabled" label={t("employee:employee.label.status")} helpMessage={t("employee:employee.message.statusAll")} >
-                                                    <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
-                                                    <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
-                                                    <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option>
-                                                </AvField>
+                                                    <AvField type="select" name="objectSearch.enabled" label={t("employee:employee.label.status")} helpMessage={t("employee:employee.message.statusAll")} >
+                                                        <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
+                                                        <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
+                                                        <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option>
+                                                    </AvField>
                                                 </Col>
                                                 <Col xs="12" sm="4">
-                                                <AvField name="objectSearch.createdUser" label={t("employee:employee.label.createdUser")} placeholder={t("employee:employee.placeholder.createdUser")} />
+                                                    <AvField name="objectSearch.createdUser" label={t("employee:employee.label.createdUser")} placeholder={t("employee:employee.placeholder.createdUser")} />
                                                 </Col>
                                             </Row>
                                         </CardBody>
