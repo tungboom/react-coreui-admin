@@ -92,6 +92,7 @@
                 "pattern": "Mật khẩu chỉ chứa ký tự chữ hoặc số",
                 "match": "Xác nhận mật khẩu không đúng"
             },
+            "confirmDelete": "Bạn có muốn xóa tài khoản {{username}} không ?",
             "requiredRePassword": "Bạn chưa nhập lại mật khẩu",
             "invalidateDate": "Sai định dạng thời gian",
             "dateOfBirthMax": "Ngày sinh không quá ngày hiện tại",

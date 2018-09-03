@@ -54,6 +54,7 @@ class EmployeesContainer extends Component {
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
         this.openAddOrEditModal = this.openAddOrEditModal.bind(this);
         this.closeAddOrEditModal = this.closeAddOrEditModal.bind(this);
+        this.confirmDelete = this.confirmDelete.bind(this);
         this.handleValidSubmitAddOrEdit = this.handleValidSubmitAddOrEdit.bind(this);
         this.handleInvalidSubmitAddOrEdit = this.handleInvalidSubmitAddOrEdit.bind(this);
 
@@ -92,7 +93,7 @@ class EmployeesContainer extends Component {
                 accessor: d => {
                     let html = <div className="text-center">
                     <span className="app-span-icon-table mr-2" onClick={() => this.openAddOrEditModal("EDIT", d.userId)}><i className="fa fa-edit"></i></span>
-                    <span className="app-span-icon-table"><i className="fa fa-times-circle"></i></span>
+                    <span className="app-span-icon-table" onClick={() => this.confirmDelete(d.userId, d.username)}><i className="fa fa-times-circle"></i></span>
                     </div>;
                     return html;
                 }
@@ -252,6 +253,37 @@ class EmployeesContainer extends Component {
             addOrEditModal: false,
             isAdd: null
         });
+    }
+
+    confirmDelete(userId, username) {
+        const toastrConfirmOptions = {
+            okText: this.props.t("common:common.button.delete"),
+            cancelText: this.props.t("common:common.button.cancel"),
+            onOk: () => {
+                this.props.actions.onDelete(userId).then((response) => {
+                    if(response.payload.data.key === "SUCCESS") {
+                        this.props.actions.onSearchTable(this.state.objectSearch).then((response) => {
+                            this.setState({
+                                data: response.payload.data.data,
+                                pages: response.payload.data.pages,
+                                loading: false
+                            });
+                            toastr.success(this.props.t("employee:employee.message.success.delete"));
+                        }).catch((response) => {
+                          
+                        });
+                    } else {
+                        toastr.error(this.props.t("employee:employee.message.error.delete"));
+                    }
+                }).catch((response) => {
+                    toastr.error(this.props.t("employee:employee.message.error.delete"));
+                });
+            },
+            onCancel: () => {
+                
+            }
+        };
+        toastr.confirm(this.props.t("employee:employee.message.confirmDelete", { username: username}), toastrConfirmOptions);
     }
 
     handleValidSubmitAddOrEdit(event, values) {

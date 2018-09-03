@@ -92,6 +92,7 @@
                 "pattern": "Your password must be composed only with letter and numbers",
                 "match": "Confirm the password incorrectly"
             },
+            "confirmDelete": "Do you want delete user {{username}} ?",
             "requiredRePassword": "Please enter re-password",
             "invalidateDate": "Invalidate date",
             "dateOfBirthMax": "Date of birth does not too current date",

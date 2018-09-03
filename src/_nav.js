@@ -31,7 +31,7 @@ export default {
     },
     {
       name: 'Quản lý địa bàn',
-      url: '/units',
+      url: '/locations',
       icon: 'icon-map',
     },
     {
