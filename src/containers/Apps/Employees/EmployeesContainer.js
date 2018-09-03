@@ -92,10 +92,17 @@ class EmployeesContainer extends Component {
                 sortable: false,
                 maxWidth: 80,
                 accessor: d => {
-                    let html = <div className="text-center">
-                    <span className="app-span-icon-table mr-2" onClick={() => this.openAddOrEditModal("EDIT", d.userId)}><i className="fa fa-edit"></i></span>
-                    <span className="app-span-icon-table" onClick={() => this.confirmDelete(d.userId, d.username)}><i className="fa fa-times-circle"></i></span>
-                    </div>;
+                    let html = <div></div>;
+                    if(d.roleCode === "ADMIN") {
+                        html = <div className="text-center">
+                            <span className="app-span-icon-table" onClick={() => this.openAddOrEditModal("EDIT", d.userId)}><i className="fa fa-edit"></i></span>
+                            </div>;
+                    } else {
+                        html = <div className="text-center">
+                            <span className="app-span-icon-table mr-2" onClick={() => this.openAddOrEditModal("EDIT", d.userId)}><i className="fa fa-edit"></i></span>
+                            <span className="app-span-icon-table" onClick={() => this.confirmDelete(d.userId, d.username)}><i className="fa fa-times-circle"></i></span>
+                            </div>;
+                    }
                     return html;
                 }
             },
