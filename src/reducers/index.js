@@ -6,6 +6,9 @@ import auth from './authReducer';
 import ajaxLoading from './ajaxLoadingReducer';
 //Apps_start
 import employees from './employeesReducer';
+import roles from './rolesReducer';
+import historys from './historysReducer';
+import locations from './locationsReducer';
 //Apps_end
 
 const rootReducer = combineReducers({
@@ -13,7 +16,10 @@ const rootReducer = combineReducers({
     ajaxLoading,
     toastr: toastrReducer,
     //Apps_start
-    employees
+    employees,
+    roles,
+    historys,
+    locations
     //Apps_end
 });
 

@@ -1,0 +1,111 @@
+{
+    "history": {
+        "title": {
+            
+        },
+        "intro": {
+            "loadData": "Tải dữ liệu",
+            "saveData": "Lưu dữ liệu"
+        },
+        "button": {
+            "add": "Thêm mới",
+            "edit": "Sửa",
+            "delete": "Xóa",
+            "import": "Import",
+            "export": "Export",
+            "search": "Tìm kiếm",
+            "rotateLeft": "Xoay trái",
+            "rotateRight": "Xoay phải"
+        },
+        "table": {
+            
+        },
+        "dropdown": {
+            "all": "Tất cả",
+            "status": {
+                "isActive": "Đang hoạt động",
+                "looked": "Đang khóa"
+            }
+        },
+        "label": {
+            "number": "STT",
+            "action": "Hoạt động",
+            "image": "Ảnh",
+            "username": "Tên truy cập",
+            "fullName": "Tên người dùng",
+            "firstName": "Họ",
+            "lastName": "Tên",
+            "status": "Trạng thái",
+            "roleName": "Tên quyền",
+            "createdTime": "Ngày tạo",
+            "createdUser": "Người tạo",
+            "updatedTime": "Ngày cập nhật",
+            "updatedUser": "Người cập nhật",
+            "signInCount": "Số lần đăng nhập",
+            "email": "Email",
+            "dateOfBirth": "Ngày sinh",
+            "password": "Mật khẩu",
+            "rePassword": "Nhập lại mật khẩu",
+            "phone": "Số điện thoại",
+            "historyCode": "Mã nhân viên",
+            "unit": "Đơn vị",
+            "zoom": "Thu phóng",
+            "allowScale": "Cho phép tỉ lệ thu phóng < 1",
+            "borderRadius": "Bán kính viền",
+            "rotate": "Xoay"
+        },
+        "placeholder": {
+            "username": "Nhập tên tài khoản",
+            "fullName": "Nhập tên người dùng",
+            "firstName": "Nhập họ",
+            "lastName": "Nhập tên",
+            "email": "Nhập email",
+            "dateOfBirth": "Nhập ngày sinh",
+            "createdUser": "Nhập người tạo",
+            "password": "Nhập mật khẩu",
+            "rePassword": "Nhập lại mật khẩu",
+            "phone": "Nhập số điện thoại",
+            "historyCode": "Nhập mã nhân viên",
+            "unit": "Nhập đơn vị"
+        },
+        "message": {
+            "error": {
+                "add": "Thêm mới người dùng thất bại",
+                "edit": "Sửa người dùng thất bại",
+                "delete": "Xóa người dùng thất bại",
+                "getDetail": "Lấy thông tin chi tiết người dùng thất bại"
+            },
+            "success": {
+                "add": "Thêm mới người dùng thành công",
+                "edit": "Sửa người dùng thành công",
+                "delete": "Xóa người dùng thành công",
+                "getDetail": "Lấy thông tin chi tiết người dùng thành công"
+            },
+            "username": {
+                "required": "Bạn chưa nhập tài khoản",
+                "minMaxLength": "Tài khoản phải từ 1 đến 16 ký tự",
+                "pattern": "Tài khoản chỉ chứa ký tự chữ hoặc số"
+            },
+            "password": {
+                "required": "Bạn chưa nhập mật khẩu",
+                "minMaxLength": "Mật khẩu phải từ 6 đến 16 ký tự",
+                "pattern": "Mật khẩu chỉ chứa ký tự chữ hoặc số",
+                "match": "Xác nhận mật khẩu không đúng"
+            },
+            "requiredRePassword": "Bạn chưa nhập lại mật khẩu",
+            "invalidateDate": "Sai định dạng thời gian",
+            "dateOfBirthMax": "Ngày sinh không quá ngày hiện tại",
+            "statusAll": "Mặc định là tất cả các trạng thái",
+            "requiredStatus": "Bạn chưa chọn trạng thái",
+            "fullName": "Bạn chưa nhập tên người dùng",
+            "firstName": "Bạn chưa nhập họ",
+            "lastName": "Bạn chưa nhập tên",
+            "email": "Bạn chưa nhập email",
+            "phone": "Bạn chưa nhập số điện thoại",
+            "historyCode": "Bạn chưa nhập mã nhân viên",
+            "unit": "Bạn chưa nhập đơn vị",
+            "requiredDateOfBirth": "Bạn chưa nhập ngày sinh",
+            "dateOfBirthRange": "Ngày sinh không hợp lệ"
+        }
+    }
+}
