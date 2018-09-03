@@ -52,6 +52,7 @@ class EmployeesContainer extends Component {
         this.toggleFormInfo = this.toggleFormInfo.bind(this);
         this.onFetchData = this.onFetchData.bind(this);
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
+        this.reloadSearchTable = this.reloadSearchTable.bind(this);
         this.openAddOrEditModal = this.openAddOrEditModal.bind(this);
         this.closeAddOrEditModal = this.closeAddOrEditModal.bind(this);
         this.confirmDelete = this.confirmDelete.bind(this);
@@ -224,6 +225,19 @@ class EmployeesContainer extends Component {
         });
     }
 
+    reloadSearchTable() {
+        console.log("`1111");
+        this.props.actions.onSearchTable(this.state.objectSearch).then((response) => {
+            this.setState({
+                data: response.payload.data.data,
+                pages: response.payload.data.pages,
+                loading: false
+            });
+        }).catch((response) => {
+          
+        });
+    }
+
     openAddOrEditModal(value, userId) {
         if(value === "ADD") {
             this.setState({
@@ -262,16 +276,8 @@ class EmployeesContainer extends Component {
             onOk: () => {
                 this.props.actions.onDelete(userId).then((response) => {
                     if(response.payload.data.key === "SUCCESS") {
-                        this.props.actions.onSearchTable(this.state.objectSearch).then((response) => {
-                            this.setState({
-                                data: response.payload.data.data,
-                                pages: response.payload.data.pages,
-                                loading: false
-                            });
-                            toastr.success(this.props.t("employee:employee.message.success.delete"));
-                        }).catch((response) => {
-                          
-                        });
+                        this.reloadSearchTable();
+                        toastr.success(this.props.t("employee:employee.message.success.delete"));
                     } else {
                         toastr.error(this.props.t("employee:employee.message.error.delete"));
                     }
@@ -304,7 +310,13 @@ class EmployeesContainer extends Component {
             if(this.state.isAdd === "ADD") {
                 this.props.actions.onAdd(formData).then((response) => {
                     if(response.payload.data.key === "SUCCESS") {
-                        toastr.success(this.props.t("employee:employee.message.success.add"));
+                        this.setState({
+                            addOrEditModal: false,
+                            isAdd: null
+                        }, () => {
+                            this.reloadSearchTable();
+                            toastr.success(this.props.t("employee:employee.message.success.add"));
+                        });
                     } else {
                         toastr.error(this.props.t("employee:employee.message.error.add"));
                     }
@@ -314,7 +326,13 @@ class EmployeesContainer extends Component {
             } else if(this.state.isAdd === "EDIT") {
                 this.props.actions.onEdit(formData).then((response) => {
                     if(response.payload.data.key === "SUCCESS") {
-                        toastr.success(this.props.t("employee:employee.message.success.edit"));
+                        this.setState({
+                            addOrEditModal: false,
+                            isAdd: null
+                        }, () => {
+                            this.reloadSearchTable();
+                            toastr.success(this.props.t("employee:employee.message.success.edit"));
+                        });
                     } else {
                         toastr.error(this.props.t("employee:employee.message.error.edit"));
                     }
