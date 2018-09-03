@@ -208,9 +208,9 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   //Apps_start
   { path: '/employees', exact: true, name: 'Quản lý nhân viên', component: Employees },
-  { path: '/roles', exact: true, name: 'Quản lý quyền', component: Roles },
-  { path: '/locations', exact: true, name: 'Quản lý địa bàn', component: Locations },
-  { path: '/historys', exact: true, name: 'Lịch sử tác động', component: Historys },
+  { path: '/roles', exact: true, name: 'Quản lý quyền', component: Colors },
+  { path: '/locations', exact: true, name: 'Quản lý địa bàn', component: Colors },
+  { path: '/historys', exact: true, name: 'Lịch sử tác động', component: Colors },
   //Apps_end
   //Template_start
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
