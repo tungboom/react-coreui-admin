@@ -4,31 +4,31 @@ import history from '../history';
 
 export function onGetToken(data) {
     return {
-      type: types.ON_GET_TOKEN,
-      payload: {
-        client: 'system',
-        request:{
-          method: 'GET',
-          url: "/oauth/token?client_id=" 
-            + Config.clientId + "&client_secret=" 
-            + Config.clientSecret + "&grant_type=password" 
-            + "&username=" + data.username 
-            + "&password=" + data.password
+        type: types.ON_GET_TOKEN,
+        payload: {
+            client: 'system',
+            request:{
+            method: 'GET',
+            url: "/oauth/token?client_id=" 
+                + Config.clientId + "&client_secret=" 
+                + Config.clientSecret + "&grant_type=password" 
+                + "&username=" + data.username 
+                + "&password=" + data.password
+            }
         }
-      }
     };
 }
 
 export function onLogin() {
     return {
-      type: types.ON_LOGIN,
-      payload: {
-        client: 'system',
-        request:{
-            method: 'POST',
-            url: "/oauth/login"
+        type: types.ON_LOGIN,
+        payload: {
+            client: 'system',
+            request:{
+                method: 'POST',
+                url: "/oauth/login"
+            }
         }
-      }
     };
 }
 

@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import * as authActions from '../../../actions/authActions';
 // Child components
 import LoginForm from './LoginForm';
-import * as types from '../../../actions/authTypes';
+import history from './../../../history';
 import { translate, Trans } from 'react-i18next';
 import {toastr} from 'react-redux-toastr';
 
@@ -26,6 +26,12 @@ class Login extends Component {
 
             this.props.actions.onLogin().then((response) => {
                 localStorage.setItem('user', response.payload.data);
+                const locationState = localStorage.getItem('current_location_state');
+                if (locationState) {
+                    history.push(locationState);
+                } else {
+                    history.push('/');
+                }
             }).catch((response) => {
                 localStorage.clear();
                 toastr.error(this.props.t("auth:auth.message.error.connectServer"));
@@ -59,27 +65,12 @@ class Login extends Component {
         }
     }
 
-    getRedirectPath() {
-        const locationState = localStorage.getItem('current_location_state');
-        if (locationState) {
-            return locationState;
-        } else {
-            return '/';
-        }
-    }
-
     render() {
         let errorMessage = <div></div>;
         if(this.displayRedirectMessages()) {
             errorMessage = <div className="alert alert-danger"><Trans i18nKey="auth:auth.message.error.needLogin"/></div>;
         }
-        const isAuthenticated = localStorage.getItem('is_authenticated') === "true" ? true : false;
         return (
-            isAuthenticated ?
-            <Redirect to={{
-                pathname: this.getRedirectPath(), state: { from: this.props.location }
-            }}/>
-            :
             <LoginForm handleValidSubmit = {this.handleValidSubmit} errorMessage={errorMessage} />
         )
     }
