@@ -40,6 +40,7 @@ import * as employeesActions from '../../../actions/employeesActions';
 import { translate, Trans } from 'react-i18next';
 import Dropzone from 'react-dropzone';
 import ReactAvatarEditor from 'react-avatar-editor';
+import _debounce from 'lodash.debounce';
 
 class AddOrEditEmployeeContainer extends Component {
     constructor(props) {
@@ -48,12 +49,18 @@ class AddOrEditEmployeeContainer extends Component {
         this.onOpenedModal = this.onOpenedModal.bind(this);
         this.onClosedModal = this.onClosedModal.bind(this);
 
+        this.validateUsername = this.validateUsername.bind(this);
+        this.validateEmployeeCode = this.validateEmployeeCode.bind(this);
+
         this.state = {
             //AddOrEditModal
             backdrop: "static",
             addOrEditModal: false,
-            isAdd: null,
+            isAddOrEdit: null,
             objectAddOrEdit: {},
+            //Validate
+            errorUsername: "",
+            errorEmployeeCode: "",
             //Avatar
             image: null,
             allowZoomOut: false,
@@ -69,14 +76,14 @@ class AddOrEditEmployeeContainer extends Component {
     componentWillReceiveProps(newProps) {
         this.setState({
             addOrEditModal: newProps.stateAddOrEditModal.addOrEditModal,
-            isAdd: newProps.stateAddOrEditModal.isAdd
+            isAddOrEdit: newProps.stateAddOrEditModal.isAddOrEdit
         });
     }
 
     onOpenedModal(objectUser) {
-        if(this.state.isAdd === "ADD") {
+        if(this.state.isAddOrEdit === "ADD") {
             
-        } else if(this.state.isAdd === "EDIT") {
+        } else if(this.state.isAddOrEdit === "EDIT") {
             if(objectUser.avatarBase64 !== null) {
                 fetch(objectUser.avatarBase64)
                 .then(res => res.blob())
@@ -94,10 +101,61 @@ class AddOrEditEmployeeContainer extends Component {
 
     onClosedModal() {
         this.setState({
-            isAdd: null,
+            isAddOrEdit: null,
             image: null
         });
     }
+
+    validateUsername = _debounce((value, ctx, input, cb) => {
+        let userId = "";
+        if(this.props.response.detail !== undefined && this.state.isAddOrEdit === "EDIT") {
+            userId = this.props.response.detail.payload.data.userId;
+        }
+        if (!value || value === "") {
+            this.setState({errorUsername: this.props.t("employee:employee.message.username.required")});
+            cb(false);
+        } else if (!value.match(/^[A-Za-z0-9]+$/)) {
+            this.setState({errorUsername: this.props.t("employee:employee.message.username.pattern")});
+            cb(false);
+        } else {
+            this.props.actions.onCheckExistUsername(value, userId).then((response) => {
+                if(response.payload.data.key === "DUPLICATE") {
+                    this.setState({errorUsername: this.props.t("employee:employee.message.username.duplicate")});
+                    cb(false);
+                } else {
+                    cb(true);
+                }
+            }).catch((response) => {
+                
+            });
+
+        }
+    }, 0);
+
+    validateEmployeeCode = _debounce((value, ctx, input, cb) => {
+        let userId = "";
+        if(this.props.response.detail !== undefined && this.state.isAddOrEdit === "EDIT") {
+            userId = this.props.response.detail.payload.data.userId;
+        }
+        if (!value || value === "") {
+            this.setState({errorEmployeeCode: this.props.t("employee:employee.message.employeeCode.required")});
+            cb(false);
+        } else if (!value.match(/^[A-Za-z0-9]+$/)) {
+            this.setState({errorEmployeeCode: this.props.t("employee:employee.message.employeeCode.pattern")});
+            cb(false);
+        } else {
+            this.props.actions.onCheckExistEmployeeCode(value, userId).then((response) => {
+                if(response.payload.data.key === "DUPLICATE") {
+                    this.setState({errorEmployeeCode: this.props.t("employee:employee.message.employeeCode.duplicate")});
+                    cb(false);
+                } else {
+                    cb(true);
+                }
+            }).catch((response) => {
+                
+            });
+        }
+    }, 0);
 
     handleNewImage = e => {
         this.setState({ image: e.target.files[0] });
@@ -148,9 +206,9 @@ class AddOrEditEmployeeContainer extends Component {
         const nowDate = new Date().toJSON().split('T')[0];
         const { t } = this.props;
         let objectAddOrEdit = {};
-        if(this.state.isAdd === "ADD") {
+        if(this.state.isAddOrEdit === "ADD") {
 
-        } else if(this.state.isAdd === "EDIT") {
+        } else if(this.state.isAddOrEdit === "EDIT") {
             if(this.props.response.detail !== undefined) {
                 objectAddOrEdit = this.props.response.detail.payload.data;
                 let dateOfBirthString = objectAddOrEdit.dateOfBirth === null ? undefined : objectAddOrEdit.dateOfBirth;
@@ -175,9 +233,9 @@ class AddOrEditEmployeeContainer extends Component {
         return (
         <div>
             <Modal isOpen={this.state.addOrEditModal} onOpened={this.onOpenedModal.bind(this, objectAddOrEdit)} onClosed={this.onClosedModal} toggle={this.props.closeAddOrEditModal} backdrop={this.state.backdrop}
-                    className={(this.state.isAdd === "ADD" ? 'modal-success ' : this.state.isAdd === "EDIT" ? 'modal-primary ' : '') + 'modal-lg ' + this.props.className}>
+                    className={(this.state.isAddOrEdit === "ADD" ? 'modal-success ' : this.state.isAddOrEdit === "EDIT" ? 'modal-primary ' : '') + 'modal-lg ' + this.props.className}>
             <AvForm onValidSubmit={this.props.handleValidSubmitAddOrEdit} onInvalidSubmit={this.props.handleInvalidSubmitAddOrEdit} model={objectAddOrEdit}>
-                <ModalHeader toggle={this.props.closeAddOrEditModal}>{this.state.isAdd === "ADD" ? t("common:common.title.add") : this.state.isAdd === "EDIT" ? t("common:common.title.edit") : ''}</ModalHeader>
+                <ModalHeader toggle={this.props.closeAddOrEditModal}>{this.state.isAddOrEdit === "ADD" ? t("common:common.title.add") : this.state.isAddOrEdit === "EDIT" ? t("common:common.title.edit") : ''}</ModalHeader>
                 <ModalBody>
                     <Row>
                         <Col xs="12" sm="6" className="text-right">
@@ -248,97 +306,104 @@ class AddOrEditEmployeeContainer extends Component {
                     </Row>
                     <Row>
                         <Col xs="12" sm="6">
-                        <AvField name="objectUser.username" label={t("employee:employee.label.username")} placeholder={t("employee:employee.placeholder.username")} required maxLength="16"
-                            validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.username.required")},
-                            pattern: {value: '^[A-Za-z0-9]+$', errorMessage: t("employee:employee.message.username.pattern")}
+                            <AvGroup>
+                                <Label><Trans i18nKey="employee:employee.label.username"/></Label>
+                                <AvInput name="objectUser.username" placeholder={t("employee:employee.placeholder.username")} required
+                                    maxLength="16" pattern="^[A-Za-z0-9]+$" 
+                                    validate={{async: this.validateUsername}}
+                                />
+                                <AvFeedback>{this.state.errorUsername}</AvFeedback>
+                            </AvGroup>
+                        </Col>
+                        <Col xs="12" sm="6" md="3">
+                            <AvField name="objectUser.firstName" label={t("employee:employee.label.firstName")} placeholder={t("employee:employee.placeholder.firstName")} required
+                                validate={{
+                                required: {value: true, errorMessage: t("employee:employee.message.firstName")}
                         }}/>
                         </Col>
                         <Col xs="12" sm="6" md="3">
-                        <AvField name="objectUser.firstName" label={t("employee:employee.label.firstName")} placeholder={t("employee:employee.placeholder.firstName")} required
-                            validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.firstName")}
-                        }}/>
-                        </Col>
-                        <Col xs="12" sm="6" md="3">
-                        <AvField name="objectUser.lastName" label={t("employee:employee.label.lastName")} placeholder={t("employee:employee.placeholder.lastName")} required
-                            validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.lastName")}
+                            <AvField name="objectUser.lastName" label={t("employee:employee.label.lastName")} placeholder={t("employee:employee.placeholder.lastName")} required
+                                validate={{
+                                required: {value: true, errorMessage: t("employee:employee.message.lastName")}
                         }}/>
                         </Col>
                     </Row>
                     <Row>
                         <Col xs="12" sm="6">
-                        <AvField name="objectUser.password" type="password" autoComplete="off" label={t("employee:employee.label.password")} placeholder={t("employee:employee.placeholder.password")} required maxLength="16"
-                            validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.password.required")},
-                            pattern: {value: '^[A-Za-z0-9]+$', errorMessage: t("employee:employee.message.password.pattern")},
-                            minLength: {value: 6, errorMessage: t("employee:employee.message.password.minMaxLength")}
-                        }}/>
+                            <AvField name="objectUser.password" type="password" autoComplete="off" label={t("employee:employee.label.password")} placeholder={t("employee:employee.placeholder.password")} required maxLength="16"
+                                validate={{
+                                required: {value: true, errorMessage: t("employee:employee.message.password.required")},
+                                pattern: {value: '^[A-Za-z0-9]+$', errorMessage: t("employee:employee.message.password.pattern")},
+                                minLength: {value: 6, errorMessage: t("employee:employee.message.password.minMaxLength")}
+                            }}/>
                         </Col>
                         <Col xs="12" sm="6">
-                        <AvField name="objectUser.rePassword" type="password" autoComplete="off" label={t("employee:employee.label.rePassword")} placeholder={t("employee:employee.placeholder.rePassword")} required maxLength="16"
-                            validate={{
-                            match: { value: 'objectUser.password', errorMessage: t("employee:employee.message.password.match")},
-                            required: {value: true, errorMessage: t("employee:employee.message.requiredRePassword")}
-                        }}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs="12" sm="6">
-                        <AvField name="objectUser.email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} required
-                            validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.email")},
-                            email: {value: true, errorMessage: t("employee:employee.message.invalidateEmail")}
-                        }}/>
-                        </Col>
-                        <Col xs="12" sm="6">
-                        <AvField name="objectUser.phone" label={t("employee:employee.label.phone")} placeholder={t("employee:employee.placeholder.phone")} required maxLength="15"
-                            validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.phone")},
-                            number: {value: true, errorMessage: t("employee:employee.message.invalidatePhone")},
-                            minLength: {value: 9, errorMessage: t("employee:employee.message.invalidatePhone")}
-                        }}/>
+                            <AvField name="objectUser.rePassword" type="password" autoComplete="off" label={t("employee:employee.label.rePassword")} placeholder={t("employee:employee.placeholder.rePassword")} required maxLength="16"
+                                validate={{
+                                match: { value: 'objectUser.password', errorMessage: t("employee:employee.message.password.match")},
+                                required: {value: true, errorMessage: t("employee:employee.message.requiredRePassword")}
+                            }}/>
                         </Col>
                     </Row>
                     <Row>
                         <Col xs="12" sm="6">
-                        <AvField name="objectUser.dateOfBirth" label={t("employee:employee.label.dateOfBirth")} type="date" max={nowDate} required
-                            validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.requiredDateOfBirth")},
-                            dateRange: {start: {value: -100, units: 'years'}, end: {value: 0, units: 'years'}, errorMessage: t("employee:employee.message.dateOfBirthRange")},
-                            date: {format: 'dd/mm/yyyy', errorMessage: t("employee:employee.message.invalidateDate")}
-                        }}/>
+                            <AvField name="objectUser.email" label={t("employee:employee.label.email")} placeholder={t("employee:employee.placeholder.email")} required
+                                validate={{
+                                required: {value: true, errorMessage: t("employee:employee.message.email")},
+                                email: {value: true, errorMessage: t("employee:employee.message.invalidateEmail")}
+                            }}/>
                         </Col>
                         <Col xs="12" sm="6">
-                        <AvField name="objectUser.employeeCode" label={t("employee:employee.label.employeeCode")} placeholder={t("employee:employee.placeholder.employeeCode")} required
-                            validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.employeeCode")}
-                        }}/>
+                            <AvField name="objectUser.phone" label={t("employee:employee.label.phone")} placeholder={t("employee:employee.placeholder.phone")} required maxLength="15"
+                                validate={{
+                                required: {value: true, errorMessage: t("employee:employee.message.phone")},
+                                number: {value: true, errorMessage: t("employee:employee.message.invalidatePhone")},
+                                minLength: {value: 9, errorMessage: t("employee:employee.message.invalidatePhone")}
+                            }}/>
                         </Col>
                     </Row>
                     <Row>
                         <Col xs="12" sm="6">
-                        <AvField type="select" name="objectUser.enabled" label={t("employee:employee.label.status")} required
-                            validate={{
-                            required: {value: true, errorMessage: t("employee:employee.message.requiredStatus")}
-                        }}>
-                            <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
-                            <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
-                            <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option>
-                        </AvField>
+                            <AvField name="objectUser.dateOfBirth" label={t("employee:employee.label.dateOfBirth")} type="date" max={nowDate} required
+                                validate={{
+                                required: {value: true, errorMessage: t("employee:employee.message.requiredDateOfBirth")},
+                                dateRange: {start: {value: -100, units: 'years'}, end: {value: 0, units: 'years'}, errorMessage: t("employee:employee.message.dateOfBirthRange")},
+                                date: {format: 'dd/mm/yyyy', errorMessage: t("employee:employee.message.invalidateDate")}
+                            }}/>
                         </Col>
                         <Col xs="12" sm="6">
-                        <AvField type="select" name="objectUser.unitId" label={t("employee:employee.label.unit")}>
-                            <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
-                            {/* <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
-                            <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option> */}
-                        </AvField>
+                            <AvGroup>
+                                <Label><Trans i18nKey="employee:employee.label.employeeCode"/></Label>
+                                <AvInput name="objectUser.employeeCode" placeholder={t("employee:employee.placeholder.employeeCode")} required
+                                    pattern="^[A-Za-z0-9]+$" 
+                                    validate={{async: this.validateEmployeeCode}}
+                                />
+                                <AvFeedback>{this.state.errorEmployeeCode}</AvFeedback>
+                            </AvGroup>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs="12" sm="6">
+                            <AvField type="select" name="objectUser.enabled" label={t("employee:employee.label.status")} required
+                                validate={{
+                                required: {value: true, errorMessage: t("employee:employee.message.requiredStatus")}
+                            }}>
+                                <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
+                                <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
+                                <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option>
+                            </AvField>
+                        </Col>
+                        <Col xs="12" sm="6">
+                            <AvField type="select" name="objectUser.unitId" label={t("employee:employee.label.unit")}>
+                                <option value=""><Trans i18nKey="employee:employee.dropdown.all"/></option>
+                                {/* <option value="1"><Trans i18nKey="employee:employee.dropdown.status.isActive"/></option>
+                                <option value="0"><Trans i18nKey="employee:employee.dropdown.status.looked"/></option> */}
+                            </AvField>
                         </Col>
                     </Row>
                 </ModalBody>
                 <ModalFooter>
-                <Button type="submit" color="success"><i className="fa fa-save"></i> {this.state.isAdd === "ADD" ? t("common:common.button.save") : this.state.isAdd === "EDIT" ? t("common:common.button.update") : ''}</Button>{' '}
+                <Button type="submit" color="success"><i className="fa fa-save"></i> {this.state.isAddOrEdit === "ADD" ? t("common:common.button.save") : this.state.isAddOrEdit === "EDIT" ? t("common:common.button.update") : ''}</Button>{' '}
                 <Button type="button" color="danger" onClick={this.props.closeAddOrEditModal}><i className="fa fa-reply"></i> {t("common:common.button.cancel")}</Button>
                 </ModalFooter>
             </AvForm>

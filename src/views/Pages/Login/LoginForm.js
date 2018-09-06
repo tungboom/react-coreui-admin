@@ -40,24 +40,32 @@ class LoginForm extends Component {
     }
 
     validateUsername = _debounce((value, ctx, input, cb) => {
-        cb(true);
         if (!value || value === '') {
             this.setState({errorUsername: <Trans i18nKey="auth:auth.message.username.required"/>});
+            cb(false);
         } else if (value.length > 16) {
             this.setState({errorUsername: <Trans i18nKey="auth:auth.message.username.maxLength"/>});
-        } else if (value.match(/^[A-Za-z0-9]+$/)) {
+            cb(false);
+        } else if (!value.match(/^[A-Za-z0-9]+$/)) {
             this.setState({errorUsername: <Trans i18nKey="auth:auth.message.username.pattern"/>});
+            cb(false);
+        } else {
+            cb(true);
         }
     }, 0);
 
     validatePassword = _debounce((value, ctx, input, cb) => {
-        cb(true);
         if (!value || value === '') {
             this.setState({errorPassword: <Trans i18nKey="auth:auth.message.password.required"/>});
+            cb(false);
         } else if (value.length < 6 || value.length > 16) {
             this.setState({errorPassword: <Trans i18nKey="auth:auth.message.password.minMaxLength"/>});
-        } else if (value.match(/^[A-Za-z0-9]+$/)) {
+            cb(false);
+        } else if (!value.match(/^[A-Za-z0-9]+$/)) {
             this.setState({errorPassword: <Trans i18nKey="auth:auth.message.password.pattern"/>});
+            cb(false);
+        } else {
+            cb(true);
         }
     }, 0);
 

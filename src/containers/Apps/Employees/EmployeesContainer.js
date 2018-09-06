@@ -163,7 +163,7 @@ class EmployeesContainer extends Component {
             columns: columnsTable,
             //AddOrEditModal
             addOrEditModal: false,
-            isAdd: null,
+            isAddOrEdit: null,
             objectAddOrEdit: {}
         };
     }
@@ -249,7 +249,7 @@ class EmployeesContainer extends Component {
         if(value === "ADD") {
             this.setState({
                 addOrEditModal: true,
-                isAdd: value,
+                isAddOrEdit: value,
                 objectAddOrEdit: {}
             });
         } else if(value === "EDIT") {
@@ -260,7 +260,7 @@ class EmployeesContainer extends Component {
                 }
                 this.setState({
                     addOrEditModal: true,
-                    isAdd: value,
+                    isAddOrEdit: value,
                     objectAddOrEdit: obj
                 });
             }).catch((response) => {
@@ -272,7 +272,7 @@ class EmployeesContainer extends Component {
     closeAddOrEditModal() {
         this.setState({
             addOrEditModal: false,
-            isAdd: null
+            isAddOrEdit: null
         });
     }
 
@@ -314,12 +314,12 @@ class EmployeesContainer extends Component {
             const formData = new FormData();
             formData.append('formDataJson', JSON.stringify(objSave));
             formData.append('files', fileAvatar);
-            if(this.state.isAdd === "ADD") {
+            if(this.state.isAddOrEdit === "ADD") {
                 this.props.actions.onAdd(formData).then((response) => {
                     if(response.payload.data.key === "SUCCESS") {
                         this.setState({
                             addOrEditModal: false,
-                            isAdd: null
+                            isAddOrEdit: null
                         }, () => {
                             this.reloadSearchTable();
                             toastr.success(this.props.t("employee:employee.message.success.add"));
@@ -330,12 +330,12 @@ class EmployeesContainer extends Component {
                 }).catch((response) => {
                     toastr.error(this.props.t("employee:employee.message.error.add"));
                 });
-            } else if(this.state.isAdd === "EDIT") {
+            } else if(this.state.isAddOrEdit === "EDIT") {
                 this.props.actions.onEdit(formData).then((response) => {
                     if(response.payload.data.key === "SUCCESS") {
                         this.setState({
                             addOrEditModal: false,
-                            isAdd: null
+                            isAddOrEdit: null
                         }, () => {
                             this.reloadSearchTable();
                             toastr.success(this.props.t("employee:employee.message.success.edit"));

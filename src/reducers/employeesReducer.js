@@ -23,6 +23,14 @@ export default function employeesReducer(state = initialState.employees, action)
             return { ...state, delete: action };
         case `${types.DELETE_EMPLOYEE}_FAIL`:
             return { ...state, delete: action };
+        case `${types.CHECK_EXIST_USERNAME}_SUCCESS`:
+            return { ...state, existUsername: action };
+        case `${types.CHECK_EXIST_USERNAME}_FAIL`:
+            return { ...state, existUsername: action };
+        case `${types.CHECK_EXIST_EMPLOYEE_CODE}_SUCCESS`:
+            return { ...state, existEmployeeCode: action };
+        case `${types.CHECK_EXIST_EMPLOYEE_CODE}_FAIL`:
+            return { ...state, existEmployeeCode: action };
         default:
             return state;
     }

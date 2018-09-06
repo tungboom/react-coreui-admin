@@ -84,13 +84,20 @@
             "username": {
                 "required": "Bạn chưa nhập tài khoản",
                 "minMaxLength": "Tài khoản phải từ 1 đến 16 ký tự",
-                "pattern": "Tài khoản chỉ chứa ký tự chữ hoặc số"
+                "pattern": "Tài khoản chỉ chứa ký tự chữ hoặc số",
+                "duplicate": "Tài khoản đã tồn tại"
             },
             "password": {
                 "required": "Bạn chưa nhập mật khẩu",
                 "minMaxLength": "Mật khẩu phải từ 6 đến 16 ký tự",
                 "pattern": "Mật khẩu chỉ chứa ký tự chữ hoặc số",
                 "match": "Xác nhận mật khẩu không đúng"
+            },
+            "employeeCode": {
+                "required": "Bạn chưa nhập mã nhân viên",
+                "minMaxLength": "Mã nhân viên phải từ 1 đến 16 ký tự",
+                "pattern": "Mã nhân viên chỉ chứa ký tự chữ hoặc số",
+                "duplicate": "Mã nhân viên đã tồn tại"
             },
             "confirmDelete": "Bạn có muốn xóa tài khoản {{username}} không ?",
             "requiredRePassword": "Bạn chưa nhập lại mật khẩu",
@@ -105,7 +112,6 @@
             "invalidateEmail": "Sai định dạng email",
             "phone": "Bạn chưa nhập số điện thoại",
             "invalidatePhone": "Sai định dạng số điện thoại",
-            "employeeCode": "Bạn chưa nhập mã nhân viên",
             "unit": "Bạn chưa nhập đơn vị",
             "requiredDateOfBirth": "Bạn chưa nhập ngày sinh",
             "dateOfBirthRange": "Ngày sinh không hợp lệ"

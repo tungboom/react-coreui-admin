@@ -153,7 +153,7 @@ class LocationsContainer extends Component {
             columns: columnsTable,
             //AddOrEditModal
             addOrEditModal: false,
-            isAdd: null,
+            isAddOrEdit: null,
             objectAddOrEdit: {}
         };
     }
@@ -227,7 +227,7 @@ class LocationsContainer extends Component {
         if(value === "ADD") {
             this.setState({
                 addOrEditModal: true,
-                isAdd: value,
+                isAddOrEdit: value,
                 objectAddOrEdit: {}
             });
         } else if(value === "EDIT") {
@@ -238,7 +238,7 @@ class LocationsContainer extends Component {
                 }
                 this.setState({
                     addOrEditModal: true,
-                    isAdd: value,
+                    isAddOrEdit: value,
                     objectAddOrEdit: obj
                 });
             }).catch((response) => {
@@ -250,7 +250,7 @@ class LocationsContainer extends Component {
     closeAddOrEditModal() {
         this.setState({
             addOrEditModal: false,
-            isAdd: null
+            isAddOrEdit: null
         });
     }
 
@@ -269,7 +269,7 @@ class LocationsContainer extends Component {
             const formData = new FormData();
             formData.append('formDataJson', JSON.stringify(objSave));
             formData.append('files', fileAvatar);
-            if(this.state.isAdd === "ADD") {
+            if(this.state.isAddOrEdit === "ADD") {
                 this.props.actions.onAdd(formData).then((response) => {
                     if(response.payload.data.key === "SUCCESS") {
                         toastr.success(this.props.t("location:location.message.success.add"));
@@ -279,7 +279,7 @@ class LocationsContainer extends Component {
                 }).catch((response) => {
                     toastr.error(this.props.t("location:location.message.error.add"));
                 });
-            } else if(this.state.isAdd === "EDIT") {
+            } else if(this.state.isAddOrEdit === "EDIT") {
                 this.props.actions.onEdit(formData).then((response) => {
                     if(response.payload.data.key === "SUCCESS") {
                         toastr.success(this.props.t("location:location.message.success.edit"));

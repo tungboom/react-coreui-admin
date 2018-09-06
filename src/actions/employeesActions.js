@@ -69,3 +69,29 @@ export function onDelete(userId) {
     }
   };
 }
+
+export function onCheckExistUsername(username, userId) {
+  return {
+    type: types.CHECK_EXIST_USERNAME,
+    payload: {
+      client: 'default',
+      request:{
+        method: 'GET',
+        url:'/employees/checkExistUsername?username=' + username + '&userId=' + userId
+      }
+    }
+  };
+}
+
+export function onCheckExistEmployeeCode(employeeCode, userId) {
+  return {
+    type: types.CHECK_EXIST_EMPLOYEE_CODE,
+    payload: {
+      client: 'default',
+      request:{
+        method: 'GET',
+        url:'/employees/checkExistEmployeeCode?employeeCode=' + employeeCode + '&userId=' + userId
+      }
+    }
+  };
+}

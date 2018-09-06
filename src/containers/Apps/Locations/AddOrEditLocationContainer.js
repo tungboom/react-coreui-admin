@@ -52,7 +52,7 @@ class AddOrEditLocationContainer extends Component {
             //AddOrEditModal
             backdrop: "static",
             addOrEditModal: false,
-            isAdd: null,
+            isAddOrEdit: null,
             objectAddOrEdit: {},
             //Avatar
             image: null,
@@ -69,14 +69,14 @@ class AddOrEditLocationContainer extends Component {
     componentWillReceiveProps(newProps) {
         this.setState({
             addOrEditModal: newProps.stateAddOrEditModal.addOrEditModal,
-            isAdd: newProps.stateAddOrEditModal.isAdd
+            isAddOrEdit: newProps.stateAddOrEditModal.isAddOrEdit
         });
     }
 
     onOpenedModal(objectUser) {
-        if(this.state.isAdd === "ADD") {
+        if(this.state.isAddOrEdit === "ADD") {
             
-        } else if(this.state.isAdd === "EDIT") {
+        } else if(this.state.isAddOrEdit === "EDIT") {
             if(objectUser.avatarBase64 !== null) {
                 fetch(objectUser.avatarBase64)
                 .then(res => res.blob())
@@ -94,7 +94,7 @@ class AddOrEditLocationContainer extends Component {
 
     onClosedModal() {
         this.setState({
-            isAdd: null,
+            isAddOrEdit: null,
             image: null
         });
     }
@@ -148,9 +148,9 @@ class AddOrEditLocationContainer extends Component {
         const nowDate = new Date().toJSON().split('T')[0];
         const { t } = this.props;
         let objectAddOrEdit = {};
-        if(this.state.isAdd === "ADD") {
+        if(this.state.isAddOrEdit === "ADD") {
 
-        } else if(this.state.isAdd === "EDIT") {
+        } else if(this.state.isAddOrEdit === "EDIT") {
             if(this.props.response.detail !== undefined) {
                 objectAddOrEdit = this.props.response.detail.payload.data;
                 let dateOfBirthString = objectAddOrEdit.dateOfBirth === null ? undefined : objectAddOrEdit.dateOfBirth;
@@ -175,9 +175,9 @@ class AddOrEditLocationContainer extends Component {
         return (
         <div>
             <Modal isOpen={this.state.addOrEditModal} onOpened={this.onOpenedModal.bind(this, objectAddOrEdit)} onClosed={this.onClosedModal} toggle={this.props.closeAddOrEditModal} backdrop={this.state.backdrop}
-                    className={(this.state.isAdd === "ADD" ? 'modal-success ' : this.state.isAdd === "EDIT" ? 'modal-primary ' : '') + 'modal-lg ' + this.props.className}>
+                    className={(this.state.isAddOrEdit === "ADD" ? 'modal-success ' : this.state.isAddOrEdit === "EDIT" ? 'modal-primary ' : '') + 'modal-lg ' + this.props.className}>
             <AvForm onValidSubmit={this.props.handleValidSubmitAddOrEdit} onInvalidSubmit={this.props.handleInvalidSubmitAddOrEdit} model={objectAddOrEdit}>
-                <ModalHeader toggle={this.props.closeAddOrEditModal}>{this.state.isAdd === "ADD" ? t("common:common.title.add") : this.state.isAdd === "EDIT" ? t("common:common.title.edit") : ''}</ModalHeader>
+                <ModalHeader toggle={this.props.closeAddOrEditModal}>{this.state.isAddOrEdit === "ADD" ? t("common:common.title.add") : this.state.isAddOrEdit === "EDIT" ? t("common:common.title.edit") : ''}</ModalHeader>
                 <ModalBody>
                     <Row>
                         <Col xs="12" sm="6" className="text-right">
@@ -335,7 +335,7 @@ class AddOrEditLocationContainer extends Component {
                     </Row>
                 </ModalBody>
                 <ModalFooter>
-                <Button type="submit" color="success"><i className="fa fa-save"></i> {this.state.isAdd === "ADD" ? t("common:common.button.save") : this.state.isAdd === "EDIT" ? t("common:common.button.update") : ''}</Button>{' '}
+                <Button type="submit" color="success"><i className="fa fa-save"></i> {this.state.isAddOrEdit === "ADD" ? t("common:common.button.save") : this.state.isAddOrEdit === "EDIT" ? t("common:common.button.update") : ''}</Button>{' '}
                 <Button type="button" color="danger" onClick={this.props.closeAddOrEditModal}><i className="fa fa-reply"></i> {t("common:common.button.cancel")}</Button>
                 </ModalFooter>
             </AvForm>

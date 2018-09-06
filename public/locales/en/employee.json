@@ -84,13 +84,20 @@
             "username": {
                 "required": "Please enter username",
                 "minMaxLength": "Your username must be between 1 and 16 characters",
-                "pattern": "Your username must be composed only with letter and numbers"
+                "pattern": "Your username must be composed only with letter and numbers",
+                "duplicate": "Duplicate username"
             },
             "password": {
                 "required": "Please enter password",
                 "minMaxLength": "Your password must be between 6 and 16 characters",
                 "pattern": "Your password must be composed only with letter and numbers",
                 "match": "Confirm the password incorrectly"
+            },
+            "employeeCode": {
+                "required": "Please enter employee code",
+                "minMaxLength": "Your employee code must be between 1 and 16 characters",
+                "pattern": "Your employee code must be composed only with letter and numbers",
+                "duplicate": "Duplicate employee code"
             },
             "confirmDelete": "Do you want delete user {{username}} ?",
             "requiredRePassword": "Please enter re-password",
@@ -105,7 +112,6 @@
             "invalidateEmail": "Invalidate email",
             "phone": "Please enter phone",
             "invalidatePhone": "Invalidate phone",
-            "employeeCode": "Please enter employee code",
             "unit": "Please enter unit",
             "requiredDateOfBirth": "Please enter date of birth",
             "dateOfBirthRange": "Date of birth is invalid"
