@@ -1,4 +1,11 @@
 import React, { Component } from 'react';
+import { compose, withProps } from "recompose";
+import {
+  withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  Marker
+} from "react-google-maps";
 import { Bar, Line } from 'react-chartjs-2';
 import {
   Badge,

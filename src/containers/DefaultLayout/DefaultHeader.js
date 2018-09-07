@@ -54,6 +54,19 @@ class DefaultHeader extends Component {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
 
+    const user = localStorage.getItem('user');
+    let fullName;
+    let avatarBase64 = 'assets/img/avatars/person.svg';
+    if(user) {
+      const objectUsersDto = JSON.parse(user).objectUsersDto;
+      if(objectUsersDto) {
+        fullName = objectUsersDto.firstName + " " + objectUsersDto.lastName;
+        if(objectUsersDto.avatarBase64) {
+          avatarBase64 = objectUsersDto.avatarBase64;
+        }
+      }
+    }
+
     const { t, i18n } = this.props;
     const changeLanguage = (lng) => {
       i18n.changeLanguage(lng);
@@ -104,7 +117,7 @@ class DefaultHeader extends Component {
           </NavItem>
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
-              <img src={'assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+              <img src={avatarBase64} className="img-avatar" alt={fullName} />
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>

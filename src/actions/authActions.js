@@ -32,16 +32,6 @@ export function onLogin() {
     };
 }
 
-export function saveToken(params) {
-    return dispatch => { 
-        const {access_token, refresh_token} = params;
-
-        localStorage.setItem('access_token', access_token);
-        localStorage.setItem('refresh_token', refresh_token);
-        localStorage.setItem('is_authenticated', "true");
-    };
-}
-
 export function onLogout(params) {
     return {
         type: types.ON_LOGOUT,
@@ -78,3 +68,17 @@ export function onLogout(params) {
         }
     };
 }
+
+export function onSaveCoords(data) {
+    return {
+      type: types.ON_SAVE_COORDS,
+      payload: {
+        client: 'default',
+        request:{
+          method: 'POST',
+          url:'/common/saveUsersGeolocation',
+          data: data
+        }
+      }
+    };
+  }
