@@ -16,9 +16,9 @@ export default function authReducer(state = initialState.auth, action) {
         case `${types.ON_LOGOUT}_FAIL`:
             return { ...state, logout: action, isAuthenticated: false };
         case `${types.ON_SAVE_COORDS}_SUCCESS`:
-            return { ...state, logout: action };
+            return { ...state, saveCoords: action };
         case `${types.ON_SAVE_COORDS}_FAIL`:
-            return { ...state, logout: action };
+            return { ...state, saveCoords: action };
         default:
             return state;
     }

@@ -4,7 +4,9 @@ var config = () => {
     apiUrl: 'http://localhost:8084/api',
     clientId: 'client',
     clientSecret: 'secret',
-    defaultLocale: 'vi'
+    defaultLocale: 'vi',
+    apiUrlGoogleMaps: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBCbALUWxINi8YJ6OFt04Umv2p2UIrRSig&v=3.exp&libraries=geometry,drawing,places',
+    coords: {latitude: 21.0191843, longitude: 105.7879371}
   }
 };
 

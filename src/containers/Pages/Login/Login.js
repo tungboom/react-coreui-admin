@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 // Auth actions
@@ -33,7 +32,9 @@ class Login extends Component {
                 } else {
                     history.push('/');
                 }
+                //Save coords user login
                 if(this.props.coords && response.payload.data) {
+                    sessionStorage.setItem('coords_center', JSON.stringify({latitude: this.props.coords.latitude, longitude: this.props.coords.longitude}));
                     const objSave = {
                         userId: response.payload.data.objectUsersDto.userId,
                         latitude: this.props.coords.latitude,
@@ -45,6 +46,7 @@ class Login extends Component {
                         
                     });
                 }
+                
             }).catch((response) => {
                 localStorage.clear();
                 toastr.error(this.props.t("auth:auth.message.error.connectServer"));
