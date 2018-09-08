@@ -32,7 +32,10 @@
         },
         "label": {
             "language": "Ngôn ngữ",
-            "timeLogin": "Thời gian đăng nhập"
+            "timeLogin": "Thời gian đăng nhập",
+            "signInCount": "Số lần đăng nhập",
+            "ipAddress": "Địa chỉ IP",
+            "macAddress": "Địa chỉ MAC"
         },
         "placeholder": {
             

@@ -32,7 +32,10 @@
         },
         "label": {
             "language": "Language",
-            "timeLogin": "Time login"
+            "timeLogin": "Time login",
+            "signInCount": "Sign in count",
+            "ipAddress": "IP address",
+            "macAddress": "MAC address"
         },
         "placeholder": {
             

@@ -251,48 +251,43 @@ class Dashboard extends Component {
     }
 
     render() {
-        let dateOfBirth;
+        const { t } = this.props;
+        let dateOfBirth = "-";
+        let lastSignInAt = "-";
         if(this.state.objectUsersDto.dateOfBirth) {
             dateOfBirth = dateformat(this.state.objectUsersDto.dateOfBirth, "dd/mm/yyyy");
+        }
+        if(this.state.objectUsersDto.lastSignInAt) {
+            lastSignInAt = dateformat(this.state.objectUsersDto.lastSignInAt, "dd/mm/yyyy");
         }
         return (
           <div className="animated fadeIn">
             <Row>
               <Col xs="12" sm="6" lg="3">
-                <Card className="text-white bg-info">
+                <Card className="text-white bg-primary">
                   <CardBody className="pb-3">
                   <div className="h1 text-muted text-right mb-2">
                     <i className="icon-people"></i>
                   </div>
                   <div className="h4 mb-0">{this.state.objectUsersDto.firstName + ' ' + this.state.objectUsersDto.lastName}</div>
-                  <div className="h6 mb-0">{this.state.objectUsersDto.email}</div>
-                  <div className="h6 mb-0">{this.state.objectUsersDto.phone}</div>
-                  <div className="h6 mb-0">{dateOfBirth}</div>
+                  <div className="h6 mb-0">{t('employee:employee.label.email') + ': ' + this.state.objectUsersDto.email}</div>
+                  <div className="h6 mb-0">{t('employee:employee.label.phone') + ': ' + this.state.objectUsersDto.phone}</div>
+                  <div className="h6 mb-0">{t('employee:employee.label.dateOfBirth') + ': ' + dateOfBirth}</div>
                   </CardBody>
                 </Card>
               </Col>
 
               <Col xs="12" sm="6" lg="3">
-                <Card className="text-white bg-primary">
-                  <CardBody className="pb-0">
-                    <ButtonGroup className="float-right">
-                      <Dropdown id='card2' isOpen={this.state.card2} toggle={() => { this.setState({ card2: !this.state.card2 }); }}>
-                        <DropdownToggle className="p-0" color="transparent">
-                          <i className="icon-location-pin"></i>
-                        </DropdownToggle>
-                        <DropdownMenu right>
-                          <DropdownItem>Action</DropdownItem>
-                          <DropdownItem>Another action</DropdownItem>
-                          <DropdownItem>Something else here</DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </ButtonGroup>
-                    <div className="text-value">9.823</div>
-                    <div>Members online</div>
-                  </CardBody>
-                  <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
-                    <Line data={cardChartData1} options={cardChartOpts1} height={70} />
+                <Card className="text-white bg-info">
+                  <CardBody className="pb-3">
+                  <div className="h1 text-muted text-right mb-2">
+                    <i className="icon-speedometer"></i>
                   </div>
+                  <div className="h4 mb-0">{t('common:common.label.signInCount') + ': ' + this.state.objectUsersDto.signInCount}</div>
+                  <div className="h6 mb-0">{t('common:common.label.timeLogin') + ': ' + lastSignInAt}</div>
+                  <div className="h6 mb-0">{t('common:common.label.ipAddress') + ': ' + this.state.objectUsersDto.lastSignInIp}</div>
+                  <div className="h6 mb-0">{t('common:common.label.macAddress') + ': ' + this.state.objectUsersDto.lastSignInMac}</div>
+                  </CardBody>
                 </Card>
               </Col>
 
@@ -314,8 +309,8 @@ class Dashboard extends Component {
                     <div className="text-value">9.823</div>
                     <div>Members online</div>
                   </CardBody>
-                  <div className="chart-wrapper" style={{ height: '70px' }}>
-                    <Line data={cardChartData3} options={cardChartOpts3} height={70} />
+                  <div className="chart-wrapper" style={{ height: '87px' }}>
+                    <Line data={cardChartData3} options={cardChartOpts3} height={87} />
                   </div>
                 </Card>
               </Col>
@@ -338,8 +333,8 @@ class Dashboard extends Component {
                     <div className="text-value">9.823</div>
                     <div>Members online</div>
                   </CardBody>
-                  <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
-                    <Bar data={cardChartData4} options={cardChartOpts4} height={70} />
+                  <div className="chart-wrapper mx-3" style={{ height: '87px' }}>
+                    <Bar data={cardChartData4} options={cardChartOpts4} height={87} />
                   </div>
                 </Card>
               </Col>
