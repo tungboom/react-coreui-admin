@@ -27,8 +27,12 @@ class CustomMapsComponent extends Component {
         let latitude = Config.coords.latitude;
         let longitude = Config.coords.longitude;
         if(coordsCenter) {
-            latitude = JSON.parse(coordsCenter).latitude;
-            longitude = JSON.parse(coordsCenter).longitude;
+            try {
+                latitude = JSON.parse(coordsCenter).latitude;
+                longitude = JSON.parse(coordsCenter).longitude;
+            } catch (e) {
+                console.log(e);
+            }
         }
         return (
             <GoogleMap

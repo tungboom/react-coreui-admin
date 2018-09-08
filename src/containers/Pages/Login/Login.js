@@ -33,6 +33,7 @@ class Login extends Component {
                     history.push('/');
                 }
                 //Save coords user login
+                console.log(this.props.coords);
                 if(this.props.coords && response.payload.data) {
                     sessionStorage.setItem('coords_center', JSON.stringify({latitude: this.props.coords.latitude, longitude: this.props.coords.longitude}));
                     const objSave = {

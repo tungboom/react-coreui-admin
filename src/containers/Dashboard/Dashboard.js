@@ -234,17 +234,21 @@ class Dashboard extends Component {
     componentWillMount() {
         const user = localStorage.getItem('user');
         if(user) {
-            const objectUsersDto = JSON.parse(user).objectUsersDto;
-            if(objectUsersDto) {
-                this.props.actions.onGetCoords(objectUsersDto.userId).then((response) => {
-                    let lsMarker = response.payload.data;
-                    this.setState({
-                        objectUsersDto: objectUsersDto,
-                        listMarker: lsMarker
+            try {
+                const objectUsersDto = JSON.parse(user).objectUsersDto;
+                if(objectUsersDto) {
+                    this.props.actions.onGetCoords(objectUsersDto.userId).then((response) => {
+                        let lsMarker = response.payload.data;
+                        this.setState({
+                            objectUsersDto: objectUsersDto,
+                            listMarker: lsMarker
+                        });
+                    }).catch((response) => {
+                        
                     });
-                }).catch((response) => {
-                    
-                });
+                }
+            } catch (e) {
+                console.log(e);
             }
         }
         
