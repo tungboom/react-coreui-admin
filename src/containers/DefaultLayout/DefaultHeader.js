@@ -67,7 +67,7 @@ class DefaultHeader extends Component {
       }
     }
 
-    const { t, i18n } = this.props;
+    const { i18n } = this.props;
     const changeLanguage = (lng) => {
       i18n.changeLanguage(lng);
       sessionStorage.setItem('default_locale', lng);

@@ -1,24 +1,17 @@
 import React, { Component } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import {
-  Badge,
-  Button,
   ButtonDropdown,
   ButtonGroup,
-  ButtonToolbar,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
-  CardTitle,
   Col,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  Progress,
-  Row,
-  Table,
+  Row
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -28,7 +21,6 @@ import { geolocated } from 'react-geolocated';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle } from '@coreui/coreui/dist/js/coreui-utilities';
 import CustomMapsComponent from '../Utils/CustomMapsComponent';
-import _ from "lodash";
 
 const brandPrimary = getStyle('--primary')
 const brandInfo = getStyle('--info')

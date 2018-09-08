@@ -6,10 +6,6 @@ import "react-table/react-table.css";
 import { translate } from 'react-i18next';
 
 class CustomReactTable extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const { t } = this.props;
         return (

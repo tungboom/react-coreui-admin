@@ -4,12 +4,10 @@ import { compose, withProps, withStateHandlers } from "recompose";
 import {
     withScriptjs,
     withGoogleMap,
-    GoogleMap,
-    Marker,
-    InfoWindow
+    GoogleMap
 } from "react-google-maps";
 import Config from '../../config';
-import { translate, Trans } from 'react-i18next';
+import { translate } from 'react-i18next';
 import dateformat from "dateformat";
 import MarkerWithInfoWindow from "./MarkerWithInfoWindow";
 
@@ -41,7 +39,9 @@ class CustomMapsComponent extends Component {
                         marker.longitude
                     ));
                 });
-                map.fitBounds(bounds);
+                if(map) {
+                    map.fitBounds(bounds);
+                }
             }}
             defaultZoom={8}
             defaultCenter={{ lat: latitude, lng: longitude }}
