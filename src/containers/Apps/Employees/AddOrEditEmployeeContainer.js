@@ -41,6 +41,7 @@ import { translate, Trans } from 'react-i18next';
 import Dropzone from 'react-dropzone';
 import ReactAvatarEditor from 'react-avatar-editor';
 import _debounce from 'lodash.debounce';
+import LaddaButton, { ZOOM_OUT } from 'react-ladda';
 
 class AddOrEditEmployeeContainer extends Component {
     constructor(props) {
@@ -403,7 +404,12 @@ class AddOrEditEmployeeContainer extends Component {
                     </Row>
                 </ModalBody>
                 <ModalFooter>
-                <Button type="submit" color="success"><i className="fa fa-save"></i> {this.state.isAddOrEdit === "ADD" ? t("common:common.button.save") : this.state.isAddOrEdit === "EDIT" ? t("common:common.button.update") : ''}</Button>{' '}
+                <LaddaButton type="submit"
+                    className="btn btn-success btn-md mr-1"
+                    loading={this.props.stateAddOrEditModal.btnAddOrEditLoading}
+                    data-style={ZOOM_OUT}>
+                    <i className="fa fa-save"></i> {this.state.isAddOrEdit === "ADD" ? t("common:common.button.save") : this.state.isAddOrEdit === "EDIT" ? t("common:common.button.update") : ''}
+                </LaddaButton>{' '}
                 <Button type="button" color="danger" onClick={this.props.closeAddOrEditModal}><i className="fa fa-reply"></i> {t("common:common.button.cancel")}</Button>
                 </ModalFooter>
             </AvForm>

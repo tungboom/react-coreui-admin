@@ -43,6 +43,7 @@ import { toastr } from 'react-redux-toastr';
 import dateformat from "dateformat";
 import avatar from '../../../assets/img/brand/person.svg';
 import Config from '../../../config';
+import LaddaButton, { ZOOM_OUT } from 'react-ladda';
 
 class EmployeesContainer extends Component {
     constructor(props) {
@@ -154,6 +155,9 @@ class EmployeesContainer extends Component {
         this.state = {
             collapseFormSearch: true,
             collapseFormInfo: true,
+            btnSearchLoading: false,
+            btnExportLoading: false,
+            btnAddOrEditLoading: false,
             //Object Search
             objectSearch: {},
             //Table
@@ -217,6 +221,7 @@ class EmployeesContainer extends Component {
         obj.enabled = obj.enabled === "1" ? true : obj.enabled === "0" ? false : null;
         const objectSearch = Object.assign({}, this.state.objectSearch, obj);
         this.setState({
+            btnSearchLoading: true,
             loading: true,
             objectSearch: objectSearch
         }, () => {
@@ -224,7 +229,8 @@ class EmployeesContainer extends Component {
                 this.setState({
                     data: response.payload.data.data,
                     pages: response.payload.data.pages,
-                    loading: false
+                    loading: false,
+                    btnSearchLoading: false
                 });
             }).catch((response) => {
               
@@ -233,7 +239,6 @@ class EmployeesContainer extends Component {
     }
 
     reloadSearchTable() {
-        console.log("`1111");
         this.props.actions.onSearchTable(this.state.objectSearch).then((response) => {
             this.setState({
                 data: response.payload.data.data,
@@ -300,53 +305,75 @@ class EmployeesContainer extends Component {
     }
 
     handleValidSubmitAddOrEdit(event, values) {
-        fetch(this.editor.getImageScaledToCanvas().toDataURL())
-        .then(res => res.blob())
-        .then(blob => {
-            let filename = this.editor.props.image.name;
-            let mimeType = this.editor.props.image.type;
-            let fileAvatar = new File([blob], filename, {type:mimeType});
-            let objSave = values.objectUser;
-            objSave.enabled = objSave.enabled === "1" ? true : objSave.enabled === "0" ? false : false;
-            objSave.userId = this.state.objectAddOrEdit.userId;
-            objSave.employeeId = this.state.objectAddOrEdit.employeeId;
-            objSave.avatarId = this.state.objectAddOrEdit.avatarId;
-            const formData = new FormData();
-            formData.append('formDataJson', JSON.stringify(objSave));
-            formData.append('files', fileAvatar);
-            if(this.state.isAddOrEdit === "ADD") {
-                this.props.actions.onAdd(formData).then((response) => {
-                    if(response.payload.data.key === "SUCCESS") {
+        this.setState({
+            btnAddOrEditLoading: true
+        }, () => {
+            fetch(this.editor.getImageScaledToCanvas().toDataURL())
+            .then(res => res.blob())
+            .then(blob => {
+                let filename = this.editor.props.image.name;
+                let mimeType = this.editor.props.image.type;
+                let fileAvatar = new File([blob], filename, {type:mimeType});
+                let objSave = values.objectUser;
+                objSave.enabled = objSave.enabled === "1" ? true : objSave.enabled === "0" ? false : false;
+                objSave.userId = this.state.objectAddOrEdit.userId;
+                objSave.employeeId = this.state.objectAddOrEdit.employeeId;
+                objSave.avatarId = this.state.objectAddOrEdit.avatarId;
+                const formData = new FormData();
+                formData.append('formDataJson', JSON.stringify(objSave));
+                formData.append('files', fileAvatar);
+                if(this.state.isAddOrEdit === "ADD") {
+                    this.props.actions.onAdd(formData).then((response) => {
+                        if(response.payload.data.key === "SUCCESS") {
+                            this.setState({
+                                btnAddOrEditLoading: false,
+                                addOrEditModal: false,
+                                isAddOrEdit: null
+                            }, () => {
+                                this.reloadSearchTable();
+                                toastr.success(this.props.t("employee:employee.message.success.add"));
+                            });
+                        } else {
+                            this.setState({
+                                btnAddOrEditLoading: false
+                            }, () => {
+                                toastr.error(this.props.t("employee:employee.message.error.add"));
+                            });
+                        }
+                    }).catch((response) => {
                         this.setState({
-                            addOrEditModal: false,
-                            isAddOrEdit: null
+                            btnAddOrEditLoading: false
                         }, () => {
-                            this.reloadSearchTable();
-                            toastr.success(this.props.t("employee:employee.message.success.add"));
+                            toastr.error(this.props.t("employee:employee.message.error.add"));
                         });
-                    } else {
-                        toastr.error(this.props.t("employee:employee.message.error.add"));
-                    }
-                }).catch((response) => {
-                    toastr.error(this.props.t("employee:employee.message.error.add"));
-                });
-            } else if(this.state.isAddOrEdit === "EDIT") {
-                this.props.actions.onEdit(formData).then((response) => {
-                    if(response.payload.data.key === "SUCCESS") {
+                    });
+                } else if(this.state.isAddOrEdit === "EDIT") {
+                    this.props.actions.onEdit(formData).then((response) => {
+                        if(response.payload.data.key === "SUCCESS") {
+                            this.setState({
+                                btnAddOrEditLoading: false,
+                                addOrEditModal: false,
+                                isAddOrEdit: null
+                            }, () => {
+                                this.reloadSearchTable();
+                                toastr.success(this.props.t("employee:employee.message.success.edit"));
+                            });
+                        } else {
+                            this.setState({
+                                btnAddOrEditLoading: false
+                            }, () => {
+                                toastr.error(this.props.t("employee:employee.message.error.edit"));
+                            });
+                        }
+                    }).catch((response) => {
                         this.setState({
-                            addOrEditModal: false,
-                            isAddOrEdit: null
+                            btnAddOrEditLoading: false
                         }, () => {
-                            this.reloadSearchTable();
-                            toastr.success(this.props.t("employee:employee.message.success.edit"));
+                            toastr.error(this.props.t("employee:employee.message.error.edit"));
                         });
-                    } else {
-                        toastr.error(this.props.t("employee:employee.message.error.edit"));
-                    }
-                }).catch((response) => {
-                    toastr.error(this.props.t("employee:employee.message.error.edit"));
-                });
-            }
+                    });
+                }
+            });
         });
     }
 
@@ -406,11 +433,20 @@ class EmployeesContainer extends Component {
                                             </Row>
                                         </CardBody>
                                         <CardFooter className="text-center">
-                                            <Button type="submit" size="md" color="warning" className="mr-1"><i className="fa fa-search"></i> <Trans i18nKey="employee:employee.button.search"/></Button>
+                                            <LaddaButton type="submit"
+                                                className="btn btn-warning btn-md mr-1"
+                                                loading={this.state.btnSearchLoading}
+                                                data-style={ZOOM_OUT}>
+                                                <i className="fa fa-search"></i> <Trans i18nKey="employee:employee.button.search"/>
+                                            </LaddaButton>
                                             <Button type="button" size="md" color="success" className="mr-1" onClick={() => this.openAddOrEditModal("ADD")}><i className="fa fa-plus-circle"></i> <Trans i18nKey="employee:employee.button.add"/></Button>
-                                            {/* <Button type="button" size="md" color="danger" className="mr-1" onClick={() => this.openAddOrEditModal("EDIT")}><i className="fa fa-times-circle"></i> <Trans i18nKey="employee:employee.button.delete"/></Button> */}
                                             <Button type="button" size="md" color="info" className="mr-1"><i className="fa fa-download"></i> <Trans i18nKey="employee:employee.button.import"/></Button>
-                                            <Button type="button" size="md" color="info" className="mr-1"><i className="fa fa-upload"></i> <Trans i18nKey="employee:employee.button.export"/></Button>
+                                            <LaddaButton type="button"
+                                                className="btn btn-info btn-md mr-1"
+                                                loading={this.state.btnExportLoading}
+                                                data-style={ZOOM_OUT}>
+                                                <i className="fa fa-upload"></i> <Trans i18nKey="employee:employee.button.export"/>
+                                            </LaddaButton>
                                         </CardFooter>
                                     </Collapse>
                                 </Card>

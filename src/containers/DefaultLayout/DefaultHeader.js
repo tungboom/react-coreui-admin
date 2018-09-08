@@ -82,7 +82,7 @@ class DefaultHeader extends Component {
         />
         <AppSidebarToggler className="d-md-down-none" display="lg" />
 
-        <Nav className="d-md-down-none" navbar>
+        {/* <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
             <NavLink href="/">Dashboard</NavLink>
           </NavItem>
@@ -92,7 +92,7 @@ class DefaultHeader extends Component {
           <NavItem className="px-3">
             <NavLink href="#">Settings</NavLink>
           </NavItem>
-        </Nav>
+        </Nav> */}
         <Nav className="ml-auto" navbar>
           <Dropdown isOpen={this.state.dropdownOpen[0]} toggle={() => {
                 this.toggle(0);
@@ -106,7 +106,7 @@ class DefaultHeader extends Component {
                 <DropdownItem onClick={() => changeLanguage('en')}><Trans i18nKey="common:common.button.langEn"/></DropdownItem>
             </DropdownMenu>
             </Dropdown>
-          <NavItem className="d-md-down-none">
+          {/* <NavItem className="d-md-down-none">
             <NavLink href="#"><i className="icon-bell"></i><Badge pill color="danger">5</Badge></NavLink>
           </NavItem>
           <NavItem className="d-md-down-none">
@@ -114,7 +114,7 @@ class DefaultHeader extends Component {
           </NavItem>
           <NavItem className="d-md-down-none">
             <NavLink href="#"><i className="icon-location-pin"></i></NavLink>
-          </NavItem>
+          </NavItem> */}
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
               <img src={avatarBase64} className="img-avatar" alt={fullName} />

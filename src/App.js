@@ -12,6 +12,8 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'simple-line-icons/css/simple-line-icons.css';
 // Import Main styles for this application
 import './scss/style.css'
+// Import styles ladda
+import './scss/Ladda/1.0.0/ladda.min.css'
 // Containers
 import { DefaultLayout } from './containers';
 // Pages
