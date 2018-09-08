@@ -21,6 +21,7 @@ import { geolocated } from 'react-geolocated';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle } from '@coreui/coreui/dist/js/coreui-utilities';
 import CustomMapsComponent from '../Utils/CustomMapsComponent';
+import dateformat from "dateformat";
 
 const brandPrimary = getStyle('--primary')
 const brandInfo = getStyle('--info')
@@ -225,56 +226,49 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {
+            objectUsersDto: {},
             listMarker: []
         };
     }
 
     componentWillMount() {
         const user = localStorage.getItem('user');
-        let userId;
         if(user) {
             const objectUsersDto = JSON.parse(user).objectUsersDto;
             if(objectUsersDto) {
-                userId = objectUsersDto.userId;
+                this.props.actions.onGetCoords(objectUsersDto.userId).then((response) => {
+                    let lsMarker = response.payload.data;
+                    this.setState({
+                        objectUsersDto: objectUsersDto,
+                        listMarker: lsMarker
+                    });
+                }).catch((response) => {
+                    
+                });
             }
         }
-        this.props.actions.onGetCoords(userId).then((response) => {
-            let lsMarker = response.payload.data;
-            this.setState({
-                listMarker: lsMarker
-            });
-        }).catch((response) => {
-            
-        });
+        
     }
 
     render() {
-
+        let dateOfBirth;
+        if(this.state.objectUsersDto.dateOfBirth) {
+            dateOfBirth = dateformat(this.state.objectUsersDto.dateOfBirth, "dd/mm/yyyy");
+        }
         return (
           <div className="animated fadeIn">
             <Row>
               <Col xs="12" sm="6" lg="3">
                 <Card className="text-white bg-info">
-                  <CardBody className="pb-0">
-                    <ButtonGroup className="float-right">
-                      <ButtonDropdown id='card1' isOpen={this.state.card1} toggle={() => { this.setState({ card1: !this.state.card1 }); }}>
-                        <DropdownToggle caret className="p-0" color="transparent">
-                          <i className="icon-settings"></i>
-                        </DropdownToggle>
-                        <DropdownMenu right>
-                          <DropdownItem>Action</DropdownItem>
-                          <DropdownItem>Another action</DropdownItem>
-                          <DropdownItem disabled>Disabled action</DropdownItem>
-                          <DropdownItem>Something else here</DropdownItem>
-                        </DropdownMenu>
-                      </ButtonDropdown>
-                    </ButtonGroup>
-                    <div className="text-value">9.823</div>
-                    <div>Members online</div>
-                  </CardBody>
-                  <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
-                    <Line data={cardChartData2} options={cardChartOpts2} height={70} />
+                  <CardBody className="pb-3">
+                  <div className="h1 text-muted text-right mb-2">
+                    <i className="icon-people"></i>
                   </div>
+                  <div className="h4 mb-0">{this.state.objectUsersDto.firstName + ' ' + this.state.objectUsersDto.lastName}</div>
+                  <div className="h6 mb-0">{this.state.objectUsersDto.email}</div>
+                  <div className="h6 mb-0">{this.state.objectUsersDto.phone}</div>
+                  <div className="h6 mb-0">{dateOfBirth}</div>
+                  </CardBody>
                 </Card>
               </Col>
 
