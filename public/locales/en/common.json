@@ -4,7 +4,8 @@
             "search": "Search",
             "info": "Information",
             "add": "Add new",
-            "edit": "Edit"
+            "edit": "Edit",
+            "historyLogin": "History login"
         },
         "intro": {
             
@@ -30,7 +31,8 @@
             "back": "Back"
         },
         "label": {
-            "language": "Language"
+            "language": "Language",
+            "timeLogin": "Time login"
         },
         "placeholder": {
             

@@ -4,7 +4,8 @@
             "search": "Tìm kiếm",
             "info": "Thông tin",
             "add": "Thêm mới",
-            "edit": "Sửa"
+            "edit": "Sửa",
+            "historyLogin": "Lịch sử truy cập"
         },
         "intro": {
             
@@ -30,7 +31,8 @@
             "back": "Trở về"
         },
         "label": {
-            "language": "Ngôn ngữ"
+            "language": "Ngôn ngữ",
+            "timeLogin": "Thời gian đăng nhập"
         },
         "placeholder": {
             

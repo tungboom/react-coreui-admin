@@ -27,7 +27,8 @@ import { translate, Trans } from 'react-i18next';
 import { geolocated } from 'react-geolocated';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle } from '@coreui/coreui/dist/js/coreui-utilities';
-import CustomMapsComponent from '../Utils/CustomMapsComponent'
+import CustomMapsComponent from '../Utils/CustomMapsComponent';
+import _ from "lodash";
 
 const brandPrimary = getStyle('--primary')
 const brandInfo = getStyle('--info')
@@ -361,7 +362,7 @@ class Dashboard extends Component {
               <Col>
               <Card>
                   <CardHeader>
-                    Maps
+                    <i className="fa fa-search"></i><Trans i18nKey="common:common.title.historyLogin"/>
                   </CardHeader>
                   <CardBody>
                     <CustomMapsComponent listMarker={this.state.listMarker}/>
