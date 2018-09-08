@@ -15,7 +15,7 @@ import './scss/style.css'
 // Containers
 import { DefaultLayout } from './containers';
 // Pages
-import { Login, Page404, Page500, Register } from './views/Pages';
+import { Login, Page404, Page500, Register } from './containers/Pages';
 import { translate } from 'react-i18next';
 import history from './history';
 import { PrivateRoute } from './utils/PrivateRoute';

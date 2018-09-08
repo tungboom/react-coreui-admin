@@ -1,4 +1,11 @@
 import React, { Component } from 'react';
+import { compose, withProps } from "recompose";
+import {
+  withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  Marker
+} from "react-google-maps";
 import { Bar, Line } from 'react-chartjs-2';
 import {
   Badge,
@@ -22,7 +29,26 @@ import {
 } from 'reactstrap';
 import Widget03 from '../../views/Widgets/Widget03'
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
+import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
+
+const MyMapComponent = compose(
+  withProps({
+    googleMapURL:
+      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBCbALUWxINi8YJ6OFt04Umv2p2UIrRSig&v=3.exp&libraries=geometry,drawing,places",
+    loadingElement: <div style={{ height: `100%` }} />,
+    containerElement: <div style={{ height: `500px`, width: `100%` }} />,
+    mapElement: <div style={{ height: `100%` }} />
+  }),
+  withScriptjs,
+  withGoogleMap
+)(props => (
+  <GoogleMap
+    defaultZoom={8}
+    defaultCenter={{ lat: -34.397, lng: 150.644 }}
+    options={{ gestureHandling: 'greedy' }}>
+    <Marker position={{ lat: -34.397, lng: 150.644 }} />
+  </GoogleMap>
+));
 
 const brandPrimary = getStyle('--primary')
 const brandSuccess = getStyle('--success')
@@ -480,6 +506,18 @@ class Dashboard extends Component {
 
     return (
       <div className="animated fadeIn">
+        <Row>
+          <Col>
+          <Card>
+              <CardHeader>
+                Maps
+              </CardHeader>
+              <CardBody>
+                <MyMapComponent key="map" />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
         <Row>
           <Col xs="12" sm="6" lg="3">
             <Card className="text-white bg-info">

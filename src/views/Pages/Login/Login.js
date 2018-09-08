@@ -1,111 +1,63 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-// Auth actions
-import * as authActions from '../../../actions/authActions';
-// Child components
-import LoginForm from './LoginForm';
-import history from './../../../history';
-import { translate, Trans } from 'react-i18next';
-import {toastr} from 'react-redux-toastr';
-import {geolocated} from 'react-geolocated';
+import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 
 class Login extends Component {
-    constructor(props) {
-        super(props);
-
-        this.handleValidSubmit = this.handleValidSubmit.bind(this);
-    }
-
-    handleValidSubmit(event, values) {
-        this.props.actions.onGetToken(values).then((response) => {
-            const {access_token, refresh_token} = response.payload.data;
-            localStorage.setItem('access_token', access_token);
-            localStorage.setItem('refresh_token', refresh_token);
-            localStorage.setItem('is_authenticated', "true");
-
-            this.props.actions.onLogin().then((response) => {
-                localStorage.setItem('user', JSON.stringify(response.payload.data));
-                const locationState = localStorage.getItem('current_location_state');
-                if (locationState) {
-                    history.push(locationState);
-                } else {
-                    history.push('/');
-                }
-                if(this.props.coords && response.payload.data) {
-                    const objSave = {
-                        userId: response.payload.data.objectUsersDto.userId,
-                        latitude: this.props.coords.latitude,
-                        longitude: this.props.coords.longitude
-                    }
-                    this.props.actions.onSaveCoords(objSave).then((response) => {
-                    
-                    }).catch((response) => {
-                        
-                    });
-                }
-            }).catch((response) => {
-                localStorage.clear();
-                toastr.error(this.props.t("auth:auth.message.error.connectServer"));
-            });
-        }).catch((response) => {
-            localStorage.clear();
-            if (response.error !== undefined) {
-                if (response.error.response !== undefined) {
-                    if (response.error.response.data !== undefined) {
-                        if(response.error.response.data.error === "invalid_grant") {
-                            toastr.error(this.props.t("auth:auth.message.error.wrongUsernamePassword"));
-                        }
-                    } else {
-                        toastr.error(this.props.t("auth:auth.message.error.connectServer"));
-                    }
-                } else {
-                    toastr.error(this.props.t("auth:auth.message.error.connectServer"));
-                }
-            } else {
-                toastr.error(this.props.t("auth:auth.message.error.connectServer"));
-            }
-        });
-    }
-
-    displayRedirectMessages() {
-        const isExpiredToken = localStorage.getItem('is_expired_token');
-        if (isExpiredToken === "true") {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    render() {
-        let errorMessage = <div></div>;
-        if(this.displayRedirectMessages()) {
-            errorMessage = <div className="alert alert-danger"><Trans i18nKey="auth:auth.message.error.needLogin"/></div>;
-        }
-        return (
-            <LoginForm handleValidSubmit = {this.handleValidSubmit} errorMessage={errorMessage} />
-        )
-    }
+  render() {
+    return (
+      <div className="app flex-row align-items-center">
+        <Container>
+          <Row className="justify-content-center">
+            <Col md="8">
+              <CardGroup>
+                <Card className="p-4">
+                  <CardBody>
+                    <Form>
+                      <h1>Login</h1>
+                      <p className="text-muted">Sign In to your account</p>
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-user"></i>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="text" placeholder="Username" autoComplete="username" />
+                      </InputGroup>
+                      <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-lock"></i>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="password" placeholder="Password" autoComplete="current-password" />
+                      </InputGroup>
+                      <Row>
+                        <Col xs="6">
+                          <Button color="primary" className="px-4">Login</Button>
+                        </Col>
+                        <Col xs="6" className="text-right">
+                          <Button color="link" className="px-0">Forgot password?</Button>
+                        </Col>
+                      </Row>
+                    </Form>
+                  </CardBody>
+                </Card>
+                <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
+                  <CardBody className="text-center">
+                    <div>
+                      <h2>Sign up</h2>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua.</p>
+                      <Button color="primary" className="mt-3" active>Register Now!</Button>
+                    </div>
+                  </CardBody>
+                </Card>
+              </CardGroup>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    );
+  }
 }
 
-
-function mapStateToProps(state, ownProps) {
-    return {
-        isAuthenticated: state.auth.isAuthenticated,
-        response: state.auth
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        actions: bindActionCreators(authActions, dispatch)
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(geolocated({
-    positionOptions: {
-      enableHighAccuracy: false,
-    },
-    userDecisionTimeout: 5000,
-  })(translate()(Login)));
+export default Login;

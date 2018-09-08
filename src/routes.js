@@ -8,7 +8,7 @@ function Loading() {
 }
 
 const Dashboard = Loadable({
-  loader: () => import('./views/Dashboard'),
+  loader: () => import('./containers/Dashboard/Dashboard'),
   loading: Loading,
 });
 
