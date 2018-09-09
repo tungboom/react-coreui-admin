@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import _debounce from 'lodash.debounce';
 import { translate, Trans } from 'react-i18next';
 import Config from '../../../config';
+import LaddaButton, { ZOOM_OUT } from 'react-ladda';
 
 class LoginForm extends Component {
 
@@ -132,7 +133,12 @@ class LoginForm extends Component {
                                 <FormGroup className="form-actions">
                                 <Row>
                                     <Col xs="6">
-                                        <Button type="submit" color="primary" className="px-4"><Trans i18nKey="auth:auth.button.login"/></Button>
+                                        <LaddaButton type="submit"
+                                            className="btn btn-primary btn-md px-4"
+                                            loading={this.props.btnLoginLoading}
+                                            data-style={ZOOM_OUT}>
+                                            <Trans i18nKey="auth:auth.button.login"/>
+                                        </LaddaButton>
                                     </Col>
                                     <Col xs="6" className="text-right">
                                         <Button type="button" color="link" className="px-0"><Trans i18nKey="auth:auth.button.forgotPassword"/></Button>
@@ -163,7 +169,8 @@ class LoginForm extends Component {
 
 LoginForm.propTypes = {
     handleValidSubmit: PropTypes.func.isRequired,
-    errorMessage: PropTypes.object.isRequired
+    errorMessage: PropTypes.object.isRequired,
+    btnLoginLoading: PropTypes.bool.isRequired
 };
 
 export default translate()(LoginForm);

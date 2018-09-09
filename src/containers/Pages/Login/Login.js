@@ -17,6 +17,10 @@ class Login extends Component {
         super(props);
 
         this.handleValidSubmit = this.handleValidSubmit.bind(this);
+
+        this.state = {
+            btnLoginLoading: false
+        };
     }
 
     componentWillMount() {
@@ -33,65 +37,76 @@ class Login extends Component {
     }
 
     handleValidSubmit(event, values) {
-        this.props.actions.onGetToken(values).then((response) => {
-            const {access_token, refresh_token} = response.payload.data;
-            localStorage.setItem('access_token', access_token);
-            localStorage.setItem('refresh_token', refresh_token);
-            localStorage.setItem('is_authenticated', "true");
-            let objIpLogin = {};
-            try {
-                objIpLogin = JSON.parse(localStorage.getItem('obj_ip_login'));
-            } catch (error) {
-                console.log(error);
-            }
-            this.props.actions.onLogin({currentSignInIp: objIpLogin.query}).then((response) => {
-                if(response.payload.data && response.payload.data.objectUsersDto.userId) {
-                    localStorage.setItem('user', JSON.stringify(response.payload.data));
-                    const locationState = localStorage.getItem('current_location_state');
-                    if (locationState) {
-                        history.push(locationState);
-                    } else {
-                        history.push('/');
-                    }
-                    //Save coords user login
-                    if(this.props.coords) {
-                        sessionStorage.setItem('coords_center', JSON.stringify({latitude: this.props.coords.latitude, longitude: this.props.coords.longitude}));
-                        const objSave = {
-                            userId: response.payload.data.objectUsersDto.userId,
-                            latitude: this.props.coords.latitude,
-                            longitude: this.props.coords.longitude
-                        }
-                        this.props.actions.onSaveCoords(objSave).then((response) => {
-                            console.log('Save coords success');
-                        }).catch((response) => {
-                            
-                        });
-                    }
-                } else {
-                    localStorage.clear();
-                    toastr.error(this.props.t("auth:auth.message.error.getInfoUser"));
+        this.setState({
+            btnLoginLoading: true
+        }, () => {
+            this.props.actions.onGetToken(values).then((response) => {
+                const {access_token, refresh_token} = response.payload.data;
+                localStorage.setItem('access_token', access_token);
+                localStorage.setItem('refresh_token', refresh_token);
+                localStorage.setItem('is_authenticated', "true");
+                let objIpLogin = {};
+                try {
+                    objIpLogin = JSON.parse(localStorage.getItem('obj_ip_login'));
+                } catch (error) {
+                    console.log(error);
                 }
+                this.props.actions.onLogin({currentSignInIp: objIpLogin.query}).then((response) => {
+                    this.setState({
+                        btnLoginLoading: false
+                    }, () => {
+                        if(response.payload.data && response.payload.data.objectUsersDto.userId) {
+                            localStorage.setItem('user', JSON.stringify(response.payload.data));
+                            const locationState = localStorage.getItem('current_location_state');
+                            if (locationState) {
+                                history.push(locationState);
+                            } else {
+                                history.push('/');
+                            }
+                            //Save coords user login
+                            //setTimeout(function() {
+                                if(this.props.coords) {
+                                    sessionStorage.setItem('coords_center', JSON.stringify({latitude: this.props.coords.latitude, longitude: this.props.coords.longitude}));
+                                    const objSave = {
+                                        userId: response.payload.data.objectUsersDto.userId,
+                                        latitude: this.props.coords.latitude,
+                                        longitude: this.props.coords.longitude
+                                    }
+                                    this.props.actions.onSaveCoords(objSave).then((response) => {
+                                        console.log('Save coords success');
+                                    }).catch((response) => {
+                                        
+                                    });
+                                }
+                            //}.bind(this), 1000);
+                        } else {
+                            localStorage.clear();
+                            toastr.error(this.props.t("auth:auth.message.error.getInfoUser"));
+                        }
+                    });
+                }).catch((response) => {
+                    this.setState({
+                        btnLoginLoading: false
+                    }, () => {
+                        localStorage.clear();
+                        toastr.error(this.props.t("auth:auth.message.error.connectServer"));
+                    });
+                });
             }).catch((response) => {
-                localStorage.clear();
-                toastr.error(this.props.t("auth:auth.message.error.connectServer"));
-            });
-        }).catch((response) => {
-            localStorage.clear();
-            if (response.error !== undefined) {
-                if (response.error.response !== undefined) {
-                    if (response.error.response.data !== undefined) {
+                this.setState({
+                    btnLoginLoading: false
+                }, () => {
+                    localStorage.clear();
+                    try {
                         if(response.error.response.data.error === "invalid_grant") {
                             toastr.error(this.props.t("auth:auth.message.error.wrongUsernamePassword"));
                         }
-                    } else {
+                    } catch (error) {
+                        console.log(error);
                         toastr.error(this.props.t("auth:auth.message.error.connectServer"));
                     }
-                } else {
-                    toastr.error(this.props.t("auth:auth.message.error.connectServer"));
-                }
-            } else {
-                toastr.error(this.props.t("auth:auth.message.error.connectServer"));
-            }
+                });
+            });
         });
     }
 
@@ -110,7 +125,7 @@ class Login extends Component {
             errorMessage = <div className="alert alert-danger"><Trans i18nKey="auth:auth.message.error.needLogin"/></div>;
         }
         return (
-            <LoginForm handleValidSubmit = {this.handleValidSubmit} errorMessage={errorMessage} />
+            <LoginForm handleValidSubmit = {this.handleValidSubmit} errorMessage={errorMessage} btnLoginLoading={this.state.btnLoginLoading} />
         )
     }
 }
