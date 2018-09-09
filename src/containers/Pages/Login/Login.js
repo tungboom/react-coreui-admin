@@ -10,6 +10,7 @@ import { translate, Trans } from 'react-i18next';
 import {toastr} from 'react-redux-toastr';
 import axios from "axios";
 import Config from '../../../config';
+import { geolocated } from 'react-geolocated';
 
 class Login extends Component {
     constructor(props) {
@@ -53,17 +54,19 @@ class Login extends Component {
                         history.push('/');
                     }
                     //Save coords user login
-                    sessionStorage.setItem('coords_center', JSON.stringify({latitude: objIpLogin.lat, longitude: objIpLogin.lon}));
-                    const objSave = {
-                        userId: response.payload.data.objectUsersDto.userId,
-                        latitude: objIpLogin.lat,
-                        longitude: objIpLogin.lon
+                    if(this.props.coords) {
+                        sessionStorage.setItem('coords_center', JSON.stringify({latitude: this.props.coords.latitude, longitude: this.props.coords.longitude}));
+                        const objSave = {
+                            userId: response.payload.data.objectUsersDto.userId,
+                            latitude: this.props.coords.latitude,
+                            longitude: this.props.coords.longitude
+                        }
+                        this.props.actions.onSaveCoords(objSave).then((response) => {
+                            console.log('Save coords success');
+                        }).catch((response) => {
+                            
+                        });
                     }
-                    this.props.actions.onSaveCoords(objSave).then((response) => {
-                    
-                    }).catch((response) => {
-                        
-                    });
                 } else {
                     localStorage.clear();
                     toastr.error(this.props.t("auth:auth.message.error.getInfoUser"));
@@ -126,4 +129,9 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate()(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(geolocated({
+    positionOptions: {
+      enableHighAccuracy: false,
+    },
+    userDecisionTimeout: 5000,
+  })(translate()(Login)));
