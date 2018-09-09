@@ -23,16 +23,13 @@ class CustomMapsComponent extends Component {
 
     render() {
         const { t } = this.props;
-        const coordsCenter = sessionStorage.getItem('coords_center');
         let latitude = Config.coords.latitude;
         let longitude = Config.coords.longitude;
-        if(coordsCenter) {
-            try {
-                latitude = JSON.parse(coordsCenter).latitude;
-                longitude = JSON.parse(coordsCenter).longitude;
-            } catch (e) {
-                console.log(e);
-            }
+        try {
+            latitude = JSON.parse(sessionStorage.getItem('coords_center')).latitude;
+            longitude = JSON.parse(sessionStorage.getItem('coords_center')).longitude;
+        } catch (error) {
+            console.log(error);
         }
         return (
             <GoogleMap

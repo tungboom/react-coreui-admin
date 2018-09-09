@@ -13,12 +13,6 @@ const apiMiddleware = {
       baseURL: Config.apiUrl + '/demo',
       responseType: 'json'
     })
-  },
-  googleMaps: {
-    client: axios.create({
-        baseURL:'https://maps.googleapis.com/maps/api',
-        responseType: 'json'
-    })
   }
 }
 

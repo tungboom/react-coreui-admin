@@ -17,11 +17,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as dashboardActions from '../../actions/dashboardActions';
 import { translate, Trans } from 'react-i18next';
-import { geolocated } from 'react-geolocated';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle } from '@coreui/coreui/dist/js/coreui-utilities';
 import CustomMapsComponent from '../Utils/CustomMapsComponent';
 import dateformat from "dateformat";
+import history from './../../history';
 
 const brandPrimary = getStyle('--primary')
 const brandInfo = getStyle('--info')
@@ -232,26 +232,23 @@ class Dashboard extends Component {
     }
 
     componentWillMount() {
-        const user = localStorage.getItem('user');
-        if(user) {
-            try {
-                const objectUsersDto = JSON.parse(user).objectUsersDto;
-                if(objectUsersDto) {
-                    this.props.actions.onGetCoords(objectUsersDto.userId).then((response) => {
-                        let lsMarker = response.payload.data;
-                        this.setState({
-                            objectUsersDto: objectUsersDto,
-                            listMarker: lsMarker
-                        });
-                    }).catch((response) => {
-                        
+        try {
+            const objectUsersDto = JSON.parse(localStorage.getItem('user')).objectUsersDto;
+            if(objectUsersDto) {
+                this.props.actions.onGetCoords(objectUsersDto.userId).then((response) => {
+                    let lsMarker = response.payload.data;
+                    this.setState({
+                        objectUsersDto: objectUsersDto,
+                        listMarker: lsMarker
                     });
-                }
-            } catch (e) {
-                console.log(e);
+                }).catch((response) => {
+                    
+                });
             }
+        } catch (error) {
+            console.log(error);
+            history.push('/login');
         }
-        
     }
 
     render() {
@@ -262,100 +259,97 @@ class Dashboard extends Component {
             dateOfBirth = dateformat(this.state.objectUsersDto.dateOfBirth, "dd/mm/yyyy");
         }
         if(this.state.objectUsersDto.lastSignInAt) {
-            lastSignInAt = dateformat(this.state.objectUsersDto.lastSignInAt, "dd/mm/yyyy");
+            lastSignInAt = dateformat(this.state.objectUsersDto.lastSignInAt, "HH:MM:ss dd-mm-yyyy");
         }
+        let objIpLogin = {};
+        try {
+            objIpLogin = JSON.parse(localStorage.getItem('obj_ip_login'));
+        } catch (error) {
+            console.log(error);
+        }
+        console.log(objIpLogin);
         return (
-          <div className="animated fadeIn">
-            <Row>
-              <Col xs="12" sm="6" lg="3">
-                <Card className="text-white bg-primary">
-                  <CardBody className="pb-3">
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className="icon-people"></i>
-                  </div>
-                  <div className="h4 mb-0">{this.state.objectUsersDto.firstName + ' ' + this.state.objectUsersDto.lastName}</div>
-                  <div className="h6 mb-0">{t('employee:employee.label.email') + ': ' + this.state.objectUsersDto.email}</div>
-                  <div className="h6 mb-0">{t('employee:employee.label.phone') + ': ' + this.state.objectUsersDto.phone}</div>
-                  <div className="h6 mb-0">{t('employee:employee.label.dateOfBirth') + ': ' + dateOfBirth}</div>
-                  </CardBody>
-                </Card>
-              </Col>
+            <div className="animated fadeIn">
+                <Row>
+                    <Col xs="12" sm="6" lg="3">
+                        <Card className="text-white bg-primary">
+                            <CardBody className="pb-3">
+                            <div className="h1 text-muted text-right mb-2">
+                                <i className="icon-people"></i>
+                            </div>
+                            <div className="h4 mb-0">{this.state.objectUsersDto.firstName + ' ' + this.state.objectUsersDto.lastName}</div>
+                            <div className="h6 mb-0">{t('employee:employee.label.email') + ': ' + this.state.objectUsersDto.email}</div>
+                            <div className="h6 mb-0">{t('employee:employee.label.phone') + ': ' + this.state.objectUsersDto.phone}</div>
+                            <div className="h6 mb-0">{t('employee:employee.label.dateOfBirth') + ': ' + dateOfBirth}</div>
+                            </CardBody>
+                        </Card>
+                    </Col>
 
-              <Col xs="12" sm="6" lg="3">
-                <Card className="text-white bg-info">
-                  <CardBody className="pb-3">
-                  <div className="h1 text-muted text-right mb-2">
-                    <i className="icon-speedometer"></i>
-                  </div>
-                  <div className="h4 mb-0">{t('common:common.label.signInCount') + ': ' + this.state.objectUsersDto.signInCount}</div>
-                  <div className="h6 mb-0">{t('common:common.label.timeLogin') + ': ' + lastSignInAt}</div>
-                  <div className="h6 mb-0">{t('common:common.label.ipAddress') + ': ' + this.state.objectUsersDto.lastSignInIp}</div>
-                  <div className="h6 mb-0">{t('common:common.label.macAddress') + ': ' + this.state.objectUsersDto.lastSignInMac}</div>
-                  </CardBody>
-                </Card>
-              </Col>
+                    <Col xs="12" sm="6" lg="3">
+                        <Card className="text-white bg-info">
+                            <CardBody className="pb-3">
+                            <div className="h1 text-muted text-right mb-2">
+                                <i className="icon-speedometer"></i>
+                            </div>
+                            <div className="h4 mb-0">{t('common:common.label.signInCount') + ': ' + this.state.objectUsersDto.signInCount}</div>
+                            <div className="h6 mb-0">{t('common:common.label.timeLogin') + ': ' + lastSignInAt}</div>
+                            <div className="h6 mb-0">&nbsp;</div>
+                            <div className="h6 mb-0">&nbsp;</div>
+                            </CardBody>
+                        </Card>
+                    </Col>
 
-              <Col xs="12" sm="6" lg="3">
-                <Card className="text-white bg-warning">
-                  <CardBody className="pb-0">
-                    <ButtonGroup className="float-right">
-                      <Dropdown id='card3' isOpen={this.state.card3} toggle={() => { this.setState({ card3: !this.state.card3 }); }}>
-                        <DropdownToggle caret className="p-0" color="transparent">
-                          <i className="icon-settings"></i>
-                        </DropdownToggle>
-                        <DropdownMenu right>
-                          <DropdownItem>Action</DropdownItem>
-                          <DropdownItem>Another action</DropdownItem>
-                          <DropdownItem>Something else here</DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </ButtonGroup>
-                    <div className="text-value">9.823</div>
-                    <div>Members online</div>
-                  </CardBody>
-                  <div className="chart-wrapper" style={{ height: '87px' }}>
-                    <Line data={cardChartData3} options={cardChartOpts3} height={87} />
-                  </div>
-                </Card>
-              </Col>
+                    <Col xs="12" sm="6" lg="3">
+                        <Card className="text-white bg-warning">
+                            <CardBody className="pb-3">
+                            <div className="h1 text-muted text-right mb-2">
+                                <i className="icon-location-pin"></i>
+                            </div>
+                            <div className="h4 mb-0">{objIpLogin.query}</div>
+                            <div className="h6 mb-0">{objIpLogin.regionName + ' (' + objIpLogin.region + ')'}</div>
+                            <div className="h6 mb-0">{objIpLogin.country + ' (' + objIpLogin.countryCode + ')'}</div>
+                            <div className="h6 mb-0">{'Timezone: ' + objIpLogin.timezone}</div>
+                            </CardBody>
+                        </Card>
+                    </Col>
 
-              <Col xs="12" sm="6" lg="3">
-                <Card className="text-white bg-danger">
-                  <CardBody className="pb-0">
-                    <ButtonGroup className="float-right">
-                      <ButtonDropdown id='card4' isOpen={this.state.card4} toggle={() => { this.setState({ card4: !this.state.card4 }); }}>
-                        <DropdownToggle caret className="p-0" color="transparent">
-                          <i className="icon-settings"></i>
-                        </DropdownToggle>
-                        <DropdownMenu right>
-                          <DropdownItem>Action</DropdownItem>
-                          <DropdownItem>Another action</DropdownItem>
-                          <DropdownItem>Something else here</DropdownItem>
-                        </DropdownMenu>
-                      </ButtonDropdown>
-                    </ButtonGroup>
-                    <div className="text-value">9.823</div>
-                    <div>Members online</div>
-                  </CardBody>
-                  <div className="chart-wrapper mx-3" style={{ height: '87px' }}>
-                    <Bar data={cardChartData4} options={cardChartOpts4} height={87} />
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-              <Card>
-                  <CardHeader>
-                    <i className="fa fa-search"></i><Trans i18nKey="common:common.title.historyLogin"/>
-                  </CardHeader>
-                  <CardBody>
-                    <CustomMapsComponent listMarker={this.state.listMarker}/>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          </div>
+                    <Col xs="12" sm="6" lg="3">
+                        <Card className="text-white bg-danger">
+                            <CardBody className="pb-0">
+                              <ButtonGroup className="float-right">
+                                <ButtonDropdown id='card4' isOpen={this.state.card4} toggle={() => { this.setState({ card4: !this.state.card4 }); }}>
+                                  <DropdownToggle caret className="p-0" color="transparent">
+                                    <i className="icon-settings"></i>
+                                  </DropdownToggle>
+                                  <DropdownMenu right>
+                                    <DropdownItem>Action</DropdownItem>
+                                    <DropdownItem>Another action</DropdownItem>
+                                    <DropdownItem>Something else here</DropdownItem>
+                                  </DropdownMenu>
+                                </ButtonDropdown>
+                              </ButtonGroup>
+                              <div className="text-value">9.823</div>
+                              <div>Members online</div>
+                            </CardBody>
+                            <div className="chart-wrapper mx-3" style={{ height: '87px' }}>
+                              <Bar data={cardChartData4} options={cardChartOpts4} height={87} />
+                            </div>
+                        </Card>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                      <Card>
+                          <CardHeader>
+                              <i className="fa fa-search"></i><Trans i18nKey="common:common.title.historyLogin"/>
+                          </CardHeader>
+                          <CardBody>
+                              <CustomMapsComponent listMarker={this.state.listMarker}/>
+                          </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
+            </div>
         );
     }
 }
@@ -372,9 +366,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(geolocated({
-    positionOptions: {
-        enableHighAccuracy: false,
-    },
-    userDecisionTimeout: 5000,
-})(translate()(Dashboard)));
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(Dashboard));

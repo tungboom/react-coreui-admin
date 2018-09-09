@@ -8,7 +8,8 @@ import LoginForm from './LoginForm';
 import history from './../../../history';
 import { translate, Trans } from 'react-i18next';
 import {toastr} from 'react-redux-toastr';
-import {geolocated} from 'react-geolocated';
+import axios from "axios";
+import Config from '../../../config';
 
 class Login extends Component {
     constructor(props) {
@@ -17,37 +18,56 @@ class Login extends Component {
         this.handleValidSubmit = this.handleValidSubmit.bind(this);
     }
 
+    componentWillMount() {
+        axios.get(Config.apiUrlGetIp)
+        .then(function (response) {
+            if(response.status === 200) {
+                localStorage.setItem('obj_ip_login', JSON.stringify(response.data));
+            }
+        }).catch(function (error) {
+            console.log(error);
+        }).then(function () {
+            // always executed
+        });
+    }
+
     handleValidSubmit(event, values) {
         this.props.actions.onGetToken(values).then((response) => {
             const {access_token, refresh_token} = response.payload.data;
             localStorage.setItem('access_token', access_token);
             localStorage.setItem('refresh_token', refresh_token);
             localStorage.setItem('is_authenticated', "true");
-
-            this.props.actions.onLogin().then((response) => {
-                localStorage.setItem('user', JSON.stringify(response.payload.data));
-                const locationState = localStorage.getItem('current_location_state');
-                if (locationState) {
-                    history.push(locationState);
-                } else {
-                    history.push('/');
-                }
-                //Save coords user login
-                console.log(this.props.coords);
-                if(this.props.coords && response.payload.data) {
-                    sessionStorage.setItem('coords_center', JSON.stringify({latitude: this.props.coords.latitude, longitude: this.props.coords.longitude}));
+            let objIpLogin = {};
+            try {
+                objIpLogin = JSON.parse(localStorage.getItem('obj_ip_login'));
+            } catch (error) {
+                console.log(error);
+            }
+            this.props.actions.onLogin({currentSignInIp: objIpLogin.query}).then((response) => {
+                if(response.payload.data && response.payload.data.objectUsersDto.userId) {
+                    localStorage.setItem('user', JSON.stringify(response.payload.data));
+                    const locationState = localStorage.getItem('current_location_state');
+                    if (locationState) {
+                        history.push(locationState);
+                    } else {
+                        history.push('/');
+                    }
+                    //Save coords user login
+                    sessionStorage.setItem('coords_center', JSON.stringify({latitude: objIpLogin.lat, longitude: objIpLogin.lon}));
                     const objSave = {
                         userId: response.payload.data.objectUsersDto.userId,
-                        latitude: this.props.coords.latitude,
-                        longitude: this.props.coords.longitude
+                        latitude: objIpLogin.lat,
+                        longitude: objIpLogin.lon
                     }
                     this.props.actions.onSaveCoords(objSave).then((response) => {
                     
                     }).catch((response) => {
                         
                     });
+                } else {
+                    localStorage.clear();
+                    toastr.error(this.props.t("auth:auth.message.error.getInfoUser"));
                 }
-                
             }).catch((response) => {
                 localStorage.clear();
                 toastr.error(this.props.t("auth:auth.message.error.connectServer"));
@@ -106,9 +126,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(geolocated({
-    positionOptions: {
-      enableHighAccuracy: false,
-    },
-    userDecisionTimeout: 5000,
-  })(translate()(Login)));
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(Login));

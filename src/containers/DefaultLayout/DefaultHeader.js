@@ -54,21 +54,18 @@ class DefaultHeader extends Component {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
 
-    const user = localStorage.getItem('user');
     let fullName;
     let avatarBase64 = 'assets/img/avatars/person.svg';
-    if(user) {
-        try {
-            const objectUsersDto = JSON.parse(user).objectUsersDto;
-            if(objectUsersDto) {
-                fullName = objectUsersDto.firstName + " " + objectUsersDto.lastName;
-                if(objectUsersDto.avatarBase64) {
-                  avatarBase64 = objectUsersDto.avatarBase64;
-                }
+    try {
+        const objectUsersDto = JSON.parse(localStorage.getItem('user')).objectUsersDto;
+        if(objectUsersDto) {
+            fullName = objectUsersDto.firstName + " " + objectUsersDto.lastName;
+            if(objectUsersDto.avatarBase64) {
+              avatarBase64 = objectUsersDto.avatarBase64;
             }
-        } catch (e) {
-            console.log(e);
         }
+    } catch (error) {
+        console.log(error);
     }
 
     const { i18n } = this.props;

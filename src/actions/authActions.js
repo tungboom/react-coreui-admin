@@ -19,16 +19,17 @@ export function onGetToken(data) {
     };
 }
 
-export function onLogin() {
+export function onLogin(data) {
     return {
-        type: types.ON_LOGIN,
-        payload: {
-            client: 'system',
-            request:{
-                method: 'POST',
-                url: "/oauth/login"
-            }
+      type: types.ON_LOGIN,
+      payload: {
+        client: 'system',
+        request:{
+          method: 'POST',
+          url:'/oauth/login',
+          data: data
         }
+      }
     };
 }
 
@@ -81,4 +82,4 @@ export function onSaveCoords(data) {
         }
       }
     };
-  }
+}
