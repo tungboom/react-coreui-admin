@@ -267,7 +267,6 @@ class Dashboard extends Component {
         } catch (error) {
             console.log(error);
         }
-        console.log(objIpLogin);
         return (
             <div className="animated fadeIn">
                 <Row>
