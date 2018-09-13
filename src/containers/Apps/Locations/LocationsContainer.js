@@ -37,7 +37,6 @@ import { bindActionCreators } from 'redux';
 import * as locationsActions from '../../../actions/locationsActions';
 // Child components
 import CustomReactTable from "../../Utils/CustomReactTable";
-import AddOrEditLocationContainer from "./AddOrEditLocationContainer";
 import { translate, Trans } from 'react-i18next';
 import { toastr } from 'react-redux-toastr';
 import dateformat from "dateformat";
@@ -69,34 +68,6 @@ class LocationsContainer extends Component {
                 }
             },
             {
-                Header: this.props.t("location:location.label.image"),
-                id: "avatarId",
-                sortable: false,
-                maxWidth: 80,
-                accessor: d => {
-                    let html = <div></div>;
-                    if(d.avatarId === undefined || d.avatarId === null || d.avatarId === "") {
-                    html = <div className="text-center"><img className="app-img-avatar-table" src={avatar} alt={d.firstName + " " + d.lastName} /></div>;
-                    } else {
-                    const accessToken = localStorage.getItem('access_token');
-                    html = <div className="text-center"><img className="app-img-avatar-table" src={Config.apiUrl + "/demo/common/getFileById?fileId=" + d.avatarId + '&access_token=' + accessToken} alt={d.firstName + " " + d.lastName} /></div>;
-                    }
-                    return html;
-                }
-            },
-            {
-                Header: this.props.t("location:location.label.action"),
-                id: "userId",
-                sortable: false,
-                accessor: d => {
-                    let html = <div className="text-center">
-                    <span className="app-span-icon-table mr-2" onClick={() => this.openAddOrEditModal("EDIT", d.userId)}><i className="fa fa-edit"></i></span>
-                    <span className="app-span-icon-table"><i className="fa fa-times-circle"></i></span>
-                    </div>;
-                    return html;
-                }
-            },
-            {
                 Header: this.props.t("location:location.label.username"),
                 accessor: "username"
             },
@@ -113,31 +84,6 @@ class LocationsContainer extends Component {
             {
                 Header: this.props.t("location:location.label.locationName"),
                 accessor: "locationName"
-            },
-            {
-                Header: this.props.t("location:location.label.createdTime"),
-                id: "createdTime",
-                className: "text-right",
-                accessor: d => dateformat(d.createdTime, "HH:MM:ss dd-mm-yyyy")
-            },
-            {
-                Header: this.props.t("location:location.label.createdUser"),
-                accessor: "createdUser"
-            },
-            {
-                Header: this.props.t("location:location.label.updatedTime"),
-                id: "updatedTime",
-                className: "text-right",
-                accessor: d => d.updatedTime === null ? "" : dateformat(d.updatedTime, "HH:MM:ss dd-mm-yyyy")
-            },
-            {
-                Header: this.props.t("location:location.label.updatedUser"),
-                accessor: "updatedUser"
-            },
-            {
-                Header: this.props.t("location:location.label.signInCount"),
-                className: "text-center",
-                accessor: "signInCount"
             }
         ];
 
