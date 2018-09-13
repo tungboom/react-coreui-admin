@@ -51,10 +51,6 @@ class LocationsContainer extends Component {
         this.toggleFormInfo = this.toggleFormInfo.bind(this);
         this.onFetchData = this.onFetchData.bind(this);
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
-        this.openAddOrEditModal = this.openAddOrEditModal.bind(this);
-        this.closeAddOrEditModal = this.closeAddOrEditModal.bind(this);
-        this.handleValidSubmitAddOrEdit = this.handleValidSubmitAddOrEdit.bind(this);
-        this.handleInvalidSubmitAddOrEdit = this.handleInvalidSubmitAddOrEdit.bind(this);
 
         const columnsTable = [
             {
@@ -96,11 +92,7 @@ class LocationsContainer extends Component {
             data: [],
             pages: null,
             loading: true,
-            columns: columnsTable,
-            //AddOrEditModal
-            addOrEditModal: false,
-            isAddOrEdit: null,
-            objectAddOrEdit: {}
+            columns: columnsTable
         };
     }
 
@@ -169,86 +161,7 @@ class LocationsContainer extends Component {
         });
     }
 
-    openAddOrEditModal(value, userId) {
-        if(value === "ADD") {
-            this.setState({
-                addOrEditModal: true,
-                isAddOrEdit: value,
-                objectAddOrEdit: {}
-            });
-        } else if(value === "EDIT") {
-            this.props.actions.onGetDetail(userId).then((response) => {
-                let obj = {};
-                if(response.payload !== undefined) {
-                    obj = response.payload.data;
-                }
-                this.setState({
-                    addOrEditModal: true,
-                    isAddOrEdit: value,
-                    objectAddOrEdit: obj
-                });
-            }).catch((response) => {
-                toastr.error(this.props.t("location:location.message.error.getDetail"));
-            });
-        }
-    }
-
-    closeAddOrEditModal() {
-        this.setState({
-            addOrEditModal: false,
-            isAddOrEdit: null
-        });
-    }
-
-    handleValidSubmitAddOrEdit(event, values) {
-        fetch(this.editor.getImageScaledToCanvas().toDataURL())
-        .then(res => res.blob())
-        .then(blob => {
-            let filename = this.editor.props.image.name;
-            let mimeType = this.editor.props.image.type;
-            let fileAvatar = new File([blob], filename, {type:mimeType});
-            let objSave = values.objectUser;
-            objSave.enabled = objSave.enabled === "1" ? true : objSave.enabled === "0" ? false : false;
-            objSave.userId = this.state.objectAddOrEdit.userId;
-            objSave.locationId = this.state.objectAddOrEdit.locationId;
-            objSave.avatarId = this.state.objectAddOrEdit.avatarId;
-            const formData = new FormData();
-            formData.append('formDataJson', JSON.stringify(objSave));
-            formData.append('files', fileAvatar);
-            if(this.state.isAddOrEdit === "ADD") {
-                this.props.actions.onAdd(formData).then((response) => {
-                    if(response.payload.data.key === "SUCCESS") {
-                        toastr.success(this.props.t("location:location.message.success.add"));
-                    } else {
-                        toastr.error(this.props.t("location:location.message.error.add"));
-                    }
-                }).catch((response) => {
-                    toastr.error(this.props.t("location:location.message.error.add"));
-                });
-            } else if(this.state.isAddOrEdit === "EDIT") {
-                this.props.actions.onEdit(formData).then((response) => {
-                    if(response.payload.data.key === "SUCCESS") {
-                        toastr.success(this.props.t("location:location.message.success.edit"));
-                    } else {
-                        toastr.error(this.props.t("location:location.message.error.edit"));
-                    }
-                }).catch((response) => {
-                    toastr.error(this.props.t("location:location.message.error.edit"));
-                });
-            }
-        });
-    }
-
-    handleInvalidSubmitAddOrEdit(event, errors, values) {
-        
-    }
-
-    setEditorRefAvatar = editor => {
-        if (editor) this.editor = editor;
-    }
-
     render() {
-        const nowDate = new Date().toJSON().split('T')[0];
         const { t } = this.props;
         const { columns, data, pages, loading } = this.state;
         return (
@@ -282,7 +195,7 @@ class LocationsContainer extends Component {
                                                 <Col xs="12" sm="4">
                                                 <AvGroup>
                                                     <Label for="objectSearch.dateOfBirth"><Trans i18nKey="location:location.label.dateOfBirth"/></Label>
-                                                    <AvInput type="date" max={nowDate} id="objectSearch.dateOfBirth" name="objectSearch.dateOfBirth"/>
+                                                    <AvInput type="date" id="objectSearch.dateOfBirth" name="objectSearch.dateOfBirth"/>
                                                     <AvFeedback><Trans i18nKey="location:location.message.invalidateDate"/></AvFeedback>
                                                 </AvGroup>
                                                 </Col>
@@ -300,8 +213,6 @@ class LocationsContainer extends Component {
                                         </CardBody>
                                         <CardFooter className="text-center">
                                             <Button type="submit" size="md" color="warning" className="mr-1"><i className="fa fa-search"></i> <Trans i18nKey="location:location.button.search"/></Button>
-                                            <Button type="button" size="md" color="success" className="mr-1" onClick={() => this.openAddOrEditModal("ADD")}><i className="fa fa-plus-circle"></i> <Trans i18nKey="location:location.button.add"/></Button>
-                                            {/* <Button type="button" size="md" color="danger" className="mr-1" onClick={() => this.openAddOrEditModal("EDIT")}><i className="fa fa-times-circle"></i> <Trans i18nKey="location:location.button.delete"/></Button> */}
                                             <Button type="button" size="md" color="info" className="mr-1"><i className="fa fa-download"></i> <Trans i18nKey="location:location.button.import"/></Button>
                                             <Button type="button" size="md" color="info" className="mr-1"><i className="fa fa-upload"></i> <Trans i18nKey="location:location.button.export"/></Button>
                                         </CardFooter>
@@ -338,12 +249,6 @@ class LocationsContainer extends Component {
                         </Col>
                     </Row>
                 </div>
-                <AddOrEditLocationContainer
-                    closeAddOrEditModal={this.closeAddOrEditModal}
-                    stateAddOrEditModal={this.state}
-                    handleValidSubmitAddOrEdit={this.handleValidSubmitAddOrEdit}
-                    handleInvalidSubmitAddOrEdit={this.handleInvalidSubmitAddOrEdit}
-                    setEditorRefAvatar={this.setEditorRefAvatar}/>
             </div>
         );
     }

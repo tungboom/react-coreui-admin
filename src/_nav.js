@@ -32,11 +32,7 @@ export default {
     {
       name: 'Quản lý địa bàn',
       url: '/locations',
-      icon: 'icon-map',
-      badge: {
-        variant: 'info',
-        text: 'DEV',
-      },
+      icon: 'icon-map'
     },
     {
       name: 'Lịch sử tác động',
