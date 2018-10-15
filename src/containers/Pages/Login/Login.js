@@ -96,7 +96,7 @@ class Login extends Component {
                 this.setState({
                     btnLoginLoading: false
                 }, () => {
-                    localStorage.clear();
+                    //localStorage.clear();
                     try {
                         if(response.error.response.data.error === "invalid_grant") {
                             toastr.error(this.props.t("auth:auth.message.error.wrongUsernamePassword"));
