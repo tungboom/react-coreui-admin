@@ -38,7 +38,8 @@ class App extends Component {
               <Route path="/register" render={(props) => <Register {...props} />} />
               <Route path="/404" render={(props) => <Page404 {...props} />} />
               <Route path="/500" render={(props) => <Page500 {...props} />} />
-              <PrivateRoute path="/" name="Home" component={DefaultLayout} />
+              <Route path="/" name="Home" component={DefaultLayout} />
+              {/* <PrivateRoute path="/" name="Home" component={DefaultLayout} /> */}
             </Switch>
           </Router>
           <ReduxToastr

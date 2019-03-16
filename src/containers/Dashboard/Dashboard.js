@@ -269,6 +269,7 @@ class Dashboard extends Component {
         }
         return (
             <div className="animated fadeIn">
+                <p>API_URL: {window._env_.API_URL}</p>
                 <Row>
                     <Col xs="12" sm="6" lg="3">
                         <Card className="text-white bg-primary">

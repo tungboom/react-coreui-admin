@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  demo-app:
+    image: demo-app
+    ports:
+      - "5000:80"
+    environment:
+      - "API_URL=production.example.com"

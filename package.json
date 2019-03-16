@@ -71,12 +71,11 @@
     "utf8": "^3.0.0"
   },
   "scripts": {
-    "build-css": "node-sass-chokidar --include-path ./node_modules ./src/scss -o ./src/scss",
-    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./node_modules ./src/scss -o ./src/scss --watch --recursive",
+    "dev": "chmod +x ./env.sh && ./env.sh && cp env-config.js ./public/ && react-scripts start",
     "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
-    "build-js": "react-scripts build",
-    "build": "npm-run-all build-css build-js",
+    "start": "npm-run-all start-js",
+    "build-js": "sh -ac '. ./.env; react-scripts build'",
+    "build": "npm-run-all build-js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
