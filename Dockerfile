@@ -6,6 +6,7 @@ COPY package-lock.json .
 RUN npm install
 
 COPY . .
+RUN npm build
 
 # => Run container
 FROM nginx:alpine
