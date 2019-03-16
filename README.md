@@ -165,6 +165,8 @@ As of now I am exploring the possibility of working on CoreUI fulltime - if you 
 * docker run -p 3000:80 -e API_URL=https://staging.api.com -t react-coreui-admin
 * docker push -t react-coreui-admin
 
+## If production
+* docker-compose up
 ## Setup virtualbox centos7
 
 
