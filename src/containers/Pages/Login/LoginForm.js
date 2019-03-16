@@ -79,6 +79,7 @@ class LoginForm extends Component {
         return (
             <div className="app flex-row align-items-center">
                 <Container>
+                <p>API_URL: {window._env_.API_URL}</p>
                 <Row className="justify-content-center">
                     <Col md="8">
                     <CardGroup>
