@@ -8,7 +8,7 @@ RUN npm install
 COPY . .
 
 # => Run container
-FROM nginx:1.15.9-alpine
+FROM nginx:alpine
 
 # Nginx config
 RUN rm -rf /etc/nginx/conf.d
