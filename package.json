@@ -71,10 +71,9 @@
     "utf8": "^3.0.0"
   },
   "scripts": {
-    "dev": "chmod +x ./env.sh && ./env.sh && cp env-config.js ./public/ && react-scripts start",
     "start-js": "react-scripts start",
     "start": "npm-run-all start-js",
-    "build-js": "sh -ac '. ./.env; react-scripts build'",
+    "build-js": "react-scripts build",
     "build": "npm-run-all build-js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
