@@ -14,4 +14,4 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=development
-      - REACT_APP_API_URL=https://production.api.com
+      - REACT_APP_API_URL=https://development.api.com

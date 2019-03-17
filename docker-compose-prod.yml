@@ -9,3 +9,6 @@ services:
       dockerfile: Dockerfile-prod
     ports:
       - '8084:80'
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=https://production.api.com
