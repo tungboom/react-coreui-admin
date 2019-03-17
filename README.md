@@ -164,12 +164,15 @@ As of now I am exploring the possibility of working on CoreUI fulltime - if you 
 ## Setup virtualbox centos7
 
 #### Ping 8.8.8.8 if error: connect: Network is unreachable
+
 cat /etc/resolv.conf
+
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
 https://dev.to/isabolic99/how-to-set-host-only-adapter-on-vm-virtual-box-2jka
 
 ### Check IP
+
 ip add
 
 echo $(curl -s https://api.ipify.org)
@@ -177,33 +180,45 @@ echo $(curl -s https://api.ipify.org)
 
 
 yum update -y
+
 yum install curl nano
+
 yum install epel-release
 
 curl -sL https://rpm.nodesource.com/setup_11.x | bash -
+
 sudo yum install -y nodejs
 
+
 yum install git
+
 git --version
 
 https://github.com/NaturalHistoryMuseum/scratchpads2/wiki/Install-Docker-and-Docker-Compose-(Centos-7)
 
 sudo yum install epel-release
+
 sudo yum install nginx
+
 sudo systemctl start nginx
 
 sudo firewall-cmd --permanent --zone=public --add-service=http 
+
 sudo firewall-cmd --permanent --zone=public --add-service=https
+
 sudo firewall-cmd --reload
 
 ### Enable Nginx to start when your system boots
+
 sudo systemctl enable nginx
 
 ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'
 
 
 systemctl stop docker
+
 rm -rf /var/lib/docker
+
 systemctl start docker
 
 ### Dockerizing a React App (https://mherman.org/blog/dockerizing-a-react-app/)
