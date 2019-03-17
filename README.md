@@ -209,10 +209,13 @@ systemctl start docker
 ### Dockerizing a React App (https://mherman.org/blog/dockerizing-a-react-app/)
 
 * Docker Developer (port: 3000)
+
 $ docker-compose up -d --build
 
 * Docker Production (port: 80)
+
 $ docker-compose -f docker-compose-prod.yml up -d --build
 
 * Stop Docker
+
 $ docker-compose stop
