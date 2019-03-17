@@ -227,10 +227,13 @@ systemctl start docker
 
 $ docker-compose up -d --build
 
-* Docker Production (port: 80)
+* Docker Production (port: 8084)
 
 $ docker-compose -f docker-compose-prod.yml up -d --build
 
 * Stop Docker
 
 $ docker-compose stop
+
+
+### https://testdriven.io/courses/microservices-with-docker-flask-and-react/part-two-react-and-docker/
