@@ -2,8 +2,8 @@ version: '3.7'
 
 services:
 
-  sample-app-prod:
-    container_name: sample-app-prod
+  react-coreui-admin-prod:
+    container_name: react-coreui-admin-prod
     build:
       context: .
       dockerfile: Dockerfile-prod
