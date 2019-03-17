@@ -160,15 +160,8 @@ CoreUI is an MIT licensed open source project and completely free to use. Howeve
 
 As of now I am exploring the possibility of working on CoreUI fulltime - if you are a business that is building core products using CoreUI, I am also open to conversations regarding custom sponsorship / consulting arrangements. Get in touch on [Twitter](https://twitter.com/lukaszholeczek).
 
-## Docker
-* docker build . -t react-coreui-admin
-* docker run -p 3000:80 -e API_URL=https://staging.api.com -t react-coreui-admin
-* docker push -t react-coreui-admin
 
-## If production
-* docker-compose up
 ## Setup virtualbox centos7
-
 
 #### Ping 8.8.8.8 if error: connect: Network is unreachable
 cat /etc/resolv.conf
@@ -212,3 +205,14 @@ ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'
 systemctl stop docker
 rm -rf /var/lib/docker
 systemctl start docker
+
+### Dockerizing a React App (https://mherman.org/blog/dockerizing-a-react-app/)
+
+* Docker Developer (port: 3000)
+$ docker-compose up -d --build
+
+* Docker Production (port: 80)
+$ docker-compose -f docker-compose-prod.yml up -d --build
+
+* Stop Docker
+$ docker-compose stop
