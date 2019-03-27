@@ -1,31 +1,27 @@
 import React, { Component } from 'react';
-import { Route, Router, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
+// import { renderRoutes } from 'react-router-config';
+import './App.scss';
 import './App.css';
-// Styles
-// CoreUI Icons Set
-import '@coreui/icons/css/coreui-icons.min.css';
-// Import Flag Icons Set
-import 'flag-icon-css/css/flag-icon.min.css';
-// Import Font Awesome Icons Set
-import 'font-awesome/css/font-awesome.min.css';
-// Import Simple Line Icons Set
-import 'simple-line-icons/css/simple-line-icons.css';
-// Import Main styles for this application
-import './scss/style.css'
 // Import styles ladda
-import './scss/Ladda/1.0.0/ladda.min.css'
-// Containers
-import { DefaultLayout } from './containers';
-// Pages
-import { Login, Page404, Page500, Register } from './containers/Pages';
-import { translate } from 'react-i18next';
+import './scss/Ladda/1.0.0/ladda.min.css';
 import history from './history';
-import { PrivateRoute } from './utils/PrivateRoute';
 import { Provider } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
 // Store config
 import configureStore from './stores/configureStore';
 const store = configureStore();
+
+const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
+
+// Containers
+const DefaultLayout = React.lazy(() => import('./containers/DefaultLayout'));
+
+// Pages
+const Login = React.lazy(() => import('./views/Pages/Login'));
+const Register = React.lazy(() => import('./views/Pages/Register'));
+const Page404 = React.lazy(() => import('./views/Pages/Page404'));
+const Page500 = React.lazy(() => import('./views/Pages/Page500'));
 
 class App extends Component {
   render() {
@@ -33,14 +29,16 @@ class App extends Component {
       <Provider store={store}>
         <div>
           <Router history={history}>
-            <Switch>
-              <Route path="/login" render={(props) => <Login {...props} />} />
-              <Route path="/register" render={(props) => <Register {...props} />} />
-              <Route path="/404" render={(props) => <Page404 {...props} />} />
-              <Route path="/500" render={(props) => <Page500 {...props} />} />
-              <Route path="/" name="Home" component={DefaultLayout} />
-              {/* <PrivateRoute path="/" name="Home" component={DefaultLayout} /> */}
-            </Switch>
+            <React.Suspense fallback={loading()}>
+              <Switch>
+                <Route path="/login" render={(props) => <Login {...props} />} />
+                <Route path="/register" render={(props) => <Register {...props} />} />
+                <Route path="/404" render={(props) => <Page404 {...props} />} />
+                <Route path="/500" render={(props) => <Page500 {...props} />} />
+                <Route path="/" name="Home" render={props => <DefaultLayout {...props}/>} />
+                {/* <PrivateRoute path="/" name="Home" render={props => <DefaultLayout {...props}/>} */}
+              </Switch>
+            </React.Suspense>
           </Router>
           <ReduxToastr
             timeOut={4000}
