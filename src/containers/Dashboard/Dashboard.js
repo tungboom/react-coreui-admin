@@ -247,7 +247,7 @@ class Dashboard extends Component {
             }
         } catch (error) {
             console.log(error);
-            history.push('/login');
+            // history.push('/login');
         }
     }
 
@@ -304,10 +304,10 @@ class Dashboard extends Component {
                             <div className="h1 text-muted text-right mb-2">
                                 <i className="icon-location-pin"></i>
                             </div>
-                            <div className="h4 mb-0">{objIpLogin.query}</div>
+                            {/* <div className="h4 mb-0">{objIpLogin.query}</div>
                             <div className="h6 mb-0">{objIpLogin.regionName + ' (' + objIpLogin.region + ')'}</div>
                             <div className="h6 mb-0">{objIpLogin.country + ' (' + objIpLogin.countryCode + ')'}</div>
-                            <div className="h6 mb-0">{'Timezone: ' + objIpLogin.timezone}</div>
+                            <div className="h6 mb-0">{'Timezone: ' + objIpLogin.timezone}</div> */}
                             </CardBody>
                         </Card>
                     </Col>
